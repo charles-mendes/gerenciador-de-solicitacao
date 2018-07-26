@@ -6,22 +6,22 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateSolicitacaoTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
+  const CREATED_AT = 'data_criacao_solic';
+  // const UPDATED_AT = 'data_modific_solic';
+
+
     public function up()
     {
         Schema::create('solicitacao', function (Blueprint $table) {
             $table->increments('id_solic');
-            $table->foreign('id_usuario_solic')
-                  ->references('id_usu')->on('usuario')
-                  ->onDelete('cascade');
             $table->char('status_atual_solic',1);
             $table->string('descricao_solic');
-            $table->date('data_criacao_solic');
-            $table->timestamps();
+            $table->timestamps('data_criacao_solic');
+            // $table->timestamps('data_modific_solic');
+
+            $table->foreign('id_usuario_solic')
+                  ->references('id_usu')->on('usuarios')
+                  ->onDelete('cascade')->after('id_solic');
         });
     }
 
@@ -33,6 +33,5 @@ class CreateSolicitacaoTable extends Migration
     public function down()
     {
         Schema::dropIfExists('solicitacao');
-        Schema::dropForeign(['id_usuario_solic']);
     }
 }

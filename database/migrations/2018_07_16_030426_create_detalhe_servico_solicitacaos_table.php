@@ -14,8 +14,17 @@ class CreateDetalheServicoSolicitacaosTable extends Migration
     public function up()
     {
         Schema::create('detalhe_servico_solicitacaos', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+            $table->increments('id_detServSolic');
+
+            $table->foreign('id_solic_detServSolic')
+                  ->references('id_solic')->on('solicitacao')
+                  ->onDelete('cascade');
+
+            $table->foreign('id_serv_detServSolic')
+                  ->references('id_serv')->on('servicos')
+                  ->onDelete('cascade');
+
+
         });
     }
 

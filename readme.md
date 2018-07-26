@@ -1,5 +1,8 @@
+Instalar PHP >=7.2
 
-Para criar Controller/Model e migration utilizar <php artisan model:model XXX --all>
+Configurar ambiente de programação para UTF-8
+
+Para criar Controller/Model e migration utilizar <php artisan make:model XXX --all>
 
 
 Para funcionar a aplicacao

@@ -14,8 +14,8 @@ class CreateTipoEnviosTable extends Migration
     public function up()
     {
         Schema::create('tipo_envios', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+            $table->increments('id_tipo_envio');
+            $table->string('nome_envio');
         });
     }
 

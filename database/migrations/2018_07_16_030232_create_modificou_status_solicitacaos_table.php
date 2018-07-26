@@ -11,6 +11,11 @@ class CreateModificouStatusSolicitacaosTable extends Migration
      *
      * @return void
      */
+
+     // const CREATED_AT = 'data_criacao_solic';
+     const UPDATED_AT = 'data_modific_solic';
+
+
     public function up()
     {
         Schema::create('modificou_status_solicitacaos', function (Blueprint $table) {
@@ -18,13 +23,17 @@ class CreateModificouStatusSolicitacaosTable extends Migration
             $table->foreign('id_solic_modStatusSolic')
                   ->references('id_solic')->on('solicitacao')
                   ->onDelete('cascade');
+
             $table->foreign('id_status_modStatusSolic')
                   ->references('id_status')->on('status')
                   ->onDelete('cascade');
+
             $table->foreign('id_usuario_modStatusSolic')
                   ->references('id_usu')->on('usuarios')
                   ->onDelete('cascade');
-            $table->timestamps();
+
+                  $table->timestamps('data_modific_solic');
+
         });
     }
 

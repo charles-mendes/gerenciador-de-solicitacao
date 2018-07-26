@@ -14,8 +14,20 @@ class CreateNotificacaosTable extends Migration
     public function up()
     {
         Schema::create('notificacaos', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+            $table->increments('id_notific');
+
+            $table->string('mensagem_notific');
+
+            $table->foreign('id_detSolicHistorico')
+                  ->references('id_solic')->on('solicitacao')
+                  ->onDelete('cascade');
+
+            $table->foreign('id_modifStatusSolic_notific')
+                  ->references('id_modStatusSolic')->on('modificou_status_solicitacaos')
+                  ->onDelete('cascade');
+
+            $table->char('finalizou_visualizacao');
+
         });
     }
 

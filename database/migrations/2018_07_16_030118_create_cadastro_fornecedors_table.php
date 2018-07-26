@@ -6,6 +6,8 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateCadastroFornecedorsTable extends Migration
 {
+  const CREATED_AT = 'data_cadastro_fornecedor';
+  const UPDATED_AT = 'data_modific_cadastro';
     /**
      * Run the migrations.
      *
@@ -13,9 +15,21 @@ class CreateCadastroFornecedorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('cadastro_fornecedors', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+        Schema::create('cadastro_fornecedor', function (Blueprint $table) {
+            $table->increments('id_cadastro_forn');
+            $table->timestamps('data_cadastro_fornecedor');
+            $table->timestamps('data_modific_cadastro');
+
+            $table->foreign('id_fornecedor')
+                  ->references('id_forn')->on('fornecedores')
+                  ->onDelete('cascade')->after('id_cadastro_forn');
+
+            $table->foreign('id_usuario_cadastro_forn')
+                  ->references('id_usu')->on('usuarios')
+                  ->onDelete('cascade')->after('id_fornecedor');
+
+
+
         });
     }
 

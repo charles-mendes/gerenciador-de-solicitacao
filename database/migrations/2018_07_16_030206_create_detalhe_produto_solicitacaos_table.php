@@ -15,7 +15,14 @@ class CreateDetalheProdutoSolicitacaosTable extends Migration
     {
         Schema::create('detalhe_produto_solicitacaos', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
+
+            $table->foreign('id_solic_detProdSolic')
+                  ->references('id_solic')->on('solicitacao')
+                  ->onDelete('cascade')->after('id');
+
+            $table->foreign('id_produto_detProdSolic')
+                  ->references('id_produto')->on('produtos')
+                  ->onDelete('cascade')->after('id_solic_detProdSolic');
         });
     }
 

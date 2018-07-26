@@ -14,8 +14,16 @@ class CreateDetalheProdutoFornecedorsTable extends Migration
     public function up()
     {
         Schema::create('detalhe_produto_fornecedors', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+            $table->increments('id_detProdForn');
+
+            $table->foreign('id_produto_detProdForn')
+                  ->references('id_produto')->on('produtos')
+                  ->onDelete('cascade')->after('id_detProdForn');
+
+                  $table->foreign('id_forn_detProdForn')
+                        ->references('id_forn')->on('fornecedores')
+                        ->onDelete('cascade')->after('id_produto_detProdForn');
+
         });
     }
 

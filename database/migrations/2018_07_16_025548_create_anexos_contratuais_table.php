@@ -16,7 +16,6 @@ class CreateAnexosContratuaisTable extends Migration
         Schema::create('anexos_contratuais', function (Blueprint $table) {
             $table->increments('id_ac');
             $table->string('caminho_path_ac');
-            // $table->string('data_update_AC');
             $table->timestamps();
             $table->foreign('id_tipo')
                   ->references('id_tipo_ac')->on('tipo_anexo_contratuais')
