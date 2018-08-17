@@ -13,15 +13,16 @@ class CreateServicosTable extends Migration
      */
     public function up()
     {
-        Schema::create('servicos', function (Blueprint $table) {
-            $table->increments('id_serv');
-            $table->string('nome_serv');
-            $table->float('valor_serv');
-            $table->float('valor_imposto_serv');
-            $table->string('descricao_serv');
+        Schema::create('servico', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('id_contrato');
+            $table->string('nome');
+            $table->float('valor');
+            $table->float('valor_imposto');
+            $table->string('descricao');
 
-            $table->foreign('id_contratos_serv')
-                  ->references('id_contrato')->on('contratos')
+            $table->foreign('id_contrato')
+                  ->references('id')->on('contrato')
                   ->onDelete('cascade');
 
         });
@@ -34,6 +35,6 @@ class CreateServicosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('servicos');
+        Schema::dropIfExists('servico');
     }
 }

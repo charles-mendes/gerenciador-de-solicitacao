@@ -13,17 +13,18 @@ class CreateNotificacaosTable extends Migration
      */
     public function up()
     {
-        Schema::create('notificacaos', function (Blueprint $table) {
-            $table->increments('id_notific');
+        Schema::create('notificacao', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('id_solicitacao');
+            $table->unsignedInteger('id_modificou_status_solicitacao');
+            $table->string('mensagem');
 
-            $table->string('mensagem_notific');
-
-            $table->foreign('id_detSolicHistorico')
-                  ->references('id_solic')->on('solicitacao')
+            $table->foreign('id_solicitacao')
+                  ->references('id')->on('solicitacao')
                   ->onDelete('cascade');
 
-            $table->foreign('id_modifStatusSolic_notific')
-                  ->references('id_modStatusSolic')->on('modificou_status_solicitacaos')
+            $table->foreign('id_modificou_status_solicitacao')
+                  ->references('id')->on('modificou_status_solicitacaos')
                   ->onDelete('cascade');
 
             $table->char('finalizou_visualizacao');
@@ -38,7 +39,7 @@ class CreateNotificacaosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notificacaos');
+        Schema::dropIfExists('notificacao');
 
     }
 }

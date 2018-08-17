@@ -16,16 +16,17 @@ class CreateFornecedoresTable extends Migration
      */
     public function up()
     {
-        Schema::create('fornecedores', function (Blueprint $table) {
-            $table->increments('id_forn');
-            $table->string('nome_forn');
-            $table->string('cpnj_forn');
+        Schema::create('fornecedor', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('nome');
+            $table->string('cpnj');
+            //TODO :: nao entendi esse
             $table->char('status_contato_forn',1);
-            $table->string('telefone_forn');
-            $table->string('email_forn');
-            $table->string('categoria_forn');
-            $table->date('data_forn');
-            $table->timestamps();
+            $table->string('telefone');
+            $table->string('email');
+            $table->string('categoria');
+            $table->integer('id_criador');
+            $table->timestamp('data_criacao');
         });
     }
 
@@ -36,6 +37,6 @@ class CreateFornecedoresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fornecedores');
+        Schema::dropIfExists('fornecedor');
     }
 }

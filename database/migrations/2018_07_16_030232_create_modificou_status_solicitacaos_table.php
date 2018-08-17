@@ -18,21 +18,27 @@ class CreateModificouStatusSolicitacaosTable extends Migration
 
     public function up()
     {
-        Schema::create('modificou_status_solicitacaos', function (Blueprint $table) {
-            $table->increments('id_modStatusSolic');
-            $table->foreign('id_solic_modStatusSolic')
-                  ->references('id_solic')->on('solicitacao')
+        Schema::create('modificou_status_solicitacao', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('id_solicitacao');
+            $table->unsignedInteger('id_status');
+            $table->unsignedInteger('id_usuario');
+
+            
+            $table->foreign('id_solicitacao')
+                  ->references('id')->on('solicitacao')
                   ->onDelete('cascade');
 
-            $table->foreign('id_status_modStatusSolic')
-                  ->references('id_status')->on('status')
+            $table->foreign('id_status')
+                  ->references('id')->on('status')
                   ->onDelete('cascade');
 
-            $table->foreign('id_usuario_modStatusSolic')
-                  ->references('id_usu')->on('usuarios')
+            $table->foreign('id_usuario')
+                  ->references('id')->on('usuario')
                   ->onDelete('cascade');
 
-                  $table->timestamps('data_modific_solic');
+            $table->integer('id_modificador');
+            $table->timestamp('data_modificacao')->nullable();
 
         });
     }
@@ -44,6 +50,6 @@ class CreateModificouStatusSolicitacaosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('modificou_status_solicitacaos');
+        Schema::dropIfExists('modificou_status_solicitacao');
     }
 }

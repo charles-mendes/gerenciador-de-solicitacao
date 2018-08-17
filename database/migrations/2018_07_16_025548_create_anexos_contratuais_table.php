@@ -13,15 +13,21 @@ class CreateAnexosContratuaisTable extends Migration
      */
     public function up()
     {
-        Schema::create('anexos_contratuais', function (Blueprint $table) {
-            $table->increments('id_ac');
-            $table->string('caminho_path_ac');
-            $table->timestamps();
+        Schema::create('anexo_contratual', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('caminho_path');
+            $table->unsignedInteger('id_tipo');
+            $table->unsignedInteger('id_contrato');
+            $table->integer('id_criador');
+            $table->timestamp('data_criacao');
+            $table->integer('id_modificador');
+            $table->timestamp('data_modificacao')->nullable();
+
             $table->foreign('id_tipo')
-                  ->references('id_tipo_ac')->on('tipo_anexo_contratuais')
+                  ->references('id')->on('tipo_anexo_contratuais')
                   ->onDelete('cascade');
-            $table->foreign('id_contrato_AC')
-                  ->references('id_contrato')->on('contratos')
+            $table->foreign('id_contrato')
+                  ->references('id')->on('contratos')
                   ->onDelete('cascade');
         });
     }
@@ -33,6 +39,6 @@ class CreateAnexosContratuaisTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('anexos_contratuais');
+        Schema::dropIfExists('anexo_contratual');
     }
 }

@@ -13,10 +13,13 @@ class CreateTipoAnexoContratuaisTable extends Migration
      */
     public function up()
     {
-        Schema::create('tipo_anexo_contratuais', function (Blueprint $table) {
-            $table->increments('id_tipo_ac');
-            $table->char('tipo_ac');
-            $table->timestamps();
+        Schema::create('tipo_anexo_contratual', function (Blueprint $table) {
+            $table->increments('id');
+            $table->char('tipo_anexo');
+            $table->integer('id_criador');
+            $table->timestamp('data_criacao');
+            $table->integer('id_modificador');
+            $table->timestamp('data_modificacao')->nullable();
         });
     }
 
@@ -27,6 +30,6 @@ class CreateTipoAnexoContratuaisTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tipo_anexo_contratuais');
+        Schema::dropIfExists('tipo_anexo_contratual');
     }
 }

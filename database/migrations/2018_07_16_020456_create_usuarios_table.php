@@ -13,13 +13,18 @@ class CreateUsuariosTable extends Migration
      */
     public function up()
     {
-        Schema::create('usuarios', function (Blueprint $table) {
-            $table->increments('id_usu');
-            $table->string('nome_usu');
-            $table->string('email_usu')->unique();
-            $table->char('tipo_conta_usu',2);
-            $table->rememberToken();
-            $table->timestamps();
+        Schema::create('usuario', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('nome');
+            $table->string('email');
+            $table->string('senha');
+            $table->enum('situacao', ['A', 'I']);
+            $table->integer('id_criador');
+            $table->timestamp('data_criacao');
+            $table->integer('id_modificador');
+            $table->timestamp('data_modificacao')->nullable();
+            //TODO :: eu nao sei se faço tipo de usuario aqui
+            $table->char('tipo_conta',2);
         });
     }
 

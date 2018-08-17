@@ -13,16 +13,18 @@ class CreateDetalheProdutoSolicitacaosTable extends Migration
      */
     public function up()
     {
-        Schema::create('detalhe_produto_solicitacaos', function (Blueprint $table) {
+        Schema::create('detalhe_produto_solicitacao', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('id_solicitacao');
+            $table->unsignedInteger('id_produto');
 
-            $table->foreign('id_solic_detProdSolic')
-                  ->references('id_solic')->on('solicitacao')
-                  ->onDelete('cascade')->after('id');
+            $table->foreign('id_solicitacao')
+                  ->references('id')->on('solicitacao')
+                  ->onDelete('cascade');
 
-            $table->foreign('id_produto_detProdSolic')
-                  ->references('id_produto')->on('produtos')
-                  ->onDelete('cascade')->after('id_solic_detProdSolic');
+            $table->foreign('id_produto')
+                  ->references('id')->on('produtos')
+                  ->onDelete('cascade');
         });
     }
 
@@ -33,6 +35,6 @@ class CreateDetalheProdutoSolicitacaosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('detalhe_produto_solicitacaos');
+        Schema::dropIfExists('detalhe_produto_solicitacao');
     }
 }

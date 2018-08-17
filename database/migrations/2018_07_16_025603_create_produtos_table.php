@@ -13,18 +13,24 @@ class CreateProdutosTable extends Migration
      */
     public function up()
     {
-        Schema::create('produtos', function (Blueprint $table) {
-            $table->increments('id_produto');
-            $table->string('nome_prod');
-            $table->int('quantidade_prod');
-            $table->float('valor_prod');
-            $table->float('valor_imposto_prod');
-            $table->string('descricao_prod');
-            $table->string('link_oferta_prod');
-            $table->foreign('id_contrato_prod')
-                  ->references('id_contrato')->on('contratos')
+        Schema::create('produto', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('id_contrato');
+            $table->string('nome');
+            $table->int('quantidade');
+            $table->float('valor');
+            $table->float('valor_imposto');
+            $table->string('descricao');
+            $table->string('link_oferta');
+            $table->integer('id_criador');
+            $table->timestamp('data_criacao');
+            $table->integer('id_modificador');
+            $table->timestamp('data_modificacao')->nullable();
+
+
+            $table->foreign('id_contrato')
+                  ->references('id')->on('contrato')
                   ->onDelete('cascade');
-            // $table->timestamps();
         });
     }
 
@@ -35,6 +41,6 @@ class CreateProdutosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('produtos');
+        Schema::dropIfExists('produto');
     }
 }

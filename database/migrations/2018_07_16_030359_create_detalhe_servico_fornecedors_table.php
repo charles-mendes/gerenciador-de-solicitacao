@@ -14,14 +14,17 @@ class CreateDetalheServicoFornecedorsTable extends Migration
     public function up()
     {
         Schema::create('detalhe_servico_fornecedor', function (Blueprint $table) {
-            $table->increments('id_detServForn');
+            $table->increments('id');
+            $table->unsignedInteger('id_servico');
+            $table->unsignedInteger('id_fornecedor');
+            
 
-            $table->foreign('id_serv_detServForn')
-                  ->references('id_serv')->on('servicos')
+            $table->foreign('id_servico')
+                  ->references('id')->on('servico')
                   ->onDelete('cascade');
 
-            $table->foreign('id_forn_detServForn')
-                  ->references('id_forn')->on('fornecedores')
+            $table->foreign('id_fornecedor')
+                  ->references('id')->on('fornecedore')
                   ->onDelete('cascade');
         });
     }

@@ -13,8 +13,8 @@ class CreateTipoEnviosTable extends Migration
      */
     public function up()
     {
-        Schema::create('tipo_envios', function (Blueprint $table) {
-            $table->increments('id_tipo_envio');
+        Schema::create('tipo_envio', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('nome_envio');
         });
     }
@@ -26,6 +26,6 @@ class CreateTipoEnviosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tipo_envios');
+        Schema::dropIfExists('tipo_envio');
     }
 }
