@@ -27,7 +27,8 @@ class CreateNotificacaosTable extends Migration
                   ->references('id')->on('modificou_status_solicitacaos')
                   ->onDelete('cascade');
 
-            $table->char('finalizou_visualizacao');
+            $table->char('finalizou_visualizacao');//
+
 
         });
     }
