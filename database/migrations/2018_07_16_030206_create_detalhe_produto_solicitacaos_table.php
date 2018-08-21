@@ -23,7 +23,7 @@ class CreateDetalheProdutoSolicitacaosTable extends Migration
                   ->onDelete('cascade');
 
             $table->foreign('id_produto')
-                  ->references('id')->on('produtos')
+                  ->references('id')->on('produto')
                   ->onDelete('cascade');
         });
     }

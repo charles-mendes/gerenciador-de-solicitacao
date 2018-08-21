@@ -24,10 +24,10 @@ class CreateAnexosContratuaisTable extends Migration
             $table->timestamp('data_modificacao')->nullable();
 
             $table->foreign('id_tipo')
-                  ->references('id')->on('tipo_anexo_contratuais')
+                  ->references('id')->on('tipo_anexo_contratual')
                   ->onDelete('cascade');
             $table->foreign('id_contrato')
-                  ->references('id')->on('contratos')
+                  ->references('id')->on('contrato')
                   ->onDelete('cascade');
         });
     }

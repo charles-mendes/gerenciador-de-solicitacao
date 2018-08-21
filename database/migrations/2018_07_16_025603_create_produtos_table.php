@@ -17,7 +17,7 @@ class CreateProdutosTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('id_contrato');
             $table->string('nome');
-            $table->int('quantidade');
+            $table->integer('quantidade');
             $table->float('valor');
             $table->float('valor_imposto');
             $table->string('descricao');

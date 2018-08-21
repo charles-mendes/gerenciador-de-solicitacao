@@ -15,6 +15,8 @@ class CreateDetalheProdutoFornecedorsTable extends Migration
     {
         Schema::create('detalhe_produto_fornecedor', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('id_produto');
+            $table->unsignedInteger('id_fornecedor');
 
             $table->foreign('id_produto')
                   ->references('id')->on('produto')

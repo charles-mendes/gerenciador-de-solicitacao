@@ -24,7 +24,7 @@ class CreateDetalheServicoFornecedorsTable extends Migration
                   ->onDelete('cascade');
 
             $table->foreign('id_fornecedor')
-                  ->references('id')->on('fornecedore')
+                  ->references('id')->on('fornecedor')
                   ->onDelete('cascade');
         });
     }

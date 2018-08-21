@@ -18,10 +18,10 @@ class CreateContratosTable extends Migration
             $table->unsignedInteger('id_usuario');
             $table->unsignedInteger('id_fornecedor');
             $table->string('tipo');
-            $table->timestamp('data_criacao');
-            $table->timestamp('data_vencimento');
+            $table->date('data_vencimento');
             $table->enum('status', ['A', 'I']);
             $table->integer('id_modificador');
+            $table->timestamp('data_criacao');
             $table->timestamp('data_modificacao')->nullable();
 
             $table->foreign('id_usuario')
@@ -30,7 +30,6 @@ class CreateContratosTable extends Migration
             $table->foreign('id_fornecedor')
                     ->references('id')->on('fornecedor')
                     ->onDelete('cascade');
-            $table->timestamps();
             
             
         });
@@ -43,6 +42,6 @@ class CreateContratosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('contratos');
+        Schema::dropIfExists('contrato');
     }
 }
