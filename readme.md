@@ -33,3 +33,10 @@ adicionar localização da virtual hosts no hosts
 rodar 
 >composer update
 >composer install
+
+dar permissão para as pastas
+    sudo chmod -R 777 /var/www/html/gerenciador-de-solicitacao/storage/
+adicionar o arquivo .env
+    cp /var/www/html/gerenciador-de-solicitacao/.env.example .env
+gerar a chave 
+    php artisan key:generate
