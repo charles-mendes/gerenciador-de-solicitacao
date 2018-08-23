@@ -1,20 +1,35 @@
 Instalar PHP >=7.2
 
-Configurar ambiente de programação para UTF-8
+dar um git clone no repositório
+>git clone https://github.com/CharlesMendes1/gerenciador-de-solicitacao.git
 
-Para criar Controller/Model e migration utilizar <php artisan make:model XXX --all>
+após dar um git clone você pode dar start no servidor laravel , ou criar um virtual host para o laravel , se você criar um virtual host não precisar ficar dando start no servidor do laravel
 
+para dar start no laravel
+ 	php artisan laravel
+para criar um virtual host
+	ir até o diretório 
+>cd /etc/apache2/sites-available/
+	copiar e colar arquivo conf que configura um novo virtual host
+		>sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/gerenciador.conf
 
-Para funcionar a aplicacao
-tem que criar um virtual host na maquina para apontar a aplicação
-
-Para configurar virtual host do laravel
-<Directory /var/www/html/portal-light/public>
+adicionar no arquivo conf
+        ServerAlias gerenciador.c
+        ServerName gerenciador
+        DocumentRoot /var/www/html/gerenciador-de-solicitacao/public
+        <Directory /var/www/html/gerenciador-de-solicitacao/public>
           AllowOverride All
           allow from all
           Options +Indexes
-</Directory>
+        </Directory>
+após realizar esta configuração :
+Ativar os arquivo de configuração
+>sudo a2ensite example.com.conf
+e Restart o servidor apache 2
+>sudo service apache2 restart
 
-
-se der erro na hora de rodar as migrations e dar um erro que não achou o PDO, então que instalar esses modulos do php
-sudo apt-get install php-gd php-mysql
+adicionar localização da virtual hosts no hosts
+>127.0.0.1       gerenciador.c
+rodar 
+>composer update
+>composer install
