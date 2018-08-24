@@ -30,8 +30,8 @@ e Restart o servidor apache 2
 
 adicionar localização da virtual hosts no hosts
 >127.0.0.1       gerenciador.c
-rodar 
->composer update
+Rodar
+>composer update,
 >composer install
 
 dar permissão para as pastas
