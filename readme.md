@@ -52,3 +52,10 @@ adicionar o arquivo .env
 
 gerar a chave 
 >php artisan key:generate
+
+
+------------
+para configurar tabela usuario
+https://pt.stackoverflow.com/questions/187488/personalizando-uma-model-de-usuarios-laravel-5-4-problema-no-login
+
+
