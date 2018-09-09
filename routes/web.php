@@ -15,6 +15,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('/principal', function () {
+    return view('layouts.principal');
+});
+
 Route::get('/u', 'UsuarioController@index');
 
 Auth::routes();
