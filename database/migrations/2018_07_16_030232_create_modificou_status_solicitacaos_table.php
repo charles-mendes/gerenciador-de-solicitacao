@@ -23,6 +23,8 @@ class CreateModificouStatusSolicitacaosTable extends Migration
             $table->unsignedInteger('id_solicitacao');
             $table->unsignedInteger('id_status');
             $table->unsignedInteger('id_usuario');
+            $table->integer('id_modificador');
+            $table->timestamp('data_modificacao')->nullable();
 
             
             $table->foreign('id_solicitacao')
@@ -37,8 +39,7 @@ class CreateModificouStatusSolicitacaosTable extends Migration
                   ->references('id')->on('usuario')
                   ->onDelete('cascade');
 
-            $table->integer('id_modificador');
-            $table->timestamp('data_modificacao')->nullable();
+            
 
         });
     }

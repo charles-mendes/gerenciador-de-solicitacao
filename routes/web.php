@@ -21,6 +21,10 @@ Route::get('/dashboard', function () {
 });
 
 Route::get('/u', 'UsuarioController@index');
+Route::get('/solicitacao', 'SolicitacaoController@index');
+
+//Solicitacao
+
 
 Auth::routes();
 

@@ -15,10 +15,10 @@ class CreateDetalheServicoSolicitacaosTable extends Migration
     {
         Schema::create('detalhe_servico_solicitacao', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_solicao');
+            $table->unsignedInteger('id_solicitacao');
             $table->unsignedInteger('id_servico');
 
-            $table->foreign('id_solicao')
+            $table->foreign('id_solicitacao')
                   ->references('id')->on('solicitacao')
                   ->onDelete('cascade');
 
