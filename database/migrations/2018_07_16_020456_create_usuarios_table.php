@@ -25,6 +25,7 @@ class CreateUsuariosTable extends Migration
             $table->timestamp('data_modificacao')->nullable();
             //TODO :: eu nao sei se faço tipo de usuario aqui
             $table->char('tipo_conta',2);
+            $table->rememberToken();
         });
     }
 
@@ -35,6 +36,8 @@ class CreateUsuariosTable extends Migration
      */
     public function down()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('usuarios');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

@@ -43,6 +43,8 @@ class CreateCadastroFornecedorsTable extends Migration
      */
     public function down()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('cadastro_fornecedor');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

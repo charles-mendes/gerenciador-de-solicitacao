@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 
-Route::get('/principal', function () {
+Route::get('/dashboard', function () {
     return view('layouts.principal');
 });
 

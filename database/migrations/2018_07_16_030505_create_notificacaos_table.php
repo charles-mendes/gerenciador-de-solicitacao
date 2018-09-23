@@ -41,7 +41,9 @@ class CreateNotificacaosTable extends Migration
      */
     public function down()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('notificacao');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
 
     }
 }

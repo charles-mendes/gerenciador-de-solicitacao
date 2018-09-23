@@ -37,6 +37,8 @@ class CreateDetalheServicoSolicitacaosTable extends Migration
      */
     public function down()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('detalhe_servico_solicitacaos');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

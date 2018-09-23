@@ -36,6 +36,8 @@ class CreateDetalheProdutoFornecedorsTable extends Migration
      */
     public function down()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('detalhe_produto_fornecedor');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }
