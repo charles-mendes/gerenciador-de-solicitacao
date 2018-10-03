@@ -15,16 +15,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
 Route::get('/dashboard', function () {
     return view('layouts.principal');
 });
 
 Route::get('/u', 'UsuarioController@index');
-Route::get('/solicitacao', 'SolicitacaoController@index');
+
 
 //Solicitacao
-
+Route::get('/solicitacao', 'SolicitacaoController@index');
+Route::get('/nova-solicitacao', 'SolicitacaoController@nova');
 
 Auth::routes();
 
