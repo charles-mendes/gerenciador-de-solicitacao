@@ -164,8 +164,27 @@
             <!-- ============================================================== -->
             <!-- Container fluid  -->
             <!-- ============================================================== -->
-            
-            @yield('content')
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <div class="row page-titles">
+                    <div class="col-md-5 col-8 align-self-center">
+                        <h3 class="text-themecolor m-b-0 m-t-0">Table</h3>
+                        @yield('breadcrumb')
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                @yield('content')
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+            </div>    
             <!-- ============================================================== -->
             <!-- End Container fluid  -->
             <!-- ============================================================== -->
@@ -208,7 +227,7 @@
     <!-- ============================================================== -->
     <!-- chartist chart -->
     <script src="{{ asset('plugins/chartist-js/dist/chartist.min.js') }}"></script>
-    <script src="{{ asset('plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js') }}"></script>
+    <!-- <script src="{{-- asset('plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js') --}}"></script> -->
     <!--c3 JavaScript -->
     <script src="{{ asset('plugins/d3/d3.min.js') }}"></script>
     <script src="{{ asset('plugins/c3-master/c3.min.js') }}"></script>

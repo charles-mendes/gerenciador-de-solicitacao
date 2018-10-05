@@ -21,10 +21,11 @@ class SolicitacaoController extends Controller
         $solicitacao->data_criacao = time();
         $solicitacao->id_modificador = Auth::user()->id;
         $solicitacao->data_modificacao = time(); 
+        
         if($solicitacao->save()){
-            return view('solicitacao.nova',$solicitacao);
+            return view('solicitacao.nova',$solicitacao );
         }
-        //dd($solicitacao);
+        
     }
 
 

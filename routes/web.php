@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('layouts.principal');
-});
+})->name('dashboard');
 
 Route::get('/u', 'UsuarioController@index');
 
