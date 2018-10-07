@@ -1,4 +1,5 @@
 ------------------No Windows------------------
+
 primeiro instala o wamp 
 
 
@@ -36,6 +37,7 @@ da pra usar o console CMD dentro do VScode
 
 
 --------------------No linux--------------------
+
 instalar Apache 2
 instalar mysql
 Instalar PHP >=7.2
