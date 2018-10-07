@@ -28,6 +28,12 @@ adicionar o arquivo .env no projeto, pq o env não vem, tem que copiar um arquiv
 gerar a chave key do laravel
 >php artisan key:generate --force.
 
+da pra usar o console CMD dentro do VScode 
+>Ctrl + Shift + P - abre caixa de pesquisa no vsCode
+>digitar : Create new integrated Terminal
+
+
+
 
 --------------------No linux--------------------
 instalar Apache 2
