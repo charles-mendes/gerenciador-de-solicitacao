@@ -24,7 +24,8 @@ Route::get('/u', 'UsuarioController@index');
 
 //Solicitacao
 Route::get('/solicitacao', 'SolicitacaoController@index');
-Route::get('/nova-solicitacao', 'SolicitacaoController@nova');
+Route::get('/solicitacao/nova', 'SolicitacaoController@nova');
+Route::post('/solicitacao/cadastrar_produto', 'SolicitacaoController@cadastrar_produto')->name('cadastrar_produto');
 
 Auth::routes();
 
