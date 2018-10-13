@@ -15,6 +15,9 @@
 
 
 @section('content')
+<form action="{{route('nova_solicitacao')}}" method="POST">
+    <button type="submit" class="btn btn-primary">Cadastrar nova solicitação</button>
+</form>
 
 
 @endsection

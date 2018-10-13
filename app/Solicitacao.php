@@ -11,5 +11,10 @@ class Solicitacao extends Model
     const CREATED_AT = 'data_criacao';
     const UPDATED_AT = 'data_modificacao';
 
+
+    public function produtos()
+    {
+        return $this->hasMany('App\Produto');
+    }
     
 }
