@@ -8,7 +8,7 @@ use Validator;
 use Auth;
 //use Input;
 use Illuminate\Http\Request;
-use App\Detalhe_Produto_Solicitacao;
+use App\Detalhe_Solicitacao_Produto;
 
 class SolicitacaoController extends Controller
 {
@@ -18,21 +18,52 @@ class SolicitacaoController extends Controller
     }
 
     public function nova(){
-        //cria uma nova solicitação
-        $solicitacao = new Solicitacao;
-        $solicitacao->status = "A";
-        $solicitacao->descricao = "nao sei pq desse campo";
-        $solicitacao->id_criador = Auth::user()->id;
-        $solicitacao->data_criacao = time();
-        $solicitacao->id_modificador = Auth::user()->id;
-        $solicitacao->data_modificacao = time(); 
-        
-        if($solicitacao->save()){
-            session(['solicitacao_id' => $solicitacao->id]);
-            return view('solicitacao.nova');
+        //verifica se ultima solicitação tem algo cadastrado nela 
+        //se não tiver nada cadastrado nela : usar ela, se tiver criar uma nova
+        $ultimaSolicitacao = Solicitacao::all()->last();
+        // ->orderBy('id', 'desc')->get();
+        // >orderBy('id')
+        if($ultimaSolicitacao->produtos == [] || $ultimaSolicitacao->solicitacao == []){
+            session(['solicitacao_id' => $ultimaSolicitacao->id]);
+        }else{
+            //cria uma nova solicitação
+            $solicitacao = new Solicitacao;
+            $solicitacao->status = "A";
+            $solicitacao->descricao = "nao sei pq desse campo";
+            $solicitacao->id_criador = Auth::user()->id;
+            $solicitacao->data_criacao = time();
+            $solicitacao->id_modificador = Auth::user()->id;
+            $solicitacao->data_modificacao = time(); 
+
+            if($solicitacao->save()){
+                session(['solicitacao_id' => $solicitacao->id]);
+                
+                // return view('solicitacao.nova');
+            }
         }
-        
+        //retornar para funcao
+        return redirect()->route('listar_solicitacao');        
     }
+
+    public function listar(){
+        
+        //ir na tabela 
+        //produto
+        //e ir na tabela solititacao
+        //trazer tudo e mandar para view
+        $solicitacoes = Solicitacao::all();
+        
+        
+        // $solicitacao = Solicitacao::where('id',27)->first();
+
+        //mandar para tela listar com os produtos e com os servicos
+
+        return view('solicitacao.listar', ['solicitacoes'=> $solicitacoes]);
+
+    }
+
+
+
 
     public function cadastrar_produto(Request $request){
 
