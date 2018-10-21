@@ -19,14 +19,20 @@ Route::get('/dashboard', function () {
     return view('layouts.principal');
 })->name('dashboard');
 
+Route::get('/table', function () {
+    return view('table');
+});
+
+
 Route::get('/u', 'UsuarioController@index');
 
 
 //Solicitacao
 Route::get('/solicitacao', 'SolicitacaoController@index');
+Route::get('/solicitacao/listar', 'SolicitacaoController@listar')->name('listar_solicitacao');
 Route::get('/solicitacao/nova', 'SolicitacaoController@nova')->name('nova_solicitacao');
 Route::post('/solicitacao/cadastrar_produto', 'SolicitacaoController@cadastrar_produto')->name('cadastrar_produto');
-Route::get('/solicitacao/listar', 'SolicitacaoController@listar')->name('listar_solicitacao');
+
 
 //Solicitacao Produtos
 

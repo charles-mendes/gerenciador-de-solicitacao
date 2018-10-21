@@ -22,6 +22,8 @@
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <!-- You can change the theme colors from here -->
     <link href="{{ asset('css/colors/blue.css') }}" id="theme" rel="stylesheet">
+    <!-- Datatables-->
+    <link href="{{ asset('plugins/datatables/jquery.dataTables.min.css') }}" rel="stylesheet">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -36,6 +38,7 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
+    @stack('styles')
     
 </head>
 
@@ -207,6 +210,8 @@
     <!-- All Jquery -->
     <!-- ============================================================== -->
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+    <!-- DataTables -->
+    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <!-- Bootstrap tether Core JavaScript -->
     <script src="{{ asset('plugins/bootstrap/js/tether.min.js') }}"></script>
     
