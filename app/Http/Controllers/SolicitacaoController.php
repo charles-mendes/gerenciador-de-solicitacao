@@ -15,25 +15,21 @@ class SolicitacaoController extends Controller
 {
     
     public function index(){
-        return view('solicitacao.index');
+        $solicitacoes = Solicitacao::all();
+        //mandar para tela listar com os produtos e com os servicos
+
+        return view('solicitacao.listar', ['solicitacoes'=> $solicitacoes]);
     }
 
 
 
     public function listar(){
         
-        //ir na tabela 
-        //produto
-        //e ir na tabela solititacao
-        //trazer tudo e mandar para view
-        $solicitacoes = Solicitacao::all();
-        
-        
-        // $solicitacao = Solicitacao::where('id',27)->first();
+       
+        // $solicitacoes = Solicitacao::all();
+        // //mandar para tela listar com os produtos e com os servicos
 
-        //mandar para tela listar com os produtos e com os servicos
-
-        return view('solicitacao.listar', ['solicitacoes'=> $solicitacoes]);
+        // return view('solicitacao.listar', ['solicitacoes'=> $solicitacoes]);
 
     }
 
@@ -108,6 +104,11 @@ class SolicitacaoController extends Controller
         }
     }
 
-
+    public function detalhe($id){
+        //pegando solicitacao
+        // dd('');
+        $solicitacao = Solicitacao::find($id);
+        return view('solicitacao.detalhe',['solicitacao'=> $solicitacao]);        
+    }
 
 }

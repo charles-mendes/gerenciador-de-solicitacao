@@ -24,6 +24,7 @@
             padding: 5px;
         }
     </style> --}}
+    <link href="{{ asset('css/switch.css') }}" rel="stylesheet">
 @endpush
 
 @push('scripts')
@@ -52,7 +53,8 @@
                                     <th>Data Criacao</th>
                                     <th>Ultima Modificacao</th>
                                     <th>Data Modificacao</th>
-                                    <th>Status</th>
+                                    <th>Situação</th>
+                                    <th>Ações</th>
                                 </tr>
                             </thead>
                         
@@ -65,11 +67,32 @@
                                             <td>N</td>
                                         @endif
                                         <td>{{$solicitacao->descricao}}</td>
-                                        <td>{{$solicitacao->id_criador}}</td>
+                                        <td>{{App\Usuario::find($solicitacao->id_criador)->nome}}</td>
                                         <td>{{$solicitacao->data_criacao}}</td>
-                                        <td>{{$solicitacao->id_modificador}}</td>
+                                        <td>{{App\Usuario::find($solicitacao->id_modificador)->nome}}</td>
                                         <td>{{$solicitacao->data_modificacao}}</td>
-                                        <td>{{$solicitacao->status}}</td>
+                                        <td>
+                                            @if($solicitacao->status == 'A')
+                                                <span class="label label-success">ativo</span>
+                                            @else
+                                                <span class="label label-success">Inativo</span>
+                                            @endif
+                                        </td>                                        
+                                        <td>
+                                            <button type="button" class="btn btn-primary" data-id="{{$solicitacao->id}}" onclick="visualizarSoliciticoes(this);" data-toggle="tooltip" data-placement="right" title=""
+                                                data-original-title="Clique aqui para visualizar os detalhes deste usuário">
+                                                    <i class="ti-eye"></i>
+                                            </button>
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="ti-settings"></i>
+                                                </button>
+                                                <div class="dropdown-menu" x-placement="bottom-start">
+                                                    <a class="dropdown-item" data-id="{{$solicitacao->id}}" onclick="alterarStatus(this);">Inativar</a>
+                                                </div>
+                                            </div>
+                                                  
+                                        </td>
                                     </tr>
 
                                     {{-- @if($solicitacao->produtos->first() !== null)
@@ -156,12 +179,20 @@
                                     <th>Ultima Modificacao</th>
                                     <th>Data Modificacao</th>
                                     <th>Status</th>
+                                    <th>Ações</th>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
             </div>    
+        </div>
+        <div class="modal fade" id="detalhe-solicitacao" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                        
+                </div>
+            </div>
         </div>    
 @endsection
 

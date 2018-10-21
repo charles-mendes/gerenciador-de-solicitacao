@@ -29,10 +29,15 @@ Route::get('/u', 'UsuarioController@index');
 
 //Solicitacao
 Route::get('/solicitacao', 'SolicitacaoController@index');
-Route::get('/solicitacao/listar', 'SolicitacaoController@listar')->name('listar_solicitacao');
+// Route::get('/solicitacao/listar', 'SolicitacaoController@listar')->name('listar_solicitacao');
 Route::get('/solicitacao/nova', 'SolicitacaoController@nova')->name('nova_solicitacao');
 Route::post('/solicitacao/cadastrar_produto', 'SolicitacaoController@cadastrar_produto')->name('cadastrar_produto');
 
+Route::get('/solicitacao/detalhe/{id}', 'SolicitacaoController@detalhe')->where('id','[0-9]+');
+
+// Route::get('user/{id}', function ($id) {
+//     //
+// })->where('id', '[0-9]+');
 
 //Solicitacao Produtos
 
