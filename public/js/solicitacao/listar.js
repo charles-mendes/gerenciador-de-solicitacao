@@ -1,6 +1,6 @@
 
 function novaSolicitacao(){
-    window.location.href = 'nova/';
+    window.location.href = '/solicitacao/nova';
 }
 
 function visualizarSoliciticoes(solicitacao){
