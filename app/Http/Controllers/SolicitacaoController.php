@@ -15,10 +15,7 @@ class SolicitacaoController extends Controller
 {
     
     public function index(){
-        $solicitacoes = Solicitacao::all();
-        //mandar para tela listar com os produtos e com os servicos
-
-        return view('solicitacao.listar', ['solicitacoes'=> $solicitacoes]);
+        
     }
 
 
@@ -26,10 +23,10 @@ class SolicitacaoController extends Controller
     public function listar(){
         
        
-        // $solicitacoes = Solicitacao::all();
-        // //mandar para tela listar com os produtos e com os servicos
+        $solicitacoes = Solicitacao::all();
+        //mandar para tela listar com os produtos e com os servicos
 
-        // return view('solicitacao.listar', ['solicitacoes'=> $solicitacoes]);
+        return view('solicitacao.listar', ['solicitacoes'=> $solicitacoes]);
 
     }
 

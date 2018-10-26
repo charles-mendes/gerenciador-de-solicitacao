@@ -47,7 +47,7 @@
                         <table id="example" class="display" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th></th>
+                                    {{-- <th></th> --}}
                                     <th>Descrição</th>
                                     <th>Criador</th>
                                     <th>Data Criacao</th>
@@ -61,11 +61,11 @@
                             <tbody>
                                 @foreach($solicitacoes as $solicitacao)
                                     <tr>
-                                        @if($solicitacao->produtos->first() !== null || $solicitacao->servicos->first() !== null)
+                                        {{-- @if($solicitacao->produtos->first() !== null || $solicitacao->servicos->first() !== null)
                                             <td>Tem</td>
                                         @else
                                             <td>N</td>
-                                        @endif
+                                        @endif --}}
                                         <td>{{$solicitacao->descricao}}</td>
                                         <td>{{App\Usuario::find($solicitacao->id_criador)->nome}}</td>
                                         <td>{{$solicitacao->data_criacao}}</td>
@@ -94,83 +94,9 @@
                                                   
                                         </td>
                                     </tr>
-
-                                    {{-- @if($solicitacao->produtos->first() !== null)
-                                        <tr>
-                                            <table id="example1" class="display" style="width:100%">
-                                                <thead>
-                                                    <tr>
-                                                        <td>Produtos</td>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <table id="example2" class="display" style="width:100%">
-                                                        <tr>
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Nome</th>
-                                                                    <th>Quantidade</th>
-                                                                    <th>Valor</th>
-                                                                    <th>Total Imposto</th>
-                                                                    <th>Descricao</th>
-                                                                    <th>link</th>
-                                                                </tr>
-                                                            </thead>
-                                                            @foreach($solicitacao->produtos as $produto)
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>{{$produto->nome}}</td>
-                                                                    <td>{{$produto->quantidade}}</td>
-                                                                    <td>{{$produto->valor}}</td>
-                                                                    <td>{{$produto->valor_imposto}}</td>
-                                                                    <td>{{$produto->descricao}}</td>
-                                                                    <td>{{$produto->link_oferta}}</td>
-                                                                </tr>
-                                                            </tbody>
-                                                            @endforeach
-                                                        </tr> 
-                                                    </table>      
-                                                </tbody>    
-                                            </table>    
-                                        </tr>
-                                    @endif
-                                    @if($solicitacao->servicos->first() !== null)
-                                        <tr>
-                                            <table id="example3" class="display" style="width:100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <td></td>
-                                                            <td>Servicos</td>
-                                                        </tr>
-                                                    </thead>
-                    
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Nome</th>
-                                                            <th>Quantidade</th>
-                                                            <th>Valor</th>
-                                                            <th>Total Imposto</th>
-                                                            <th>Descricao</th>
-                                                            <th>link</th>
-                                                        </tr>
-                                                    </thead>
-                                                @foreach($solicitacao->servicos as $servico)
-                                                    <tr>
-                                                        <td></td>
-                                                        <td>{{$servico->nome}}</td>
-                                                        <td>{{$servico->quantidade}}</td>
-                                                        <td>{{$servico->valor}}</td>
-                                                        <td>{{$servico->valor_imposto}}</td>
-                                                        <td>{{$servico->descricao}}</td>
-                                                        <td>{{$servico->link_oferta}}</td>
-                                                    </tr>
-                                                @endforeach
-                                            </table>    
-                                        </tr>
-                                    @endif --}}
                                 @endforeach
                             </tbody>
-                            <tfoot>
+                            {{-- <tfoot>
                                 <tr>
                                     <th></th>
                                     <th>Descrição</th>
@@ -181,7 +107,7 @@
                                     <th>Status</th>
                                     <th>Ações</th>
                                 </tr>
-                            </tfoot>
+                            </tfoot> --}}
                         </table>
                     </div>
                 </div>

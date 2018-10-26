@@ -79,10 +79,10 @@
 
                     <div class="form-group">
                         <div class="col-xs-12">
-                            <input class="form-control" type="text" id="email" name="email" required="" autofocus="" value="" placeholder="E-Mail">
-                            @if ($errors->has('email'))
+                            <input class="form-control" type="text" id="email-recuperacao" name="email-recuperacao" required="" autofocus="" value="" placeholder="E-Mail">
+                            @if ($errors->has('email-recuperacao'))
                                 <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $errors->first('email') }}</strong>
+                                    <strong>{{ $errors->first('email-recuperacao') }}</strong>
                                 </span>
                             @endif
                         </div>

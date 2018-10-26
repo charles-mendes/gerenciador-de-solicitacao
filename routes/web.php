@@ -12,7 +12,8 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    // return view('welcome');
+    // return view('auth.login');
 });
 
 Route::get('/dashboard', function () {
@@ -28,7 +29,7 @@ Route::get('/u', 'UsuarioController@index');
 
 
 //Solicitacao
-Route::get('/solicitacao', 'SolicitacaoController@index');
+Route::get('/solicitacao', 'SolicitacaoController@listar');
 // Route::get('/solicitacao/listar', 'SolicitacaoController@listar')->name('listar_solicitacao');
 Route::get('/solicitacao/nova', 'SolicitacaoController@nova')->name('nova_solicitacao');
 Route::post('/solicitacao/cadastrar_produto', 'SolicitacaoController@cadastrar_produto')->name('cadastrar_produto');
