@@ -28,7 +28,7 @@
 @endpush
 
 @push('scripts')
-    <script src="{{ asset('js/solicitacao/listar.js') }}"></script>
+    <script src="{{ asset('js/solicitacao/listar.js?t='.time()) }}"></script>
 @endpush
 
 
@@ -47,7 +47,7 @@
                         <table id="example" class="display" style="width:100%">
                             <thead>
                                 <tr>
-                                    {{-- <th></th> --}}
+                                    <th>id</th>
                                     <th>Descrição</th>
                                     <th>Criador</th>
                                     <th>Data Criacao</th>
@@ -66,6 +66,7 @@
                                         @else
                                             <td>N</td>
                                         @endif --}}
+                                        <td>{{$solicitacao->id}}</td>
                                         <td>{{$solicitacao->descricao}}</td>
                                         <td>{{App\Usuario::find($solicitacao->id_criador)->nome}}</td>
                                         <td>{{$solicitacao->data_criacao}}</td>

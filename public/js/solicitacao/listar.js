@@ -7,10 +7,10 @@ function visualizarSoliciticoes(solicitacao){
     
     let id = $(solicitacao).attr("data-id");
 
-    $('#detalhe-solicitacao .modal-content').load('detalhe/'+ id, function () {
+    $('#detalhe-solicitacao .modal-content').load('/solicitacao/detalhe/'+ id, function () {
         $('#detalhe-solicitacao').modal('show');
         $('table.display').DataTable();
-    })
+    });
 
     
 }
