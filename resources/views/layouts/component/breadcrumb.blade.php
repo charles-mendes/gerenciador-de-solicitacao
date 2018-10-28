@@ -1,3 +1,4 @@
+<h3 class="text-themecolor m-b-0 m-t-0">{{$title}}</h3>
 <ol class="breadcrumb">
     @forelse($localizacoes as $local)
         <li class="breadcrumb-item {{ empty($local[1]) ? 'active' : '' }}">

@@ -4,11 +4,8 @@
     @component(
         'layouts.component.breadcrumb',
         [
-            'localizacoes' =>
-            [
-                ['Home', route('dashboard') ],
-                ['nova-solicitacao', '']
-            ]
+          'title' => 'Nova Solicitacao',
+          'localizacoes' => [ ['Home', route('dashboard') ],['nova-solicitacao', ''] ] 
         ]
     )
     @endcomponent
@@ -23,21 +20,20 @@
   <script src="{{ asset('js/solicitacao/nova.js') }}"></script>
 @endpush
 
+@php
+    // dd(session('novaSolicitacao')->produtos)
+@endphp
 
 
 @section('content')
-
-
-  {{-- <table id="" class="display" style="width:100%"></table>
-  <table id="" class="display" style="width:100%"></table> --}}
   <div class="col-lg-12">
       <div class="card">
           <div class="card-block">
-              <h4 class="card-title">Nova Solicitação
-                  {{-- <button type="button" class="btn btn-primary float-right" onclick="novaSolicitacao();">Nova Solicitacao</button> --}}
+              <h4 class="card-title">
+                  Cadastrar Produto
+                  {{-- cadastrarProduto() --}}
                   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Cadastrar produto</button>
               </h4>
-              <h6 class="card-subtitle">Cadastrar Produto</h6>
               <div class="table-responsive">
                   <table id="" class="display" style="width:100%">
                       <thead>
@@ -48,30 +44,30 @@
                             <th>Valor Imposto</th>
                             <th>Descricao</th>
                             <th>Link Oferta</th>
-                            {{-- <th>Criador</th> --}}
-                            {{-- <th>Data Criacao</th> --}}
-                            {{-- <th>Ultima Modificacao</th> --}}
-                            {{-- <th>Data Modificacao</th> --}}
-                            {{-- <th>Status</th> --}}
+                            <th>Ações</th>
                           </tr>
                       </thead>
                   
-                      <tbody>                           
-                        @foreach($solicitacao->produtos as $produto)
-                            <tr>      
-                              <td>{{$produto->nome}}</td>
-                              <td>{{$produto->quantidade}}</td>
-                              <td>{{$produto->valor}}</td>
-                              <td>{{$produto->valor_imposto}}</td>
-                              <td>{{$produto->descricao}}</td>
-                              <td>{{$produto->link_oferta}}</td>
-                              {{-- <td>{{App\Usuario::find($produto->id_criador)->nome}}</td> --}}
-                              {{-- <td>{{$solicitacao->data_criacao}}</td> --}}
-                              {{-- <td>{{App\Usuario::find($produto->id_modificador)->nome}}</td> --}}
-                              {{-- <td>{{$solicitacao->data_modificacao}}</td> --}}
-                              {{-- <td>{{$solicitacao->status}}</td> --}}
-                            </tr>
-                        @endforeach
+                      <tbody>
+                        @if ( isset(session('novaSolicitacao')->produtos) )
+                          @foreach(session('novaSolicitacao')->produtos as $key => $produto)
+                              <tr>      
+                                <td>{{$produto->nome}}</td>
+                                <td>{{$produto->quantidade}}</td>
+                                <td>{{$produto->valor}}</td>
+                                <td>{{$produto->valor_imposto}}</td>
+                                <td>{{$produto->descricao}}</td>
+                                <td>{{$produto->link_oferta}}</td> 
+                                <th>
+                                  <button id="btn-edit" type="button" class="btn btn-primary" data-id="{{$key}}" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap"><i class="ti-pencil"></i></button>
+                                  {{-- <button type="button" class="btn btn-primary" data-id="{{$key}}" data-toggle="tooltip" data-target="#exampleModal" data-whatever="@getbootstrap"  data-placement="left" --}}
+                                      {{-- data-original-title="Clique aqui para editar o produto"> --}}
+                                          
+                                  {{-- </button>    --}}
+                                </th>                          
+                              </tr>
+                          @endforeach
+                        @endif 
                       </tbody>
                       <tfoot>
                           <tr>
@@ -81,25 +77,21 @@
                             <th>Valor Imposto</th>
                             <th>Descricao</th>
                             <th>Link Oferta</th>
-                            {{-- <th>Criador</th> --}}
-                            {{-- <th>Data Criacao</th> --}}
-                            {{-- <th>Ultima Modificacao</th> --}}
-                            {{-- <th>Data Modificacao</th> --}}
+                            <td>Ações</td>
                           </tr>
                       </tfoot>
                   </table>
               </div>
-
-              {{-- <h6 class="">Cadastrar Servicos</h6> --}}
              
           </div>
       </div>   
       <div class="card"> 
           <div class="card-block">
-              <h4 class="card-title">Nova Solicitação
+              <h4 class="card-title">
+                Cadastrar Servicos
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalServico" data-whatever="@getbootstrap">Cadastrar solicitacao</button>
               </h4>
-              <h6 class="card-subtitle">Cadastrar Servicos</h6>
+              {{-- <h6 class="card-subtitle">Cadastrar Servicos</h6> --}}
               <div class="table-responsive">
                   <table id="" class="display" style="width:100%">
                       <thead>
@@ -108,19 +100,22 @@
                             <th>Valor</th>
                             <th>Valor Imposto</th>
                             <th>Descricao</th>
+                            <th>Ações</th>
                           </tr>
                       </thead>
                       
                       <tbody>
-                        @foreach($solicitacao->servicos as $servico)
-                          <tr>
-                              <td>{{$servico->nome}}</td>
-                              <td>{{$servico->valor}}</td>
-                              <td>{{$servico->valor_imposto}}</td>
-                              <td>{{$servico->descricao}}</td>
-                              
-                          </tr>
-                        @endforeach
+                        @if ( isset(session('novaSolicitacao')->servicos) )
+                          @foreach(session('novaSolicitacao')->servicos as $servico)
+                            <tr>
+                                <td>{{$servico->nome}}</td>
+                                <td>{{$servico->valor}}</td>
+                                <td>{{$servico->valor_imposto}}</td>
+                                <td>{{$servico->descricao}}</td>
+                                <td>Ações</td>
+                            </tr>
+                          @endforeach
+                        @endif
                       </tbody>
                       <tfoot>
                           <tr>
@@ -128,12 +123,21 @@
                               <th>Valor</th>
                               <th>Valor Imposto</th>
                               <th>Descricao</th>
+                              <th>Ações</th>
                           </tr>
                       </tfoot>
                   </table>
               </div>
           </div>  
       </div>  
+  </div>  
+  
+  <div class="modal fade" id="produto" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+                  
+          </div>
+      </div>
   </div>    
 
 
@@ -196,7 +200,7 @@
           </div>
           <div class="modal-body">
             <p>itens obrigatorios (*)</p>
-            <form id="cadastrar_servico" action="{{route('cadastrar_produto')}}" method="POST">
+            <form id="cadastrar_servico" action="{{route('cadastrar_servico')}}" method="POST">
               @csrf
               <div class="form-group mb-0">
                 <label for="name" class="col-form-label">Nome do Servico*</label>

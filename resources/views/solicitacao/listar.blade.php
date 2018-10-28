@@ -4,11 +4,8 @@
     @component(
         'layouts.component.breadcrumb',
         [
-            'localizacoes' =>
-            [
-                ['Home', route('dashboard') ],
-                ['listar solicitacao', '']
-            ]
+            'title' => 'Listar Solicitações',
+            'localizacoes' => [ ['Home', route('dashboard') ],['listar solicitacao', ''] ]
         ]
     )
     @endcomponent
@@ -31,15 +28,15 @@
     <script src="{{ asset('js/solicitacao/listar.js?t='.time()) }}"></script>
 @endpush
 
-
+@php
+    // dd($solicitacoes);
+@endphp
 
 @section('content')
-    {{-- <div class="row">     --}}
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-block">
                     <h4 class="card-title">Listar Solicitações 
-                        {{-- <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Nova Solicitacao</button> --}}
                         <button type="button" class="btn btn-primary float-right" onclick="novaSolicitacao();">Nova Solicitacao</button>
                     </h4>
                     <h6 class="card-subtitle">Lista os solicitações cadastrados no sistema.</h6>
@@ -47,7 +44,7 @@
                         <table id="example" class="display" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>id</th>
+                                    {{-- <th>id</th> --}}
                                     <th>Descrição</th>
                                     <th>Criador</th>
                                     <th>Data Criacao</th>
@@ -61,12 +58,7 @@
                             <tbody>
                                 @foreach($solicitacoes as $solicitacao)
                                     <tr>
-                                        {{-- @if($solicitacao->produtos->first() !== null || $solicitacao->servicos->first() !== null)
-                                            <td>Tem</td>
-                                        @else
-                                            <td>N</td>
-                                        @endif --}}
-                                        <td>{{$solicitacao->id}}</td>
+                                        {{-- <td>{{$solicitacao->id}}</td> --}}
                                         <td>{{$solicitacao->descricao}}</td>
                                         <td>{{App\Usuario::find($solicitacao->id_criador)->nome}}</td>
                                         <td>{{$solicitacao->data_criacao}}</td>
@@ -97,18 +89,6 @@
                                     </tr>
                                 @endforeach
                             </tbody>
-                            {{-- <tfoot>
-                                <tr>
-                                    <th></th>
-                                    <th>Descrição</th>
-                                    <th>Criador</th>
-                                    <th>Data Criacao</th>
-                                    <th>Ultima Modificacao</th>
-                                    <th>Data Modificacao</th>
-                                    <th>Status</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </tfoot> --}}
                         </table>
                     </div>
                 </div>
