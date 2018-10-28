@@ -27,7 +27,7 @@ class SolicitacaoController extends Controller
     }
 
     public function edita_produto($id){
-        return view('solicitacao.modal.produto',[$id]);
+        return view('solicitacao.modal.produto',['id' => $id]);
     }
 
 
@@ -74,7 +74,7 @@ class SolicitacaoController extends Controller
         $produto->valor = $request->input('valor');
         $produto->valor_imposto = $request->input('imposto');
         $produto->descricao = $request->input('descricao');
-        $produto->link_oferta = $request->input('link-oferta');
+        $produto->link_oferta = $request->input('link_oferta');
         $produto->id_criador = Auth::user()->id;
         $produto->id_modificador = Auth::user()->id;
 
@@ -84,39 +84,44 @@ class SolicitacaoController extends Controller
 
         session()->put('novaSolicitacao', $solicitacao);
         
-        
-        // // $produto = new Produto;
-        // $produto->id_contrato = 0;
-        // $produto->nome = $request->input('name');
-        // $produto->quantidade = $request->input('quantidade');
-        // $produto->valor = $request->input('valor');
-        // $produto->valor_imposto = $request->input('imposto');
-        // $produto->descricao = $request->input('descricao');
-        // $produto->link_oferta = $request->input('link-oferta');
-        // $produto->id_criador = Auth::user()->id;
-        // //$produto->data_criacao = time();
-        // $produto->id_modificador = Auth::user()->id;
-        // //$produto->data_modificacao = time(); 
-        
-        
-        // if($produto->save()){
-        //     //adiciona produto a uma solicitacao
-        //     $detalhe_produto_solicitacao = new Detalhe_Solicitacao_Produto;
-        //     $detalhe_produto_solicitacao->id_solicitacao = session('solicitacao')->id;
-        //     $detalhe_produto_solicitacao->id_produto = $produto->id ;
-        //     $detalhe_produto_solicitacao->save();
-
-        //     //Atualiza solicitação da session fazendo consulta no banco
-        //     $solicitacao = Solicitacao::find(session('solicitacao')->id);
-        //     session(['solicitacao' => $solicitacao]);
-                        
-
-        //     return view('solicitacao.nova',['solicitacao'=> session('solicitacao')]);
-        // }
-
         return redirect()->route('nova_solicitacao');
         
     }
+
+    public function salvar_produto(Request $request){
+        $this->validate($request,[
+            'id_produto' => 'required',
+            'name' => 'required',
+            'quantidade' => 'required',
+            'valor'=> 'required',
+            // 'imposto'=>'',
+            // 'descricao'=>'required',
+            // 'link-oferta'=>'',
+         ]);
+
+        
+        //pegando o id do produto
+        $id = $request->input('id_produto');
+         
+        //pegando solicitacao da session
+        $solicitacao = session('novaSolicitacao');
+        
+        //alterar produto ja existente na session
+        $solicitacao->produtos[$id]->nome = $request->input('name');
+        $solicitacao->produtos[$id]->quantidade = $request->input('quantidade');
+        $solicitacao->produtos[$id]->valor = $request->input('valor');
+        $solicitacao->produtos[$id]->valor_imposto =  $request->input('imposto');
+        $solicitacao->produtos[$id]->descricao = $request->input('descricao');
+        $solicitacao->produtos[$id]->link_oferta = $request->input('link_oferta');
+        $solicitacao->produtos[$id]->id_criador = Auth::user()->id;
+        $solicitacao->produtos[$id]->id_modificador = Auth::user()->id;
+        
+        //adicionando alterações na solicitação 
+        session()->put('novaSolicitacao', $solicitacao);
+
+        return redirect()->route('nova_solicitacao');
+    }
+
 
     public function cadastrar_servico(Request $request){
         $this->validate($request,[

@@ -21,7 +21,7 @@
 @endpush
 
 @php
-    // dd(session('novaSolicitacao')->produtos)
+    // session()->forget('novaSolicitacao');
 @endphp
 
 
@@ -32,7 +32,9 @@
               <h4 class="card-title">
                   Cadastrar Produto
                   {{-- cadastrarProduto() --}}
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Cadastrar produto</button>
+                  <button type="button" onclick="cadastrarProduto()" class="btn btn-primary" 
+                    {{-- data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap" --}}
+                  >Cadastrar produto</button>
               </h4>
               <div class="table-responsive">
                   <table id="" class="display" style="width:100%">
@@ -59,7 +61,10 @@
                                 <td>{{$produto->descricao}}</td>
                                 <td>{{$produto->link_oferta}}</td> 
                                 <th>
-                                  <button id="btn-edit" type="button" class="btn btn-primary" data-id="{{$key}}" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap"><i class="ti-pencil"></i></button>
+                                  <button id="btn-edit" type="button" class="btn btn-primary" data-id="{{$key}}" 
+                                    {{-- data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap" --}}
+                                    onclick="editarProduto(this)"
+                                  ><i class="ti-pencil"></i></button>
                                   {{-- <button type="button" class="btn btn-primary" data-id="{{$key}}" data-toggle="tooltip" data-target="#exampleModal" data-whatever="@getbootstrap"  data-placement="left" --}}
                                       {{-- data-original-title="Clique aqui para editar o produto"> --}}
                                           

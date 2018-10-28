@@ -35,6 +35,10 @@ Route::get('/solicitacao/novo-produto/', 'SolicitacaoController@novo_produto');
 Route::get('/solicitacao/edita-produto/{id}', 'SolicitacaoController@edita_produto');
 
 Route::post('/solicitacao/cadastrar_produto', 'SolicitacaoController@cadastrar_produto')->name('cadastrar_produto');
+Route::post('/solicitacao/salvar_produto', 'SolicitacaoController@salvar_produto')->name('salvar_produto');
+
+
+
 Route::post('/solicitacao/cadastrar_servico', 'SolicitacaoController@cadastrar_servico')->name('cadastrar_servico');
 
 Route::get('/solicitacao/detalhe/{id}', 'SolicitacaoController@detalhe')->where('id','[0-9]+');

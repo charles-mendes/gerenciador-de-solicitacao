@@ -22,13 +22,13 @@ $(document).ready(function () {
     // });
 
 
-    $('#btn-cadastro-produto').click(function(){
-        $('#cadastrar_produto').submit();
-    });
+    // $('#btn-cadastro-produto').click(function(){
+    //     $('#cadastrar_produto').submit();
+    // });
 
-    $('#btn-cadastro-servico').click(function(){
-        $('#cadastrar_servico').submit();
-    });
+    // $('#btn-cadastro-servico').click(function(){
+    //     $('#cadastrar_servico').submit();
+    // });
 
 });
 
