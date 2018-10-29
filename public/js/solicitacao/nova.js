@@ -11,24 +11,6 @@ $(document).ready(function () {
 
     $('table.display').DataTable();
 
-    // $('#btn-edit').click(function(){
-        
-    //     let id = $(this).attr("data-id");
-
-        
-    //     //alterar o action 
-    //     $('cadastrar_produto');
-    //     // $('#cadastrar_produto').submit();
-    // });
-
-
-    // $('#btn-cadastro-produto').click(function(){
-    //     $('#cadastrar_produto').submit();
-    // });
-
-    // $('#btn-cadastro-servico').click(function(){
-    //     $('#cadastrar_servico').submit();
-    // });
 
 });
 
@@ -39,8 +21,6 @@ function cadastrarProduto(){
         $('#produto').modal('show');
         $('table.display').DataTable();
     });
-
-    // detalhe-solicitacao
 }
 
 
@@ -52,6 +32,26 @@ function editarProduto(produto){
         $('#produto').modal('show');
         $('table.display').DataTable();
     });
+    
+}
 
+
+function cadastrarServico(){
+    
+    $('#servico .modal-content').load('/solicitacao/novo-servico/', function () {
+        $('#servico').modal('show');
+        $('table.display').DataTable();
+    });
+}
+
+
+function editarServico(servico){
+    
+    let id = $(servico).attr("data-id");
+
+    $('#produto .modal-content').load('/solicitacao/edita-servico/'+ id, function () {
+        $('#produto').modal('show');
+        $('table.display').DataTable();
+    });
     
 }

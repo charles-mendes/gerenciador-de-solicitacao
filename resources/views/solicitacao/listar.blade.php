@@ -66,9 +66,16 @@
                                         <td>{{$solicitacao->data_modificacao}}</td>
                                         <td>
                                             @if($solicitacao->status == 'A')
-                                                <span class="label label-success">ativo</span>
-                                            @else
-                                                <span class="label label-success">Inativo</span>
+                                                <span class="label label-success">aprovado</span>
+                                            @endif
+                                            @if($solicitacao->status == 'P')
+                                                <span class="label label-success">pendente</span>
+                                            @endif
+                                            @if($solicitacao->status == 'R')
+                                                <span class="label label-success">reprovado</span>
+                                            @endif
+                                            @if($solicitacao->status == 'E')
+                                                <span class="label label-alert">excluido</span>
                                             @endif
                                         </td>                                        
                                         <td>

@@ -14,7 +14,8 @@ class CreateSolicitacaoTable extends Migration
     {
         Schema::create('solicitacao', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum('status', ['A', 'I']);
+            $table->enum('status', ['P','A','R','E'])->default('P')
+            ->comment('P = Pendente A = Aprovado R = reprovado E = excluiu solicitação');
             $table->string('descricao');
             $table->integer('id_criador');
             $table->timestamp('data_criacao');
