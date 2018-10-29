@@ -22,183 +22,29 @@ class SolicitacaoController extends Controller
         $this->middleware('auth');
     }
     
-    // public function index(){
+    public function nova(){
         
-    // }
-
-    public function novo_produto(){
-        //verifica se a session existe, se não existir ele redireciona a nova solicitacao
-        if(session()->has('novaSolicitacao')){
-            return view('solicitacao.modal.produto');
-        }
-        return redirect()->route('nova_solicitacao');
-    }
-
-    public function cadastrar_produto(Request $request){
-
-        $this->validate($request,[
-           'name' => 'required',
-           'quantidade' => 'required',
-            'valor'=> 'required',
-           // 'imposto'=>'',
-           // 'descricao'=>'required',
-           // 'link-oferta'=>'',
-        ]);
-
-        // adiciona um novo produto
-        $solicitacao = session('novaSolicitacao');
-        
-        $produto = new \stdClass();
-        $produto->nome = $request->input('name');
-        $produto->quantidade = $request->input('quantidade');
-        $produto->valor = $request->input('valor');
-        $produto->valor_imposto = $request->input('imposto');
-        $produto->descricao = $request->input('descricao');
-        $produto->link_oferta = $request->input('link_oferta');
-        $produto->id_criador = Auth::user()->id;
-        $produto->id_modificador = Auth::user()->id;
-
-        
-        //adicionando o novo produto na sessao
-        $solicitacao->produtos[]= $produto;
-
-        session()->put('novaSolicitacao', $solicitacao);
-        
-        return redirect()->route('nova_solicitacao');
-        
-    }
-
-    public function edita_produto($id){
-        //verifica se a session existe, se não existir ele redireciona a nova solicitacao
-        if(session()->has('novaSolicitacao')){
-            return view('solicitacao.modal.produto',['id' => $id]);    
+        //verificando se session não existe
+        if(!session()->has('novaSolicitacao')){
+            session(['novaSolicitacao' => new \stdClass() ]);
         }
         
-        return redirect()->route('nova_solicitacao');
+        return view('solicitacao.nova');      
     }
-
-    public function salvar_produto(Request $request){
-        $this->validate($request,[
-            'id_produto' => 'required',
-            'name' => 'required',
-            'quantidade' => 'required',
-            'valor'=> 'required',
-            // 'imposto'=>'',
-            // 'descricao'=>'required',
-            // 'link-oferta'=>'',
-         ]);
-
+    
+    public function listar(){
         
-        //pegando o id do produto
-        $id = $request->input('id_produto');
-         
-        //pegando solicitacao da session
-        $solicitacao = session('novaSolicitacao');
-        
-        //alterar produto ja existente na session
-        $solicitacao->produtos[$id]->nome = $request->input('name');
-        $solicitacao->produtos[$id]->quantidade = $request->input('quantidade');
-        $solicitacao->produtos[$id]->valor = $request->input('valor');
-        $solicitacao->produtos[$id]->valor_imposto =  $request->input('imposto');
-        $solicitacao->produtos[$id]->descricao = $request->input('descricao');
-        $solicitacao->produtos[$id]->link_oferta = $request->input('link_oferta');
-        $solicitacao->produtos[$id]->id_criador = Auth::user()->id;
-        $solicitacao->produtos[$id]->id_modificador = Auth::user()->id;
-        
-        //adicionando alterações na solicitação 
-        session()->put('novaSolicitacao', $solicitacao);
+        $solicitacoes = Solicitacao::all();
+        //mandar para tela listar com os produtos e com os servicos
+        return view('solicitacao.listar', ['solicitacoes'=> $solicitacoes]);
 
-        return redirect()->route('nova_solicitacao');
     }
-
-
 
     
-    public function novo_servico(){
-        //verifica se a session existe, se não existir ele redireciona a nova solicitacao
-        if(session()->has('novaSolicitacao')){
-            return view('solicitacao.modal.servico');
-        }
-        return redirect()->route('nova_solicitacao');
-    }
-
-    public function cadastrar_servico(Request $request){
-        // dd($request->input());
-        $this->validate($request,[
-           'name' => 'required',
-        //    'quantidade' => 'required',
-            'valor'=> 'required',
-           // 'imposto'=>'',
-           'descricao'=>'required',
-           // 'link-oferta'=>'',
-        ]);
-
-        // adiciona um novo produto
-        $solicitacao = session('novaSolicitacao');
-        
-        $servico = new \stdClass();
-        $servico->nome = $request->input('name');
-        $servico->quantidade = $request->input('quantidade');
-        $servico->valor = $request->input('valor');
-        $servico->valor_imposto = $request->input('imposto');
-        $servico->descricao = $request->input('descricao');
-        $servico->link_oferta = $request->input('link_oferta');
-        $servico->id_criador = Auth::user()->id;
-        $servico->id_modificador = Auth::user()->id;
-
-        
-        //adicionando o novo produto na sessao
-        $solicitacao->servicos[]= $servico;
-
-        session()->put('novaSolicitacao', $solicitacao);
-        
-        return redirect()->route('nova_solicitacao');
-        
-    }
-
-
-    public function edita_servico($id){
-        //verifica se a session existe, se não existir ele redireciona a nova solicitacao
-        if(session()->has('novaSolicitacao')){
-            return view('solicitacao.modal.servico',['id' => $id]);    
-        }
-        
-        return redirect()->route('nova_solicitacao');
-    }
-
-
-    public function salvar_servico(Request $request){
-        $this->validate($request,[
-            'id_servico' => 'required',
-            'name' => 'required',
-            // 'quantidade' => 'required',
-            'valor'=> 'required',
-            // 'imposto'=>'',
-            'descricao'=>'required',
-            // 'link-oferta'=>'',
-         ]);
-
-        
-        //pegando o id do servico
-        $id = $request->input('id_servico');
-         
-        //pegando solicitacao da session
-        $solicitacao = session('novaSolicitacao');
-        
-        //alterar produto ja existente na session
-        $solicitacao->servicos[$id]->nome = $request->input('name');
-        $solicitacao->servicos[$id]->quantidade = $request->input('quantidade');
-        $solicitacao->servicos[$id]->valor = $request->input('valor');
-        $solicitacao->servicos[$id]->valor_imposto =  $request->input('imposto');
-        $solicitacao->servicos[$id]->descricao = $request->input('descricao');
-        $solicitacao->servicos[$id]->link_oferta = $request->input('link_oferta');
-        $solicitacao->servicos[$id]->id_criador = Auth::user()->id;
-        $solicitacao->servicos[$id]->id_modificador = Auth::user()->id;
-        
-        //adicionando alterações na solicitação 
-        session()->put('novaSolicitacao', $solicitacao);
-
-        return redirect()->route('nova_solicitacao');
+    public function detalhe($id){
+        //pegando solicitacao
+        $solicitacao = Solicitacao::find($id);
+        return view('solicitacao.detalhe',['solicitacao'=> $solicitacao]);        
     }
 
 
@@ -221,6 +67,7 @@ class SolicitacaoController extends Controller
         
         //pegando solicitacao da session
         $solicitacaoSession = session('novaSolicitacao');
+        // dd($solicitacaoSession);
         // dd($solicitacaoSession);
         foreach ($solicitacaoSession as $key => $categoria) {
             //categoria = servico ou produto
@@ -279,37 +126,5 @@ class SolicitacaoController extends Controller
 
     }
 
-
-
-
-
-
-    public function listar(){
-        
-       
-        $solicitacoes = Solicitacao::all();
-        //mandar para tela listar com os produtos e com os servicos
-        return view('solicitacao.listar', ['solicitacoes'=> $solicitacoes]);
-
-    }
-
-    public function nova(){
-        
-        //verificando se session não existe
-        if(!session()->has('novaSolicitacao')){
-            session(['novaSolicitacao' => new \stdClass() ]);
-        }
-        
-        return view('solicitacao.nova');      
-    }
-
-
-
-
-    public function detalhe($id){
-        //pegando solicitacao
-        $solicitacao = Solicitacao::find($id);
-        return view('solicitacao.detalhe',['solicitacao'=> $solicitacao]);        
-    }
 
 }

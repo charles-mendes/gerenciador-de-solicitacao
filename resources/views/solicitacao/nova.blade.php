@@ -22,6 +22,7 @@
 
 @php
     // session()->forget('novaSolicitacao');
+    // dd(Auth::user());
 @endphp
 
 
@@ -72,17 +73,6 @@
                           @endforeach
                         @endif 
                       </tbody>
-                      <tfoot>
-                          <tr>
-                            <th>Nome</th>
-                            <th>Quantidade</th>
-                            <th>Valor</th>
-                            <th>Valor Imposto</th>
-                            <th>Descricao</th>
-                            <th>Link Oferta</th>
-                            <td>Ações</td>
-                          </tr>
-                      </tfoot>
                   </table>
               </div>
              
@@ -123,15 +113,6 @@
                           @endforeach
                         @endif
                       </tbody>
-                      <tfoot>
-                          <tr>
-                              <th>Nome</th>
-                              <th>Valor</th>
-                              <th>Valor Imposto</th>
-                              <th>Descricao</th>
-                              <th>Ações</th>
-                          </tr>
-                      </tfoot>
                   </table>
               </div>
           </div>  

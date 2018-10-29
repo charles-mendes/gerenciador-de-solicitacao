@@ -9,7 +9,12 @@ function visualizarSoliciticoes(solicitacao){
 
     $('#detalhe-solicitacao .modal-content').load('/solicitacao/detalhe/'+ id, function () {
         $('#detalhe-solicitacao').modal('show');
-        $('table.display').DataTable();
+        $('table-produto').DataTable({
+            "searching": false
+        });
+        $('table-servico').DataTable({
+            "searching": false
+        });
     });
 
     

@@ -44,7 +44,7 @@
                 <p>Nãao há produtos.</p>
             @else
                 <div class="table-responsive">
-                    <table id="" class="display" style="width:100%">
+                    <table id="table-produto" class="display" style="width:100%">
                         <thead>
                             <tr>
                                 <th>Nome</th>
@@ -75,17 +75,6 @@
                                 </tr>
                             @endforeach
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Quantidade</th>
-                                <th>Valor</th>
-                                <th>Valor Imposto</th>
-                                <th>Descricao</th>
-                                <th>link Oferta</th>
-                                <th>Ações</th>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>                
 
@@ -96,7 +85,7 @@
                 <p>Não há serviços.</p>
             @else
             <div class="table-responsive">
-                <table id="" class="display" style="width:100%">
+                <table id="table-servico" class="display" style="width:100%">
                     <thead>
                         <tr>
                             <th>Nome</th>
@@ -123,15 +112,6 @@
                             </tr>
                         @endforeach
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Valor</th>
-                            <th>Valor Imposto</th>
-                            <th>Descricao</th>
-                            <th>Ações</th>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>                
 
