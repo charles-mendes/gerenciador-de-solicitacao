@@ -109,3 +109,10 @@ para gerar os usuario fakes
 >php artisan db:seed --class=UsuarioTableSeeder -v
 
 
+
+
+
+* para criar a branch local que esta na remota 
+    git checkout -b feature/solicitacao1
+* para atualizar a branch 
+    git pull origin feature/solicitacao1

@@ -9,7 +9,7 @@
     <meta name="author" content="Charles e Rafael">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon.png') }}">
-    <!-- <title>TCC</title> -->
+    <title>TCC</title>
     <!-- Bootstrap Core CSS -->
     <link href="{{ asset('plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- chartist CSS -->
@@ -22,6 +22,9 @@
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <!-- You can change the theme colors from here -->
     <link href="{{ asset('css/colors/blue.css') }}" id="theme" rel="stylesheet">
+    <!-- Datatables-->
+    {{-- <link href="{{ asset('plugins/datatables/media/css/dataTables.min.css') }}" rel="stylesheet"> --}}
+    <link href="{{ asset('plugins/datatables/media/css/jquery.dataTables_themeroller.css') }}" rel="stylesheet">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -36,6 +39,7 @@
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
+    @stack('styles')
     
 </head>
 
@@ -164,8 +168,26 @@
             <!-- ============================================================== -->
             <!-- Container fluid  -->
             <!-- ============================================================== -->
-            
-            @yield('content')
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <div class="row page-titles">
+                    <div class="col-md-5 col-8 align-self-center">
+                        @yield('breadcrumb')
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Bread crumb and right sidebar toggle -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                @yield('content')
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+            </div>    
             <!-- ============================================================== -->
             <!-- End Container fluid  -->
             <!-- ============================================================== -->
@@ -188,6 +210,8 @@
     <!-- All Jquery -->
     <!-- ============================================================== -->
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+    <!-- DataTables -->
+    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <!-- Bootstrap tether Core JavaScript -->
     <script src="{{ asset('plugins/bootstrap/js/tether.min.js') }}"></script>
     
@@ -208,7 +232,7 @@
     <!-- ============================================================== -->
     <!-- chartist chart -->
     <script src="{{ asset('plugins/chartist-js/dist/chartist.min.js') }}"></script>
-    <script src="{{ asset('plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js') }}"></script>
+    <!-- <script src="{{-- asset('plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js') --}}"></script> -->
     <!--c3 JavaScript -->
     <script src="{{ asset('plugins/d3/d3.min.js') }}"></script>
     <script src="{{ asset('plugins/c3-master/c3.min.js') }}"></script>
@@ -218,5 +242,7 @@
     <!-- Style switcher -->
     <!-- ============================================================== -->
     
+
+    @stack('scripts')
 </body>
 </html>
