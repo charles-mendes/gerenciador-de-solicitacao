@@ -27,9 +27,17 @@ Route::get('/dashboard', function () {
     return view('layouts.principal');
 })->name('dashboard');
 
-Route::get('/solicitacao', 'SolicitacaoController@listar')->name('lista_solicitacao')->middleware(['verifySessionSolicitacao']);
-Route::get('/solicitacao/listar', 'SolicitacaoController@listar')->name('listar_solicitacao')->middleware(['verifySessionSolicitacao']);
-Route::get('/solicitacao/nova', 'SolicitacaoController@nova')->name('nova_solicitacao')->middleware(['verifySessionSolicitacao']);
+//Usuarios
+Route::get('/usuarios', 'UsuarioController@listar')->name('lista_usuarios');
+Route::get('/usuarios/novo-usuario/', 'UsuarioController@novo_usuario');
+Route::post('/usuarios/cadastrar_usuario', 'UsuarioController@cadastrar_usuario')->name('cadastrar_usuario');
+Route::get('/usuarios/edita-usuario/{id}', 'UsuarioController@edita_usuario');
+Route::post('/usuarios/salvar_usuario', 'UsuarioController@salvar_usuario')->name('salvar_usuario');
+
+Route::get('/usuarios/mudar-situacao/{id}', 'UsuarioController@mudar_situacao');
+Route::post('/usuarios/salvar_situacao', 'UsuarioController@salvar_situacao')->name('salvar_situacao');
+
+
 
 //Produto
 Route::get('/solicitacao/novo-produto/', 'ProdutoController@novo_produto');
@@ -44,7 +52,11 @@ Route::get('/solicitacao/edita-servico/{id}', 'ServicoController@edita_servico')
 Route::post('/solicitacao/salvar_servico', 'ServicoController@salvar_servico')->name('salvar_servico');
 
 //Solicitacao
+Route::get('/solicitacao', 'SolicitacaoController@listar')->name('lista_solicitacao')->middleware(['verifySessionSolicitacao']);
+Route::get('/solicitacao/listar', 'SolicitacaoController@listar')->name('listar_solicitacao')->middleware(['verifySessionSolicitacao']);
+Route::get('/solicitacao/nova', 'SolicitacaoController@nova')->name('nova_solicitacao')->middleware(['verifySessionSolicitacao']);
 Route::post('/solicitacao/cadastrar_solicitacao', 'SolicitacaoController@cadastrar_solicitacao')->name('cadastrar_solicitacao');
+
 
 // Route::group(['middleware' => ['']], function () {
     
