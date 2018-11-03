@@ -122,7 +122,7 @@ class SolicitacaoController extends Controller
             }
         }
 
-        return redirect()->route('lista_solicitacao');
+        return redirect()->route('listar_solicitacao');
 
     }
 

@@ -54,7 +54,7 @@ class ServicoController extends Controller
     }
 
 
-    public function edita_servico($id){
+    public function editar_servico($id){
         //verifica se a session existe, se não existir ele redireciona a nova solicitacao
         if(session()->has('novaSolicitacao')){
             return view('solicitacao.modal.servico',['id' => $id]);    

@@ -56,7 +56,7 @@ class ProdutoController extends Controller
         
     }
 
-    public function edita_produto($id){
+    public function editar_produto($id){
         //verifica se a session existe, se não existir ele redireciona a nova solicitacao
         if(session()->has('novaSolicitacao')){
             return view('solicitacao.modal.produto',['id' => $id]);    
