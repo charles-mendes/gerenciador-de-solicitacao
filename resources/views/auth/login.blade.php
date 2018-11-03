@@ -18,9 +18,13 @@
                         <div class="col-xs-12">
                             <input class="form-control" type="text" id="email" name="email" required="" autofocus="" value="" placeholder="E-Mail">
                             @if ($errors->has('email'))
-                                <span class="invalid-feedback" role="alert">
+                                {{-- <span class="invalid-feedback" role="alert">
                                     <strong>{{ $errors->first('email') }}</strong>
-                                </span>
+                                </span> --}}
+
+                                <div class="alert alert-danger" role="alert">
+                                    {{ $errors->first('email') }}
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -29,9 +33,13 @@
                             <input class="form-control" id="password" name="password" type="password" required="" placeholder="Password">
 
                             @if ($errors->has('password'))
-                                <span class="invalid-feedback" role="alert">
+                                {{-- <span class="invalid-feedback" role="alert">
                                     <strong>{{ $errors->first('password') }}</strong>
-                                </span>
+                                </span> --}}
+
+                                <div class="alert alert-danger" role="alert">
+                                    {{ $errors->first('password') }}
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -81,9 +89,13 @@
                         <div class="col-xs-12">
                             <input class="form-control" type="text" id="email-recuperacao" name="email-recuperacao" required="" autofocus="" value="" placeholder="E-Mail">
                             @if ($errors->has('email-recuperacao'))
-                                <span class="invalid-feedback" role="alert">
+                                {{-- <span class="invalid-feedback" role="alert">
                                     <strong>{{ $errors->first('email-recuperacao') }}</strong>
-                                </span>
+                                </span> --}}
+
+                                <div class="alert alert-danger" role="alert">
+                                    {{ $errors->first('email-recuperacao') }}
+                                </div>
                             @endif
                         </div>
                     </div>  
