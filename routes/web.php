@@ -52,13 +52,17 @@ Route::get('/solicitacao/edita-servico/{id}', 'ServicoController@editar_servico'
 Route::post('/solicitacao/salvar_servico', 'ServicoController@salvar_servico')->name('salvar_servico');
 
 //Solicitacao
-Route::get('/solicitacoes', 'SolicitacaoController@listar')->name('listar_solicitacao')->middleware(['verifySessionSolicitacao']);
-Route::get('/solicitacao/nova', 'SolicitacaoController@nova')->name('nova_solicitacao')->middleware(['verifySessionSolicitacao']);
+Route::get('/solicitacoes', 'SolicitacaoController@listar')->name('listar_solicitacao');
+Route::get('/solicitacao/nova', 'SolicitacaoController@nova')->name('nova_solicitacao');
 Route::post('/solicitacao/cadastrar_solicitacao', 'SolicitacaoController@cadastrar_solicitacao')->name('cadastrar_solicitacao');
 
 //Fornecedor
 Route::get('/fornecedores', 'FornecedorController@listar')->name('listar_fornecedores');
+Route::get('/fornecedor/novo/', 'FornecedorController@novo');
+Route::post('/fornecedor/cadastrar_fornecedor', 'FornecedorController@cadastrar_fornecedor')->name('cadastrar_fornecedor');
+Route::post('/fornecedor/salvar_fornecedor', 'FornecedorController@salvar_fornecedor')->name('salvar_fornecedor');
 
+// /fornecedor/novo-fornecedor/
 
 
 // Route::group(['middleware' => ['']], function () {
