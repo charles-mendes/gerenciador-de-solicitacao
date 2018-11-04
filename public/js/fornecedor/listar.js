@@ -4,7 +4,7 @@ function novoFornecedor(){
         $('#fornecedor').modal('show');
         $('table.display').DataTable();
 
-        //colocando ações no botão check enderco
+        // ocultar/mostrar campo do endereco
         $("#check_endereco").click(function(){
             //verificar se botão ta check 
             if($("#check_endereco").is(":checked") == true){
@@ -18,6 +18,7 @@ function novoFornecedor(){
             
         }); 
 
+        // ocultar/mostrar campo do documento em anexo
         $("#check_anexo").click(function(){
             //verificar se botão ta check 
             if($("#check_anexo").is(":checked") == true){
@@ -27,6 +28,20 @@ function novoFornecedor(){
             }else{
                 $('#field_anexo').hide();
                 $('#anexo').prop('required',false);
+            }
+            
+        }); 
+
+        // ocultar/mostrar campo do CPF/CNPJ
+        $("#check_identificacao").click(function(){
+            //verificar se botão ta check 
+            if($("#check_identificacao").is(":checked") == true){
+                $('#field_identificacao').show();
+                //adicionando required nos campos 
+                $('#identificacao').prop('required',true);
+            }else{
+                $('#field_identificacao').hide();
+                $('#identificacao').prop('required',false);
             }
             
         }); 

@@ -47,7 +47,7 @@
                                     <tr>
                                         <td>{{$fornecedor->nome}}</td>
                                         <td>{{$fornecedor->cnpj}}</td>
-                                        <td>{{$fornecedor->status_contrato}}</td>
+                                        <td>{{$fornecedor->status_contato_forn}}</td>
                                         <td>{{$fornecedor->telefone}}</td>
                                         <td>{{$fornecedor->email}}</td>
                                         {{-- <td>
@@ -66,8 +66,8 @@
                                         </td>                                         --}}
                                         <td>{{$fornecedor->categoria}}</td>
                                         <td>
-                                            <button type="button" class="btn btn-primary" data-id="{{$solicitacao->id}}" onclick="visualizarSoliciticoes(this);" data-toggle="tooltip" data-placement="right" title=""
-                                                data-original-title="Clique aqui para visualizar os detalhes deste usuário">
+                                            <button type="button" class="btn btn-primary" data-id="{{$fornecedor->id}}" onclick="visualizarFornecedor(this);" data-toggle="tooltip" data-placement="right" title=""
+                                                data-original-title="Clique aqui para visualizar os detalhes deste fornecedor">
                                                     <i class="ti-eye"></i>
                                             </button>
                                             <div class="btn-group">
@@ -75,7 +75,7 @@
                                                     <i class="ti-settings"></i>
                                                 </button>
                                                 <div class="dropdown-menu" x-placement="bottom-start">
-                                                    <a class="dropdown-item" data-id="{{$solicitacao->id}}" onclick="alterarStatus(this);">Inativar</a>
+                                                    <a class="dropdown-item" data-id="{{$fornecedor->id}}" onclick="alterarStatus(this);">Inativar</a>
                                                 </div>
                                             </div>
                                                   

@@ -13,9 +13,13 @@
             <label for="name" class="col-form-label">Nome do Fornecedor*</label>
             <input type="text" class="form-control" id="nome" name="nome" value="{{isset($fornecedor) ? $fornecedor->nome : ''}}">
         </div>
-        <div class="form-group mb-0">
-            <label for="quantidade" min="1" class="col-form-label">CPF/CNPJ*</label>
-            <input type="number" class="form-control" id="quantidade" name="quantidade" value="{{isset($fornecedor) ? $fornecedor->cnpj : ''}}">
+        <div class="form-group mb-2 mt-3">
+            <input type="checkbox" id="check_identificacao" name="check_identificacao" />
+            <label for="check_identificacao">Possui CPF/CNPJ ?</label>
+        </div>
+        <div  id="field_identificacao" class="form-group mb-0" style="display:none">
+            <label for="identificacao" class="col-form-label">CPF/CNPJ*</label>
+            <input type="number" class="form-control" id="identificacao" name="identificacao" value="{{isset($fornecedor) ? $fornecedor->cnpj : ''}}">
         </div>
         <div class="form-group mb-0">
             <label for="telefone" class="col-form-label">Telefone *</label>

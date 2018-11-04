@@ -19,7 +19,7 @@ class CreateFornecedoresTable extends Migration
         Schema::create('fornecedor', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nome');
-            $table->string('cpnj');
+            $table->string('cnpj')->nullable();
             //TODO :: nao entendi esse
             $table->char('status_contato_forn',1);
             $table->string('telefone');
