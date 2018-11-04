@@ -20,13 +20,14 @@ class CreateFornecedoresTable extends Migration
             $table->increments('id');
             $table->string('nome');
             $table->string('cnpj')->nullable();
-            //TODO :: nao entendi esse
-            $table->char('status_contato_forn',1);
+            $table->enum('status', ['A','I'])->default('A');
             $table->string('telefone');
             $table->string('email');
-            $table->string('categoria');
+            $table->string('descricao');
             $table->integer('id_criador');
             $table->timestamp('data_criacao');
+            $table->integer('id_modificador');
+            $table->timestamp('data_modificacao');
         });
     }
 

@@ -57,13 +57,26 @@
         </div>
 
         <div class="form-group mb-2 mt-3">
-            <input type="checkbox" id="check_anexo" name="check_anexo" />
-            <label for="check_anexo">Possui anexo ?</label>
+            <input type="checkbox" id="check_contrato" name="check_contrato" />
+            <label for="check_contrato">Possui contrato ?</label>
         </div>
 
-        <div  id="field_anexo" class="form-group mb-0" style="display:none">
-            <label for="anexo" class="col-form-label">Anexos</label>
-            <input type="mail" class="form-control" id="anexo" name="anexo" value="{{isset($fornecedor) ? $fornecedor->email : ''}}">
+        <div  id="fields_contrato" class="form-group mb-0" style="display:none">
+                <label for="numero_contrato" class="col-form-label">Numero do Contrato</label>
+                <input type="text" class="form-control verify-required-contrato" id="numero_contrato" name="numero_contrato" value="{{isset($fornecedor) ? $fornecedor->email : ''}}">
+
+                <label for="descricao_contrato" class="col-form-label">Descricao Contrato</label>
+                <input type="text" class="form-control verify-required-contrato" id="descricao_contrato" name="descricao_contrato" value="{{isset($fornecedor) ? $fornecedor->email : ''}}">
+
+                <label for="data_vencimento" class="col-form-label">Data Vencimento</label>
+                <input type="date" class="form-control verify-required-contrato" id="data_vencimento" name="data_vencimento" value="{{isset($fornecedor) ? $fornecedor->email : ''}}">
+
+
+                {{-- <div class="form-group mb-2 mt-3">
+                    <input type="checkbox" id="check_anexo" name="check_anexo" />
+                    <label for="check_anexo">Possui anexo ?</label>
+                </div> --}}
+
         </div>
     </form>
 </div>

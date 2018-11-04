@@ -18,19 +18,6 @@ function novoFornecedor(){
             
         }); 
 
-        // ocultar/mostrar campo do documento em anexo
-        $("#check_anexo").click(function(){
-            //verificar se botão ta check 
-            if($("#check_anexo").is(":checked") == true){
-                $('#field_anexo').show();
-                //adicionando required nos campos 
-                $('#anexo').prop('required',true);
-            }else{
-                $('#field_anexo').hide();
-                $('#anexo').prop('required',false);
-            }
-            
-        }); 
 
         // ocultar/mostrar campo do CPF/CNPJ
         $("#check_identificacao").click(function(){
@@ -45,8 +32,26 @@ function novoFornecedor(){
             }
             
         }); 
+
+        
+         // ocultar/mostrar campo do documento em anexo
+         $("#check_contrato").click(function(){
+            required(this,'#fields_contrato','.verify-required-contrato');
+        }); 
     });
 
+}
+
+function required(botao,campo,identificador){
+      //verificar se botão ta check 
+      if($(botao).is(":checked") == true){
+        $(campo).show();
+        //adicionando required nos campos 
+        $(identificador).prop('required',true);
+    }else{
+        $(campo).hide();
+        $(identificador).prop('required',false);
+    }
 }
 
 function visualizarSoliciticoes(solicitacao){

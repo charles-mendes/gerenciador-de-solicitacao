@@ -15,18 +15,17 @@ class CreateContratosTable extends Migration
     {
         Schema::create('contrato', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_usuario');
             $table->unsignedInteger('id_fornecedor');
-            $table->string('tipo');
-            $table->date('data_vencimento');
+            $table->string('numero_contrato');
             $table->enum('status', ['A', 'I']);
-            $table->integer('id_modificador');
+            $table->string('descricao');
+            $table->integer('id_criador');
             $table->timestamp('data_criacao');
-            $table->timestamp('data_modificacao')->nullable();
-
-            $table->foreign('id_usuario')
-                    ->references('id')->on('usuario')
-                    ->onDelete('cascade');
+            $table->integer('id_modificador');
+            $table->integer('data_modificacao');
+            $table->date('data_vencimento');
+            $table->enum('status_anexo', ['0', '1']);
+        
             $table->foreign('id_fornecedor')
                     ->references('id')->on('fornecedor')
                     ->onDelete('cascade');
