@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Solicitacao;
 use App\Produto;
+use App\Http\Controllers\ProdutoController;
 use App\Servico;
 use App\Detalhe_Solicitacao_Produto;
 use App\Detalhe_Solicitacao_Servico;
@@ -125,6 +126,75 @@ class SolicitacaoController extends Controller
         return redirect()->route('listar_solicitacao');
 
     }
+
+    public function novo_produto(){
+        //verifica se a session existe, se não existir ele redireciona a nova solicitacao
+        if(session()->has('novaSolicitacao')){
+            return view('solicitacao.modal.produto');
+        }
+        return redirect()->route('nova_solicitacao');
+    }
+
+    public function cadastrar_produto(Request $request){
+        $this->validate($request,[
+            'name' => 'required',
+            'quantidade' => 'required',
+             'valor'=> 'required',
+            // 'imposto'=>'',
+            // 'descricao'=>'required',
+            // 'link-oferta'=>'',
+         ]);
+
+        // adiciona um novo produto
+        $solicitacao = session('novaSolicitacao');
+        // dd('');
+        $produto = ProdutoController::cadastrar_produto($request);
+
+        //adicionando o novo produto na sessao
+        $solicitacao->produtos[]= $produto;
+
+        session()->put('novaSolicitacao', $solicitacao);
+        
+        return redirect()->route('nova_solicitacao');
+    }
+
+    public function editar_produto($id){
+        //verifica se a session existe, se não existir ele redireciona a nova solicitacao
+        if(session()->has('novaSolicitacao')){
+            return view('solicitacao.modal.produto',['id' => $id]);    
+        }
+        
+        return redirect()->route('nova_solicitacao');
+    }
+
+    public function salvar_produto(Request $request){
+        $this->validate($request,[
+            'id_produto' => 'required',
+            'name' => 'required',
+            'quantidade' => 'required',
+            'valor'=> 'required',
+            // 'imposto'=>'',
+            // 'descricao'=>'required',
+            // 'link-oferta'=>'',
+         ]);
+
+        
+        //pegando o id do produto
+        $id = $request->input('id_produto');
+         
+        //pegando solicitacao da session
+        $solicitacao = session('novaSolicitacao');
+        
+        //alterar produto ja existente na session
+        $solicitacao = ProdutoController::salvar_produto($solicitacao, $id, $request);
+        
+        //adicionando alterações na solicitação 
+        session()->put('novaSolicitacao', $solicitacao);
+
+        return redirect()->route('nova_solicitacao');
+    }
+
+
 
 
 }

@@ -39,17 +39,19 @@ Route::post('/usuarios/salvar_situacao', 'UsuarioController@salvar_situacao')->n
 
 
 
-//Produto
-Route::get('/solicitacao/novo-produto/', 'ProdutoController@novo_produto');
-Route::post('/solicitacao/cadastrar_produto', 'ProdutoController@cadastrar_produto')->name('cadastrar_produto');
-Route::get('/solicitacao/edita-produto/{id}', 'ProdutoController@editar_produto');
-Route::post('/solicitacao/salvar_produto', 'ProdutoController@salvar_produto')->name('salvar_produto');
+//Solicitacao - Produto 
+Route::get('/solicitacao/novo-produto/', 'SolicitacaoController@novo_produto');
+Route::post('/solicitacao/cadastrar_produto', 'SolicitacaoController@cadastrar_produto')->name('cadastrar_produto_solicitacao');
+Route::get('/solicitacao/edita-produto/{id}', 'SolicitacaoController@editar_produto');
+Route::post('/solicitacao/salvar_produto', 'SolicitacaoController@salvar_produto')->name('salvar_produto_solicitacao');
 
-//Servico
+//Solicitacao - Servico
 Route::get('/solicitacao/novo-servico/', 'ServicoController@novo_servico');
 Route::post('/solicitacao/cadastrar_servico', 'ServicoController@cadastrar_servico')->name('cadastrar_servico');
 Route::get('/solicitacao/edita-servico/{id}', 'ServicoController@editar_servico');
 Route::post('/solicitacao/salvar_servico', 'ServicoController@salvar_servico')->name('salvar_servico');
+
+
 
 //Solicitacao
 Route::get('/solicitacoes', 'SolicitacaoController@listar')->name('listar_solicitacao');
@@ -58,9 +60,24 @@ Route::post('/solicitacao/cadastrar_solicitacao', 'SolicitacaoController@cadastr
 
 //Fornecedor
 Route::get('/fornecedores', 'FornecedorController@listar')->name('listar_fornecedores');
-Route::get('/fornecedor/novo/', 'FornecedorController@novo');
+Route::get('/fornecedor/novo/', 'FornecedorController@novo')->name('novo_fornecedor');
 Route::post('/fornecedor/cadastrar_fornecedor', 'FornecedorController@cadastrar_fornecedor')->name('cadastrar_fornecedor');
-Route::post('/fornecedor/salvar_fornecedor', 'FornecedorController@salvar_fornecedor')->name('salvar_fornecedor');
+Route::get('/fornecedor/cadastrar/{id}', 'FornecedorController@cadastrar')->name('cadastrar');
+
+//Fornecedor :: Produto
+Route::get('/fornecedor/novo-produto', 'FornecedorController@novo_produto');
+
+Route::post('/fornecedor/cadastrar_produto', 'FornecedorController@cadastrar_produto')->name('cadastrar_produto_fornecedor');
+Route::get('/fornecedor/edita-produto/{id}', 'FornecedorController@editar_produto');
+Route::post('/fornecedor/salvar_produto', 'FornecedorController@salvar_produto')->name('salvar_produto_fornecedor');
+
+// Route::post('/fornecedor/cadastrar_produto', 'ProdutoController@cadastrar_produto')->name('cadastrar_produto');
+// Route::get('/solicitacao/edita-produto/{id}', 'ProdutoController@editar_produto');
+// Route::post('/solicitacao/salvar_produto', 'ProdutoController@salvar_produto')->name('salvar_produto');
+
+
+
+// Route::post('/fornecedor/salvar_fornecedor', 'FornecedorController@salvar_fornecedor')->name('salvar_fornecedor');
 
 // /fornecedor/novo-fornecedor/
 

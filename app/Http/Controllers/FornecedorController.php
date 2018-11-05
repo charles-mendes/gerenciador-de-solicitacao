@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Fornecedor;
 use App\Endereco;
+use App\Contrato;
 use Auth;
 
 use Illuminate\Http\Request;
@@ -46,6 +47,14 @@ class FornecedorController extends Controller
                 'pais' => 'required',
             ];
         }
+        if($array['check_contrato'] == 'on'){
+            $check_contrato = [
+                'numero_contrato' => 'required',
+                'descricao_contrato' => 'required',
+                'data_vencimento' => 'required',
+            ];  
+        }
+
         if($array['check_anexo'] == 'on'){
             $check_anexo = [
                 'anexo' => 'required',
@@ -62,6 +71,7 @@ class FornecedorController extends Controller
         $checkFinal = array_merge(
             isset($check_identificacao) ? $check_identificacao : [],
             isset($check_endereco) ? $check_endereco : [] ,
+            isset($check_contrato) ? $check_contrato : [] ,
             isset($check_anexo) ? $check_anexo : [] ,
             $checkPadrao
         );
@@ -72,12 +82,14 @@ class FornecedorController extends Controller
     }
 
 
-    public function cadastrar_fornecedor(Request $request){    
+    public function cadastrar_fornecedor(Request $request){  
         $arrayCheck = [
             'check_identificacao' => $request->input('check_identificacao'),
             'check_endereco' => $request->input('check_endereco'),
+            'check_contrato' => $request->input('check_contrato'),
             'check_anexo' => $request->input('check_anexo')
         ];
+
         //realizando validação
         $this->validate($request,$this->makeVerify($arrayCheck));
 
@@ -88,13 +100,16 @@ class FornecedorController extends Controller
             $fornecedor->cnpj = $request->input('identificacao');    
         }
         // $fornecedor->status_contato_forn = $request->input('#');
+        $fornecedor->status = 'A';
         $fornecedor->telefone = $request->input('telefone');
         $fornecedor->email = $request->input('email');
-        $fornecedor->status_contato_forn = 'A';
-        $fornecedor->categoria = 'A';
+        $fornecedor->descricao = $request->input('descricao');
+        // $fornecedor->categoria = 'A';
         // $fornecedor->categoria = $request->input('categoria');
         $fornecedor->id_criador = Auth::user()->id;
         $fornecedor->data_criacao = time();
+        $fornecedor->id_modificador = Auth::user()->id;
+        $fornecedor->data_modificacao = time();
         $fornecedor->save();
 
         //grava endereco do fornecedor
@@ -111,16 +126,63 @@ class FornecedorController extends Controller
             $endereco->save();
         }
         
-       //grava anexo do fornecedor
-        if( $request->input('check_anexo')== 'on'){
-                      
+       //grava contrato do fornecedor
+        if( $request->input('check_contrato') == 'on'){
+           $contrato = new Contrato();
+           $contrato->id_fornecedor = $fornecedor->id;           
+           $contrato->numero_contrato = $request->input('numero_contrato');
+           $contrato->status = 'A';
+           $contrato->descricao = $request->input('descricao_contrato');
+           $contrato->id_criador = Auth::user()->id;
+           $contrato->data_criacao = time() ;
+           $contrato->id_modificador = Auth::user()->id  ;
+           $contrato->data_modificacao = time() ;
+           $contrato->data_vencimento = $request->input('data_vencimento') ;
+           $contrato->status_anexo = '0';
+           $contrato->save();
         }
 
-        
-       
-
-        
+    
         return redirect()->route('listar_fornecedores');
         
     }
+
+
+    public function cadastrar($id){
+        if($id){
+           $fornecedor = Fornecedor::find($id);
+            return view('fornecedor.cadastrar',['fornecedor' => $fornecedor]);  
+        }
+        return back();
+          
+    }
+    public function novo_produto(Request $request){
+        //pegar o id do fornecedor
+        $url = explode('/',$request->headers->get('referer'));
+        $id_fornecedor = end($url);        
+
+        return view('modal.produto',['tipo' => 'fornecedor' , 'id_fornecedor' => $id_fornecedor]);    
+    }
+
+    public function cadastrar_produto(Request $request){
+        // dd($request->all());
+        $this->validate($request,[
+            'id_fornecedor' => 'required',
+            'name' => 'required',
+            'quantidade' => 'required',
+             'valor'=> 'required',
+            // 'imposto'=>'',
+            // 'descricao'=>'required',
+            // 'link-oferta'=>'',
+         ]);
+
+        $produto = ProdutoController::cadastrar_produto($request);
+        $produto->save();
+        
+        //id do fornecedor na rota
+        $id = $request->input('id_fornecedor');
+
+        return redirect()->route('cadastrar',['id' => $id]);
+    }
+
 }

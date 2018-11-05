@@ -37,7 +37,8 @@
                                     <th>Status Contrato</th>
                                     <th>Telefone</th>
                                     <th>Email</th>
-                                    <th>Categoria</th>
+                                    <th>Descricao</th>
+                                    <th>Produto</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
@@ -47,24 +48,21 @@
                                     <tr>
                                         <td>{{$fornecedor->nome}}</td>
                                         <td>{{$fornecedor->cnpj}}</td>
-                                        <td>{{$fornecedor->status_contato_forn}}</td>
+                                        <td>{{$fornecedor->status}}</td>
                                         <td>{{$fornecedor->telefone}}</td>
                                         <td>{{$fornecedor->email}}</td>
-                                        {{-- <td>
-                                            @if($solicitacao->status == 'A')
-                                                <span class="label label-success">aprovado</span>
+                                        <td>{{$fornecedor->descricao}}</td>
+                                        <td>
+                                            @if(1==1)
+                                                <button type="button" class="btn btn-primary" data-id="{{$fornecedor->id}}" onclick="cadastrar(this);" data-toggle="tooltip" data-placement="right" title=""
+                                                    data-original-title="Cadastrar produtos/servicos">
+                                                        + Produto/Servico
+                                                </button>
+                                            @else
+
                                             @endif
-                                            @if($solicitacao->status == 'P')
-                                                <span class="label label-success">pendente</span>
-                                            @endif
-                                            @if($solicitacao->status == 'R')
-                                                <span class="label label-success">reprovado</span>
-                                            @endif
-                                            @if($solicitacao->status == 'E')
-                                                <span class="label label-alert">excluido</span>
-                                            @endif
-                                        </td>                                         --}}
-                                        <td>{{$fornecedor->categoria}}</td>
+
+                                        </td>
                                         <td>
                                             <button type="button" class="btn btn-primary" data-id="{{$fornecedor->id}}" onclick="visualizarFornecedor(this);" data-toggle="tooltip" data-placement="right" title=""
                                                 data-original-title="Clique aqui para visualizar os detalhes deste fornecedor">

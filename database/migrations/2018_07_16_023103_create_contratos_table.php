@@ -22,7 +22,7 @@ class CreateContratosTable extends Migration
             $table->integer('id_criador');
             $table->timestamp('data_criacao');
             $table->integer('id_modificador');
-            $table->integer('data_modificacao');
+            $table->timestamp('data_modificacao');
             $table->date('data_vencimento');
             $table->enum('status_anexo', ['0', '1']);
         

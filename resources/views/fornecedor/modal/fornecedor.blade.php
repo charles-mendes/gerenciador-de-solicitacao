@@ -8,9 +8,8 @@
     <p>itens obrigatorios (*)</p>
     <form id="cria-edita-fornecedor" action="{{route( !isset($fornecedor) ? 'cadastrar_fornecedor' : 'salvar_fornecedor')}}" method="POST">
         @csrf
-        <input type="hidden" name="id_produto" value="{{isset($fornecedor) ? $fornecedor->id :''}}">
         <div class="form-group mb-0">
-            <label for="name" class="col-form-label">Nome do Fornecedor*</label>
+            <label for="name" class="col-form-label">Nome do Fornecedor *</label>
             <input type="text" class="form-control" id="nome" name="nome" value="{{isset($fornecedor) ? $fornecedor->nome : ''}}">
         </div>
         <div class="form-group mb-2 mt-3">
@@ -18,7 +17,7 @@
             <label for="check_identificacao">Possui CPF/CNPJ ?</label>
         </div>
         <div  id="field_identificacao" class="form-group mb-0" style="display:none">
-            <label for="identificacao" class="col-form-label">CPF/CNPJ*</label>
+            <label for="identificacao" class="col-form-label">CPF/CNPJ *</label>
             <input type="number" class="form-control" id="identificacao" name="identificacao" value="{{isset($fornecedor) ? $fornecedor->cnpj : ''}}">
         </div>
         <div class="form-group mb-0">
@@ -26,9 +25,13 @@
             <input type="number" class="form-control" id="telefone" name="telefone" value="{{isset($fornecedor) ? $fornecedor->telefone : ''}}">
         </div>
         <div class="form-group mb-0">
-            <label for="email" class="col-form-label">Email</label>
+            <label for="email" class="col-form-label">Email *</label>
             <input type="mail" class="form-control" id="email" name="email" value="{{isset($fornecedor) ? $fornecedor->email : ''}}">
         </div>
+        <div class="form-group mb-0">
+                <label for="descricao" class="col-form-label">Descricao do fornecedor :</label>
+                <input type="mail" class="form-control" id="descricao" name="descricao" value="{{isset($fornecedor) ? $fornecedor->email : ''}}">
+            </div>
         <div class="form-group mb-2 mt-3">
             <input type="checkbox" id="check_endereco" name="check_endereco" />
             <label for="check_endereco">Possui endereço ?</label>

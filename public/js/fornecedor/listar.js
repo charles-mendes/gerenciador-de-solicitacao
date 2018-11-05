@@ -6,31 +6,13 @@ function novoFornecedor(){
 
         // ocultar/mostrar campo do endereco
         $("#check_endereco").click(function(){
-            //verificar se botão ta check 
-            if($("#check_endereco").is(":checked") == true){
-                $('#fields_endereco').show();
-                //adicionando required nos campos 
-                $('.verify-required').prop('required',true);
-            }else{
-                $('#fields_endereco').hide();
-                $('.verify-required').prop('required',false);
-            }
-            
+            required(this,'#fields_endereco','.verify-required');
         }); 
 
 
         // ocultar/mostrar campo do CPF/CNPJ
         $("#check_identificacao").click(function(){
-            //verificar se botão ta check 
-            if($("#check_identificacao").is(":checked") == true){
-                $('#field_identificacao').show();
-                //adicionando required nos campos 
-                $('#identificacao').prop('required',true);
-            }else{
-                $('#field_identificacao').hide();
-                $('#identificacao').prop('required',false);
-            }
-            
+            required(this,'#field_identificacao','#identificacao');        
         }); 
 
         
@@ -39,6 +21,14 @@ function novoFornecedor(){
             required(this,'#fields_contrato','.verify-required-contrato');
         }); 
     });
+
+}
+
+function cadastrar(fornecedor){
+    let id = $(fornecedor).attr("data-id");
+
+    window.location.href = '/fornecedor/cadastrar/'+ id;
+
 
 }
 
