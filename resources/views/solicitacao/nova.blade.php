@@ -126,7 +126,7 @@
                   @csrf
                   <div class="form-group mb-0">
                       <label for="descricao" class="col-form-label">Descricao da solicitação</label>
-                      <textarea class="form-control" id="descricao" name="descricao">{{isset($id) ? session('novaSolicitacao')->produtos[$id]->descricao : ''}}</textarea>
+                      <textarea placeholder="charles delicia " required class="form-control" id="descricao" name="descricao">{{isset($id) ? session('novaSolicitacao')->produtos[$id]->descricao : ''}}</textarea>
                   </div>
                   <button  type="submit" class="btn btn-primary float-right">Salvar Solicitação</button>
               </form>
