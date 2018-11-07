@@ -69,13 +69,13 @@
                             <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
                             
                             <!-- Light Logo icon -->
-                            <img src="{{ asset('images/logo-light-icon.png') }}" alt="homepage" class="light-logo" />
+                            <img src="{{ asset('images/pgmais-logo.png') }}" alt="homepage" class="light-logo" />
                         </b>
                         <!--End Logo icon -->
                         <!-- Logo text --><span>
                          
                          <!-- Light Logo text -->    
-                         <img src="{{ asset('images/logo-light-text.png ') }}" class="light-logo" alt="homepage" /></span> </a>
+                         <img src="{{ asset('images/pgmais-logo.png') }}" class="light-logo" alt="homepage" /></span> </a>
                 </div>
                 <!-- ============================================================== -->
                 <!-- End Logo -->
@@ -90,10 +90,7 @@
                         <!-- ============================================================== -->
                         <!-- Search -->
                         <!-- ============================================================== -->
-                        <li class="nav-item hidden-sm-down search-box"> <a class="nav-link hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-search"></i></a>
-                            <form class="app-search">
-                                <input type="text" class="form-control" placeholder="Search & enter"> <a class="srh-btn"><i class="ti-close"></i></a> </form>
-                        </li>
+                        
                     </ul>
                     <!-- ============================================================== -->
                     <!-- User profile and search -->
@@ -185,7 +182,7 @@
             <!-- footer -->
             <!-- ============================================================== -->
             <footer class="footer"> 2018 - TCC rafael e charles </footer>
-            <!-- ============================================================== -->
+            <!-- ================================================git ============== -->
             <!-- End footer -->
             <!-- ============================================================== -->
         </div>
