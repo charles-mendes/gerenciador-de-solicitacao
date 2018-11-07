@@ -64,7 +64,7 @@
                 <!-- Logo -->
                 <!-- ============================================================== -->
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="index.html">
+                    <a class="navbar-brand" href="/dashboard">
                         <!-- Logo icon --><b>
                             <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
                             
@@ -145,10 +145,7 @@
             </div>
             <!-- End Sidebar scroll-->
             <!-- Bottom points-->
-            <div class="sidebar-footer">
-                <!-- item--><a href="" class="link" data-toggle="tooltip" title="Settings"><i class="ti-settings"></i></a>
-                <!-- item--><a href="" class="link" data-toggle="tooltip" title="Email"><i class="mdi mdi-gmail"></i></a>
-                <!-- item--><a href="" class="link" data-toggle="tooltip" title="Logout"><i class="mdi mdi-power"></i></a> </div>
+           
             <!-- End Bottom points-->
         </aside>
         <!-- ============================================================== -->
@@ -187,7 +184,7 @@
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-            <footer class="footer"> © 2018 Material Pro Admin by wrappixel.com </footer>
+            <footer class="footer"> 2018 - TCC rafael e charles </footer>
             <!-- ============================================================== -->
             <!-- End footer -->
             <!-- ============================================================== -->
