@@ -16,6 +16,9 @@
   <script src="{{ asset('js/fornecedor/cadastrar.js') }}"></script>
 @endpush
 
+@php
+    // dd($fornecedor->produtos);
+@endphp
 
 
 @section('content')
@@ -41,7 +44,7 @@
                       </thead>
                   
                       <tbody>
-                          {{-- @foreach($fornecedor->produtos as $key => $produto)
+                          @foreach($fornecedor->produtos as $key => $produto)
                               <tr>      
                                 <td>{{$produto->nome}}</td>
                                 <td>{{$produto->quantidade}}</td>
@@ -54,7 +57,7 @@
                                     onclick="editarProduto(this)"><i class="ti-pencil"></i></button>
                                 </th>                          
                               </tr>
-                          @endforeach --}}
+                          @endforeach
                       </tbody>
                   </table>
               </div>

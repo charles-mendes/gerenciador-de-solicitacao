@@ -71,27 +71,17 @@ class SolicitacaoController extends Controller
         // dd($solicitacaoSession);
         // dd($solicitacaoSession);
         foreach ($solicitacaoSession as $key => $categoria) {
-            //categoria = servico ou produto
-            // dd($key,$categoria,$solicitacaoSession);
             if($key == 'produtos'){
                 foreach($categoria as $item){
-                    $produto = new Produto();
-                    $produto->id_contrato = 0;
-                    $produto->nome = $item->nome;
-                    $produto->quantidade = $item->quantidade;
-                    $produto->valor = $item->valor;
-                    $produto->valor_imposto = $item->valor_imposto;
-                    $produto->descricao = $item->descricao;
-                    $produto->link_oferta = $item->link_oferta;
-                    $produto->id_criador = $item->id_criador;
-                    $produto->data_criacao = $item->data_criacao;
-                    $produto->id_modificador = $item->id_modificador;
-                    $produto->data_modificacao = $item->data_modificacao;
+                    
+                    //cadastrando produto
+                    $produtoController = new ProdutoController();
+                    $produto = $produtoController->cadastrar_produto($item);
                     $produto->save();
-
-                    $solicitacao_produto  = new Detalhe_Solicitacao_Produto();
-                    $solicitacao_produto->id_solicitacao = $solicitacao->id;
-                    $solicitacao_produto->id_produto = $produto->id;
+                    
+                    //cadastrando tabela auxiliar
+                    $detalhe_solicitacao_produto = new Detalhe_Solicitacao_Produto_Controller();
+                    $solicitacao_produto = $detalhe_solicitacao_produto->cadastrar();
                     $solicitacao_produto->save();
                 }
             }
@@ -147,8 +137,10 @@ class SolicitacaoController extends Controller
 
         // adiciona um novo produto
         $solicitacao = session('novaSolicitacao');
-        // dd('');
-        $produto = ProdutoController::cadastrar_produto($request);
+        
+        $produtoController = new ProdutoController();
+        $produto = $produtoController->cadastrar_produto($request);
+        
 
         //adicionando o novo produto na sessao
         $solicitacao->produtos[]= $produto;

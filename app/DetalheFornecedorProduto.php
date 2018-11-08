@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Detalhe_produto_fornecedor extends Model
+class DetalheFornecedorProduto extends Model
 {
-    protected $table = 'detalhe_solicitacao_forncedor';
+    protected $table = 'detalhe_fornecedor_produto';
     
     //desabilitando update_at e create_at
     public $timestamps = false;

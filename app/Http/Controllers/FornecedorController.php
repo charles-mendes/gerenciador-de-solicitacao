@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Fornecedor;
 use App\Endereco;
 use App\Contrato;
+use App\Http\Controllers\DetalheFornecedorProdutoController;
+use App\Http\Controllers\ProdutoController;
 use Auth;
 
 use Illuminate\Http\Request;
@@ -14,9 +16,6 @@ class FornecedorController extends Controller
     {
         $this->middleware('auth');
     }
-
-
-   
 
     public function listar(){
         $fornecedores = Fornecedor::all();
@@ -164,8 +163,8 @@ class FornecedorController extends Controller
         return view('modal.produto',['tipo' => 'fornecedor' , 'id_fornecedor' => $id_fornecedor]);    
     }
 
-    public function cadastrar_produto(Request $request){
-        // dd($request->all());
+    public function cadastrar_produto(Request $request){        
+        //validando entrada
         $this->validate($request,[
             'id_fornecedor' => 'required',
             'name' => 'required',
@@ -176,13 +175,21 @@ class FornecedorController extends Controller
             // 'link-oferta'=>'',
          ]);
 
-        $produto = ProdutoController::cadastrar_produto($request);
-        $produto->save();
-        
         //id do fornecedor na rota
-        $id = $request->input('id_fornecedor');
+        $id_fornecedor = $request->input('id_fornecedor');
 
-        return redirect()->route('cadastrar',['id' => $id]);
+        //cadastrando produto 
+        $produtoController = new ProdutoController();
+        $produto = $produtoController->cadastrar_produto($request);
+        $produto->save();
+
+        //cadastrando relacionamento entre fornecedor e produto
+        $detalhe = new DetalheFornecedorProdutoController();
+        $detalhe = $detalhe->cadastrar($id_fornecedor,$produto->id);
+        $detalhe->save();        
+
+        
+        return redirect()->route('cadastrar',['id' => $id_fornecedor]);
     }
 
 }
