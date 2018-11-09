@@ -17,15 +17,14 @@ class Fornecedor extends Model
 
 
 
-    // public function produtos()
-    // {
-    //     return $this->belongsToMany('App\Produto','detalhe_solicitacao_produto','id_solicitacao','id_produto');
-    // }
+    public function produtos()
+    {
+        return $this->belongsToMany('App\Produto','detalhe_fornecedor_produto','id_fornecedor','id_produto');
+    }
 
 
-    // public function servicos()
-    // {
-    //                                //tabela       nome da tab de relacionamento , 
-    //     return $this->belongsToMany('App\Servico','detalhe_solicitacao_servico','id_solicitacao','id_servico');
-    // }
+    public function servicos()
+    {
+        return $this->belongsToMany('App\Servico','detalhe_fornecedor_servico','id_fornecedor','id_servico');
+    }
 }

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 use App\Fornecedor;
 use App\Endereco;
 use App\Contrato;
+use App\Produto;
+use App\Http\Controllers\DetalheFornecedorProdutoController;
+use App\Http\Controllers\ProdutoController;
 use Auth;
 
 use Illuminate\Http\Request;
@@ -14,9 +17,6 @@ class FornecedorController extends Controller
     {
         $this->middleware('auth');
     }
-
-
-   
 
     public function listar(){
         $fornecedores = Fornecedor::all();
@@ -159,13 +159,21 @@ class FornecedorController extends Controller
     public function novo_produto(Request $request){
         //pegar o id do fornecedor
         $url = explode('/',$request->headers->get('referer'));
-        $id_fornecedor = end($url);        
-
-        return view('modal.produto',['tipo' => 'fornecedor' , 'id_fornecedor' => $id_fornecedor]);    
+        $id_fornecedor = end($url);  
+        
+        $produto = new \stdClass;
+        $produto->nome = "";
+        $produto->quantidade = "";
+        $produto->valor = "";
+        $produto->valor_imposto = "";
+        $produto->descricao = "";
+        $produto->link_oferta = "";
+        
+        return view('modal.produto',['produto' => $produto,'id_fornecedor' => $id_fornecedor , 'tipo' => 'fornecedor' ,]);    
     }
 
-    public function cadastrar_produto(Request $request){
-        // dd($request->all());
+    public function cadastrar_produto(Request $request){        
+        //validando entrada
         $this->validate($request,[
             'id_fornecedor' => 'required',
             'name' => 'required',
@@ -176,13 +184,34 @@ class FornecedorController extends Controller
             // 'link-oferta'=>'',
          ]);
 
-        $produto = ProdutoController::cadastrar_produto($request);
-        $produto->save();
-        
         //id do fornecedor na rota
-        $id = $request->input('id_fornecedor');
+        $id_fornecedor = $request->input('id_fornecedor');
 
-        return redirect()->route('cadastrar',['id' => $id]);
+        //cadastrando produto 
+        $produtoController = new ProdutoController();
+        $produto = $produtoController->cadastrar_produto($request);
+        $produto->save();
+
+        //cadastrando relacionamento entre fornecedor e produto
+        $detalhe = new DetalheFornecedorProdutoController();
+        $detalhe = $detalhe->cadastrar($id_fornecedor,$produto->id);
+        $detalhe->save();        
+
+        
+        return redirect()->route('cadastrar',['id' => $id_fornecedor]);
+    }
+
+    public function editar_produto($id){
+        //chamar modal para usuario
+
+        // if($id){
+            $produto = Produto::find($id);
+            return view('modal.produto',['produto' => $produto , 'tipo' => 'fornecedor']);    
+        // }
+        // return back();
+
+        
+
     }
 
 }

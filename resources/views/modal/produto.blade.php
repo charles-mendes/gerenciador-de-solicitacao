@@ -17,33 +17,33 @@
         <input type="hidden" name="id_produto" value="{{isset($id) ? $id :''}}">
         @if(isset($id_fornecedor))<input type="hidden" name="id_fornecedor" value="{{$id_fornecedor}}">@endif
         <div class="form-group mb-0">
-            <label for="name" class="col-form-label">Nome do Produto*</label>
-            <input type="text" class="form-control" id="name" name="name" value="{{isset($id) ? session('novaSolicitacao')->produtos[$id]->nome : ''}}">
+            <label for="nome" class="col-form-label">Nome do Produto*</label>
+            <input type="text" class="form-control" id="nome" name="nome" value="{{$produto->nome}}">
         </div>
         <div class="form-group mb-0">
             <label for="quantidade" min="1" class="col-form-label">Quantidade *</label>
-            <input type="number" class="form-control" id="quantidade" name="quantidade" value="{{isset($id) ? session('novaSolicitacao')->produtos[$id]->quantidade : ''}}">
+            <input type="number" class="form-control" id="quantidade" name="quantidade" value="{{$produto->quantidade}}">
         </div>
         <div class="form-group mb-0">
             <label for="valor" class="col-form-label">Valor Produto *</label>
-            <input type="number" class="form-control" id="valor" name="valor" value="{{isset($id) ? session('novaSolicitacao')->produtos[$id]->valor : ''}}">
+            <input type="number" class="form-control" id="valor" name="valor" value="{{$produto->valor}}">
         </div>
         <div class="form-group mb-0">
             <label for="imposto" class="col-form-label">Valor Imposto (Total)</label>
-            <input type="number" class="form-control" id="imposto" name="imposto" value="{{isset($id) ? session('novaSolicitacao')->produtos[$id]->valor_imposto : ''}}">
+            <input type="number" class="form-control" id="imposto" name="imposto" value="{{$produto->valor_imposto}}">
         </div>
         <div class="form-group mb-0">
             <label for="descricao" class="col-form-label">Descricao *</label>
-            <textarea class="form-control" id="descricao" name="descricao">{{isset($id) ? session('novaSolicitacao')->produtos[$id]->descricao : ''}}</textarea>
+            <textarea class="form-control" id="descricao" name="descricao">{{$produto->descricao}}</textarea>
         </div>
         <div class="form-group mb-0">
             <label for="link_oferta" class="col-form-label">Link Oferta</label>
-            <textarea class="form-control" type="text" id="link_oferta" name="link_oferta">{{isset($id) ? session('novaSolicitacao')->produtos[$id]->link_oferta : ''}}</textarea>
+            <textarea class="form-control" type="text" id="link_oferta" name="link_oferta">{{$produto->link_oferta}}</textarea>
         </div>
     </form>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-    <button id="btn-cadastro-produto" onclick="$('#cria-edita-produto').submit();" type="submit" class="btn btn-primary">Cadastrar</button>
+    <button id="btn-cadastro-produto" onclick="$('#cria-edita-produto').submit();" type="submit" class="btn btn-primary">Salvar</button>
 </div>
 </div>

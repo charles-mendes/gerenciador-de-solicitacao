@@ -12,16 +12,17 @@ class ProdutoController extends Controller
         $this->middleware('auth');
     }
     
-    public static function cadastrar_produto(Request $request){
-
+    public function cadastrar_produto(Request $request, $item = null){
+        $verifica = isset($item) ? true : false;
         $produto = new Produto();
-        $produto->nome = $request->input('name');
-        $produto->quantidade = $request->input('quantidade');
-        $produto->valor = $request->input('valor');
+        //verificar nome do campo name ou nome
+        $produto->nome = $verifica? $item->nome : $request->input('nome');
+        $produto->quantidade = $verifica ? $item->quantidade : $request->input('quantidade');
+        $produto->valor = $verifica ? $item->valor : $request->input('valor');
         $produto->id_contrato = '0';
-        $produto->valor_imposto = $request->input('imposto');
-        $produto->descricao = $request->input('descricao');
-        $produto->link_oferta = $request->input('link_oferta');
+        $produto->valor_imposto = $verifica ? $item->imposto : $request->input('imposto');
+        $produto->descricao = $verifica ? $item->descricao : $request->input('descricao');
+        $produto->link_oferta = $verifica ? $item->link_oferta : $request->input('link_oferta');
         $produto->id_criador = Auth::user()->id;
         $produto->data_criacao = time();
         $produto->id_modificador = Auth::user()->id;
@@ -31,10 +32,11 @@ class ProdutoController extends Controller
        
     }
 
+
     public static function salvar_produto($tipo, $id, Request $request){
         
         //alterar produto ja existente na session
-        $tipo->produtos[$id]->nome = $request->input('name');
+        $tipo->produtos[$id]->nome = $request->input('nome');
         $tipo->produtos[$id]->quantidade = $request->input('quantidade');
         $tipo->produtos[$id]->valor = $request->input('valor');
         $tipo->produtos[$id]->valor_imposto =  $request->input('imposto');
