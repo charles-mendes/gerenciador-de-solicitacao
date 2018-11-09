@@ -53,7 +53,7 @@
                                 <td>{{$produto->descricao}}</td>
                                 <td>{{$produto->link_oferta}}</td> 
                                 <th>
-                                  <button id="btn-edit" type="button" class="btn btn-primary" data-id="{{$key}}" 
+                                  <button id="btn-edit" type="button" class="btn btn-primary" data-id="{{$produto->id}}" 
                                     onclick="editarProduto(this)"><i class="ti-pencil"></i></button>
                                 </th>                          
                               </tr>

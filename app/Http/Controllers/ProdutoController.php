@@ -16,7 +16,7 @@ class ProdutoController extends Controller
         $verifica = isset($item) ? true : false;
         $produto = new Produto();
         //verificar nome do campo name ou nome
-        $produto->nome = $verifica? $item->nome : $request->input('name');
+        $produto->nome = $verifica? $item->nome : $request->input('nome');
         $produto->quantidade = $verifica ? $item->quantidade : $request->input('quantidade');
         $produto->valor = $verifica ? $item->valor : $request->input('valor');
         $produto->id_contrato = '0';
@@ -36,7 +36,7 @@ class ProdutoController extends Controller
     public static function salvar_produto($tipo, $id, Request $request){
         
         //alterar produto ja existente na session
-        $tipo->produtos[$id]->nome = $request->input('name');
+        $tipo->produtos[$id]->nome = $request->input('nome');
         $tipo->produtos[$id]->quantidade = $request->input('quantidade');
         $tipo->produtos[$id]->valor = $request->input('valor');
         $tipo->produtos[$id]->valor_imposto =  $request->input('imposto');

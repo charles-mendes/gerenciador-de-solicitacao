@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Fornecedor;
 use App\Endereco;
 use App\Contrato;
+use App\Produto;
 use App\Http\Controllers\DetalheFornecedorProdutoController;
 use App\Http\Controllers\ProdutoController;
 use Auth;
@@ -158,9 +159,17 @@ class FornecedorController extends Controller
     public function novo_produto(Request $request){
         //pegar o id do fornecedor
         $url = explode('/',$request->headers->get('referer'));
-        $id_fornecedor = end($url);        
-
-        return view('modal.produto',['tipo' => 'fornecedor' , 'id_fornecedor' => $id_fornecedor]);    
+        $id_fornecedor = end($url);  
+        
+        $produto = new \stdClass;
+        $produto->nome = "";
+        $produto->quantidade = "";
+        $produto->valor = "";
+        $produto->valor_imposto = "";
+        $produto->descricao = "";
+        $produto->link_oferta = "";
+        
+        return view('modal.produto',['produto' => $produto,'id_fornecedor' => $id_fornecedor , 'tipo' => 'fornecedor' ,]);    
     }
 
     public function cadastrar_produto(Request $request){        
@@ -190,6 +199,19 @@ class FornecedorController extends Controller
 
         
         return redirect()->route('cadastrar',['id' => $id_fornecedor]);
+    }
+
+    public function editar_produto($id){
+        //chamar modal para usuario
+
+        // if($id){
+            $produto = Produto::find($id);
+            return view('modal.produto',['produto' => $produto , 'tipo' => 'fornecedor']);    
+        // }
+        // return back();
+
+        
+
     }
 
 }

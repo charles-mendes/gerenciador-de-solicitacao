@@ -46,10 +46,10 @@ Route::get('/solicitacao/edita-produto/{id}', 'SolicitacaoController@editar_prod
 Route::post('/solicitacao/salvar_produto', 'SolicitacaoController@salvar_produto')->name('salvar_produto_solicitacao');
 
 //Solicitacao - Servico
-Route::get('/solicitacao/novo-servico/', 'ServicoController@novo_servico');
-Route::post('/solicitacao/cadastrar_servico', 'ServicoController@cadastrar_servico')->name('cadastrar_servico');
-Route::get('/solicitacao/edita-servico/{id}', 'ServicoController@editar_servico');
-Route::post('/solicitacao/salvar_servico', 'ServicoController@salvar_servico')->name('salvar_servico');
+Route::get('/solicitacao/novo-servico/', 'SolicitacaoController@novo_servico');
+Route::post('/solicitacao/cadastrar_servico', 'SolicitacaoController@cadastrar_servico')->name('cadastrar_servico_solicitacao');
+Route::get('/solicitacao/edita-servico/{id}', 'SolicitacaoController@editar_servico');
+Route::post('/solicitacao/salvar_servico', 'SolicitacaoController@salvar_servico')->name('salvar_servico_solicitacao');
 
 
 
