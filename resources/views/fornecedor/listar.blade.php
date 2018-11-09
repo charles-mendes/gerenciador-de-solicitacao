@@ -18,7 +18,10 @@
 @push('scripts')
     <script src="{{ asset('js/fornecedor/listar.js?t='.time()) }}"></script>
 @endpush
-
+@php
+    // dd($fornecedores[0]->servicos->first());
+    // dd( !($fornecedor->produtos->first()) || !($fornecedor->servicos->first()) );
+@endphp
 
 @section('content')
         <div class="col-lg-12">
@@ -38,7 +41,7 @@
                                     <th>Telefone</th>
                                     <th>Email</th>
                                     <th>Descricao</th>
-                                    <th>Produto</th>
+                                    <th>Produto/Servico</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
@@ -53,12 +56,16 @@
                                         <td>{{$fornecedor->email}}</td>
                                         <td>{{$fornecedor->descricao}}</td>
                                         <td>
-                                            @if(1==1)
+                                            @if( !($fornecedor->produtos->first()) && !($fornecedor->servicos->first()) )
                                                 <button type="button" class="btn btn-primary" data-id="{{$fornecedor->id}}" onclick="cadastrar(this);" data-toggle="tooltip" data-placement="right" title=""
                                                     data-original-title="Cadastrar produtos/servicos">
-                                                        + Produto/Servico
+                                                        Adicionar
                                                 </button>
                                             @else
+                                                <button type="button" class="btn btn-primary" data-id="{{$fornecedor->id}}" onclick="cadastrar(this);" data-toggle="tooltip" data-placement="right" title=""
+                                                    data-original-title="Cadastrar produtos/servicos">
+                                                        Editar 
+                                                </button>
 
                                             @endif
 
