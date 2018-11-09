@@ -27,7 +27,7 @@ class CreateFornecedoresTable extends Migration
             $table->integer('id_criador');
             $table->timestamp('data_criacao');
             $table->integer('id_modificador');
-            $table->timestamp('data_modificacao');
+            $table->timestamp('data_modificacao')->nullable();
         });
     }
 
