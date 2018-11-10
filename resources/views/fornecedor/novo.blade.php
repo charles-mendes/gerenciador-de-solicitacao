@@ -4,8 +4,8 @@
     @component(
         'layouts.component.breadcrumb',
         [
-          'title' => 'Nova Solicitacao',
-          'localizacoes' => [ ['Home', route('dashboard') ],['nova-solicitacao', ''] ] 
+          'title' => 'Novo Fornecedor',
+          'localizacoes' => [ ['Home', route('dashboard') ],['novo-fornecedor', ''] ] 
         ]
     )
     @endcomponent
@@ -17,23 +17,19 @@
       $('#cadastrar_produto').submit();
     }
   </script>
-  <script src="{{ asset('js/solicitacao/nova.js') }}"></script>
+  <script src="{{ asset('js/fornecedor/novo.js') }}"></script>
 @endpush
-
-@php
-    // session()->forget('novaSolicitacao');
-    // dd(Auth::user());
-@endphp
 
 
 @section('content')
   <div class="col-lg-12">
+
       <div class="card">
           <div class="card-block">
               <h4 class="card-title">
                   Cadastrar Produto
                   {{-- cadastrarProduto() --}}
-                  <button type="button" onclick="cadastrarProduto()" class="btn btn-primary">Cadastrar produto</button>
+                  <button type="button" onclick="cadastrarFornecedor()" class="btn btn-primary">Cadastrar fornecedor</button>
               </h4>
               <div class="table-responsive">
                   <table id="" class="display" style="width:100%">
@@ -50,8 +46,8 @@
                       </thead>
                   
                       <tbody>
-                        @if ( isset(session('novaSolicitacao')->produtos) )
-                          @foreach(session('novaSolicitacao')->produtos as $key => $produto)
+                        @if ( isset(session('novoFornecedor')->produtos) )
+                          @foreach(session('novoFornecedor')->produtos as $key => $produto)
                               <tr>      
                                 <td>{{$produto->nome}}</td>
                                 <td>{{$produto->quantidade}}</td>
@@ -78,6 +74,7 @@
              
           </div>
       </div>   
+      
       <div class="card"> 
           <div class="card-block">
               <h4 class="card-title">
@@ -118,15 +115,13 @@
           </div>  
       </div>  
 
-
-
       <div class="card"> 
           <div class="card-block">
               <form id="cadastra_solicitacao" action="{{route('cadastrar_solicitacao')}}" method="POST">
                   @csrf
                   <div class="form-group mb-0">
                       <label for="descricao" class="col-form-label">Descricao da solicitação</label>
-                      <textarea placeholder="charles delicia " required class="form-control" id="descricao" name="descricao">{{isset($id) ? session('novaSolicitacao')->produtos[$id]->descricao : ''}}</textarea>
+                      <textarea class="form-control" id="descricao" name="descricao">{{isset($id) ? session('novaSolicitacao')->produtos[$id]->descricao : ''}}</textarea>
                   </div>
                   <button  type="submit" class="btn btn-primary float-right">Salvar Solicitação</button>
               </form>

@@ -64,7 +64,7 @@
                 <!-- Logo -->
                 <!-- ============================================================== -->
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="index.html">
+                    <a class="navbar-brand" href="/dashboard">
                         <!-- Logo icon --><b>
                             <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
                             
@@ -90,10 +90,6 @@
                         <!-- ============================================================== -->
                         <!-- Search -->
                         <!-- ============================================================== -->
-                        <li class="nav-item hidden-sm-down search-box"> <a class="nav-link hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-search"></i></a>
-                            <form class="app-search">
-                                <input type="text" class="form-control" placeholder="Search & enter"> <a class="srh-btn"><i class="ti-close"></i></a> </form>
-                        </li>
                     </ul>
                     <!-- ============================================================== -->
                     <!-- User profile and search -->
@@ -109,10 +105,8 @@
                         </button>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
-                        </form>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{{ asset('images/users/1.jpg') }}" alt="user" class="profile-pic m-r-10" />Markarn Doe</a>
-                        </li>
+                        </form> 
+                        <li></li>
                     </ul>
                 </div>
             </nav>
@@ -129,33 +123,23 @@
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-                        <li> <a class="waves-effect waves-dark" href="index.html" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a>
+                        <li> <a class="waves-effect waves-dark" href="/dashboard" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-profile.html" aria-expanded="false"><i class="mdi mdi-account-check"></i><span class="hide-menu">Profile</span></a>
+                        <li> <a class="waves-effect waves-dark" href="/solicitacoes" aria-expanded="false"><i class="mdi mdi-account-check"></i><span class="hide-menu">Solicitação</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="table-basic.html" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">Basic Table</span></a>
+                        <li> <a class="waves-effect waves-dark" href="/usuarios" aria-expanded="false"><i class="mdi mdi-table"></i><span class="hide-menu">Usuarios</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="icon-material.html" aria-expanded="false"><i class="mdi mdi-emoticon"></i><span class="hide-menu">Icons</span></a>
+                        <li> <a class="waves-effect waves-dark" href="/fornecedores" aria-expanded="false"><i class="mdi mdi-emoticon"></i><span class="hide-menu">Fornecedor</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="map-google.html" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">Google Map</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-blank.html" aria-expanded="false"><i class="mdi mdi-book-open-variant"></i><span class="hide-menu">Blank Page</span></a>
-                        </li>
-                        <li> <a class="waves-effect waves-dark" href="pages-error-404.html" aria-expanded="false"><i class="mdi mdi-help-circle"></i><span class="hide-menu">Error 404</span></a>
+                        <li> <a class="waves-effect waves-dark" href="/relatorios" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">Relatorios</span></a>
                         </li>
                     </ul>
-                    <div class="text-center m-t-30">
-                        <a href="https://wrappixel.com/templates/materialpro/" class="btn waves-effect waves-light btn-warning hidden-md-down"> Upgrade to Pro</a>
-                    </div>
                 </nav>
                 <!-- End Sidebar navigation -->
             </div>
             <!-- End Sidebar scroll-->
             <!-- Bottom points-->
-            <div class="sidebar-footer">
-                <!-- item--><a href="" class="link" data-toggle="tooltip" title="Settings"><i class="ti-settings"></i></a>
-                <!-- item--><a href="" class="link" data-toggle="tooltip" title="Email"><i class="mdi mdi-gmail"></i></a>
-                <!-- item--><a href="" class="link" data-toggle="tooltip" title="Logout"><i class="mdi mdi-power"></i></a> </div>
+           
             <!-- End Bottom points-->
         </aside>
         <!-- ============================================================== -->
@@ -194,8 +178,8 @@
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-            <footer class="footer"> © 2018 Material Pro Admin by wrappixel.com </footer>
-            <!-- ============================================================== -->
+            <footer class="footer"> 2018 - TCC rafael e charles </footer>
+            <!-- ================================================git ============== -->
             <!-- End footer -->
             <!-- ============================================================== -->
         </div>

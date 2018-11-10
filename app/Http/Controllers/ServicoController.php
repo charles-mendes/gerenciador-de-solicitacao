@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Auth;
 use Illuminate\Http\Request;
+use App\Servico;
 
 class ServicoController extends Controller
 {
@@ -11,90 +12,40 @@ class ServicoController extends Controller
         $this->middleware('auth');
     }
     
-    public function novo_servico(){
-        //verifica se a session existe, se não existir ele redireciona a nova solicitacao
-        if(session()->has('novaSolicitacao')){
-            return view('solicitacao.modal.servico');
-        }
-        return redirect()->route('nova_solicitacao');
-    }
-
-    public function cadastrar_servico(Request $request){
-        // dd($request->input());
-        $this->validate($request,[
-           'name' => 'required',
-        //    'quantidade' => 'required',
-            'valor'=> 'required',
-           // 'imposto'=>'',
-           'descricao'=>'required',
-           // 'link-oferta'=>'',
-        ]);
-
-        // adiciona um novo produto
-        $solicitacao = session('novaSolicitacao');
-        
-        $servico = new \stdClass();
-        $servico->nome = $request->input('name');
-        $servico->quantidade = $request->input('quantidade');
-        $servico->valor = $request->input('valor');
-        $servico->valor_imposto = $request->input('imposto');
-        $servico->descricao = $request->input('descricao');
-        $servico->link_oferta = $request->input('link_oferta');
+    public function cadastrar_servico(Request $request, $item = null){
+        $verifica = isset($item) ? true : false;
+        $servico = new Servico();
+        //verificar nome do campo name ou nome
+        $servico->nome = $verifica? $item->nome : $request->input('nome');
+        $servico->quantidade = $verifica ? $item->quantidade : $request->input('quantidade');
+        $servico->valor = $verifica ? $item->valor : $request->input('valor');
+        $servico->id_contrato = '0';
+        $servico->valor_imposto = $verifica ? $item->imposto : $request->input('imposto');
+        $servico->descricao = $verifica ? $item->descricao : $request->input('descricao');
+        $servico->link_oferta = $verifica ? $item->link_oferta : $request->input('link_oferta');
         $servico->id_criador = Auth::user()->id;
+        $servico->data_criacao = time();
         $servico->id_modificador = Auth::user()->id;
-
-        
-        //adicionando o novo produto na sessao
-        $solicitacao->servicos[]= $servico;
-
-        session()->put('novaSolicitacao', $solicitacao);
-        
-        return redirect()->route('nova_solicitacao');
-        
+        $servico->data_modificacao = time();
+    
+        return $servico;
+       
     }
 
 
-    public function edita_servico($id){
-        //verifica se a session existe, se não existir ele redireciona a nova solicitacao
-        if(session()->has('novaSolicitacao')){
-            return view('solicitacao.modal.servico',['id' => $id]);    
-        }
-        
-        return redirect()->route('nova_solicitacao');
-    }
-
-
-    public function salvar_servico(Request $request){
-        $this->validate($request,[
-            'id_servico' => 'required',
-            'name' => 'required',
-            // 'quantidade' => 'required',
-            'valor'=> 'required',
-            // 'imposto'=>'',
-            'descricao'=>'required',
-            // 'link-oferta'=>'',
-         ]);
-
-        
-        //pegando o id do servico
-        $id = $request->input('id_servico');
-         
-        //pegando solicitacao da session
-        $solicitacao = session('novaSolicitacao');
+    public static function salvar_servico($tipo, $id, Request $request){
         
         //alterar produto ja existente na session
-        $solicitacao->servicos[$id]->nome = $request->input('name');
-        $solicitacao->servicos[$id]->quantidade = $request->input('quantidade');
-        $solicitacao->servicos[$id]->valor = $request->input('valor');
-        $solicitacao->servicos[$id]->valor_imposto =  $request->input('imposto');
-        $solicitacao->servicos[$id]->descricao = $request->input('descricao');
-        $solicitacao->servicos[$id]->link_oferta = $request->input('link_oferta');
-        $solicitacao->servicos[$id]->id_criador = Auth::user()->id;
-        $solicitacao->servicos[$id]->id_modificador = Auth::user()->id;
+        $tipo->servicos[$id]->nome = $request->input('nome');
+        $tipo->servicos[$id]->quantidade = $request->input('quantidade');
+        $tipo->servicos[$id]->valor = $request->input('valor');
+        $tipo->servicos[$id]->valor_imposto =  $request->input('imposto');
+        $tipo->servicos[$id]->descricao = $request->input('descricao');
+        $tipo->servicos[$id]->link_oferta = $request->input('link_oferta');
+        $tipo->servicos[$id]->id_criador = Auth::user()->id;
+        $tipo->servicos[$id]->id_modificador = Auth::user()->id;
         
-        //adicionando alterações na solicitação 
-        session()->put('novaSolicitacao', $solicitacao);
-
-        return redirect()->route('nova_solicitacao');
+        return $tipo;
     }
+    
 }

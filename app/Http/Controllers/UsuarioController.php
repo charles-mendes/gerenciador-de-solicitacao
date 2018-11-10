@@ -54,12 +54,12 @@ class UsuarioController extends Controller
     $usuario->data_modificacao = time();
     if($usuario->save()){
       // dd('deu boa');
-      return redirect()->route('lista_usuarios');
+      return redirect()->route('listar_usuarios');
     }
     
   }
 
-  public function edita_usuario($id){
+  public function editar_usuario($id){
     //TODO verifica se venho o id
 
     $usuario = Usuario::find($id);
@@ -106,7 +106,7 @@ class UsuarioController extends Controller
     $usuario->id_modificador = Auth::user()->id;
     $usuario->data_modificacao = time();
     if($usuario->save()){
-      return redirect()->route('lista_usuarios');
+      return redirect()->route('listar_usuarios');
     }
   
   }
@@ -126,7 +126,7 @@ class UsuarioController extends Controller
     $usuario->id_modificador = Auth::user()->id;
     $usuario->data_modificacao = time();
     if($usuario->save()){
-      return redirect()->route('lista_usuarios');
+      return redirect()->route('listar_usuarios');
     }
 
 

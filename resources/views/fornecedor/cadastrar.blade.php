@@ -4,25 +4,20 @@
     @component(
         'layouts.component.breadcrumb',
         [
-          'title' => 'Nova Solicitacao',
-          'localizacoes' => [ ['Home', route('dashboard') ],['nova-solicitacao', ''] ] 
+          'title' => 'Novo Cadastro Produto/Servico',
+          'localizacoes' => [ ['Home', route('dashboard') ],['nova-cadastro', ''] ] 
         ]
     )
     @endcomponent
 @endsection
 
+
 @push('scripts')
-  <script> 
-    function submit_form(){
-      $('#cadastrar_produto').submit();
-    }
-  </script>
-  <script src="{{ asset('js/solicitacao/nova.js') }}"></script>
+  <script src="{{ asset('js/fornecedor/cadastrar.js') }}"></script>
 @endpush
 
 @php
-    // session()->forget('novaSolicitacao');
-    // dd(Auth::user());
+    // dd($fornecedor->produtos);
 @endphp
 
 
@@ -32,7 +27,6 @@
           <div class="card-block">
               <h4 class="card-title">
                   Cadastrar Produto
-                  {{-- cadastrarProduto() --}}
                   <button type="button" onclick="cadastrarProduto()" class="btn btn-primary">Cadastrar produto</button>
               </h4>
               <div class="table-responsive">
@@ -50,8 +44,7 @@
                       </thead>
                   
                       <tbody>
-                        @if ( isset(session('novaSolicitacao')->produtos) )
-                          @foreach(session('novaSolicitacao')->produtos as $key => $produto)
+                          @foreach($fornecedor->produtos as $key => $produto)
                               <tr>      
                                 <td>{{$produto->nome}}</td>
                                 <td>{{$produto->quantidade}}</td>
@@ -60,18 +53,11 @@
                                 <td>{{$produto->descricao}}</td>
                                 <td>{{$produto->link_oferta}}</td> 
                                 <th>
-                                  <button id="btn-edit" type="button" class="btn btn-primary" data-id="{{$key}}" 
-                                    {{-- data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap" --}}
-                                    onclick="editarProduto(this)"
-                                  ><i class="ti-pencil"></i></button>
-                                  {{-- <button type="button" class="btn btn-primary" data-id="{{$key}}" data-toggle="tooltip" data-target="#exampleModal" data-whatever="@getbootstrap"  data-placement="left" --}}
-                                      {{-- data-original-title="Clique aqui para editar o produto"> --}}
-                                          
-                                  {{-- </button>    --}}
+                                  <button id="btn-edit" type="button" class="btn btn-primary" data-id="{{$produto->id}}" 
+                                    onclick="editarProduto(this)"><i class="ti-pencil"></i></button>
                                 </th>                          
                               </tr>
                           @endforeach
-                        @endif 
                       </tbody>
                   </table>
               </div>
@@ -99,8 +85,8 @@
                       </thead>
                       
                       <tbody>
-                        @if ( isset(session('novaSolicitacao')->servicos) )
-                          @foreach(session('novaSolicitacao')->servicos as $key => $servico)
+                        @if ( isset(session('novoCadastroFornecedor')->servicos) )
+                          @foreach(session('novoCadastroFornecedor')->servicos as $key => $servico)
                             <tr>
                                 <td>{{$servico->nome}}</td>
                                 <td>{{$servico->valor}}</td>
@@ -117,21 +103,6 @@
               </div>
           </div>  
       </div>  
-
-
-
-      <div class="card"> 
-          <div class="card-block">
-              <form id="cadastra_solicitacao" action="{{route('cadastrar_solicitacao')}}" method="POST">
-                  @csrf
-                  <div class="form-group mb-0">
-                      <label for="descricao" class="col-form-label">Descricao da solicitação</label>
-                      <textarea placeholder="charles delicia " required class="form-control" id="descricao" name="descricao">{{isset($id) ? session('novaSolicitacao')->produtos[$id]->descricao : ''}}</textarea>
-                  </div>
-                  <button  type="submit" class="btn btn-primary float-right">Salvar Solicitação</button>
-              </form>
-          </div>  
-      </div>
   </div>  
   
   <div class="modal fade" id="produto" tabindex="-1" role="dialog" aria-hidden="true">

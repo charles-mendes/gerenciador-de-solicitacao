@@ -15,17 +15,14 @@ class CreateAnexosContratuaisTable extends Migration
     {
         Schema::create('anexo_contratual', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('caminho_path');
-            $table->unsignedInteger('id_tipo');
             $table->unsignedInteger('id_contrato');
+            $table->string('descricao');
+            $table->string('caminho_path');
             $table->integer('id_criador');
             $table->timestamp('data_criacao');
             $table->integer('id_modificador');
             $table->timestamp('data_modificacao')->nullable();
 
-            $table->foreign('id_tipo')
-                  ->references('id')->on('tipo_anexo_contratual')
-                  ->onDelete('cascade');
             $table->foreign('id_contrato')
                   ->references('id')->on('contrato')
                   ->onDelete('cascade');

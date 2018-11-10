@@ -33,7 +33,7 @@ File: scss
 /*Top bar
 *******************/
 .topbar {
-  background: #1e88e5; }
+  background: #454545; }
   .topbar .navbar-header {
     background: rgba(0, 0, 0, 0.05); }
   .topbar .top-navbar .navbar-header .navbar-brand .dark-logo {
@@ -134,7 +134,7 @@ a.link:hover, a.link:focus {
 
 .card-no-border .sidebar-nav > ul > li > a.active {
   color: #ffffff;
-  background: #26c6da; }
+  background: rgb(145, 189, 48); }
   .card-no-border .sidebar-nav > ul > li > a.active i {
     color: #ffffff; }
   .card-no-border .sidebar-nav > ul > li > a.active:after {
