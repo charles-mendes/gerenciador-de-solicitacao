@@ -80,7 +80,7 @@
         <div id="card-repassword" class="login-box card" style="display: none;">
             <div class="card-body">
                 
-                <form class="form-horizontal form-material m-4" method="POST" action="{{ route('password.request') }}" aria-label="Reset Password">
+                <form class="form-horizontal form-material m-4" method="POST" action="{{ route('password.email') }}" aria-label="Reset Password">
                     @csrf
                     <h2 id="close-repassword" class="text-center col-xs-12 offset-11">&#215;</h2>
                     <h3 class="box-title m-b-20">Recuperação de senha</h3>
