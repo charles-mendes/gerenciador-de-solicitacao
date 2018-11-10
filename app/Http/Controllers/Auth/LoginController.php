@@ -31,6 +31,11 @@ class LoginController extends Controller
         return '/dashboard';
     }
 
+    public function username()
+    {
+        return 'email';
+    }
+
     /**
      * Create a new controller instance.
      *
