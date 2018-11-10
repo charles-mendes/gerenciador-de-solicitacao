@@ -29,4 +29,10 @@ class ForgotPasswordController extends Controller
     {
         $this->middleware('guest');
     }
+
+    public function email()
+    {
+        // dd($request);
+        return 'email-recuperacao';
+    }
 }

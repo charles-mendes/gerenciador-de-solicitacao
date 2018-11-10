@@ -116,3 +116,9 @@ para gerar os usuario fakes
     git checkout -b feature/solicitacao1
 * para atualizar a branch 
     git pull origin feature/solicitacao1
+
+
+
+
+para configurar o email tem configurar as variaveis no arquivo .env e depois rodar esse comando no terminal : 
+php artisan config:cache
