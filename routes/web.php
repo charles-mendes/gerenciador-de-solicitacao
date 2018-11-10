@@ -27,6 +27,9 @@ Route::get('/dashboard', function () {
     return view('layouts.principal');
 })->name('dashboard');
 
+// cadastrar novo usuario
+Route::get('cadastrar', 'Auth\RegisterController@showRegistrationForm')->name('cadastro_inicial');
+
 //Usuarios
 Route::get('/usuarios', 'UsuarioController@listar')->name('listar_usuarios');
 Route::get('/usuarios/novo-usuario/', 'UsuarioController@novo_usuario');
@@ -103,4 +106,4 @@ Route::get('/solicitacao/detalhe/{id}', 'SolicitacaoController@detalhe')->where(
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/home', 'HomeController@index')->name('home');

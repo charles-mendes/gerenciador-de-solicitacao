@@ -79,9 +79,13 @@
                                 <!-- <button type="submit" class="btn btn-primary">
                                     {{-- __('Login') --}}
                                 </button> -->
+                                
+                            <a class="btn btn-link" href="{{ route('cadastro_inicial') }}">
+                                        {{ __('Cadastrar nova conta ?') }}
+                                </a>
 
                                 <a id="recuperar-password" class="btn btn-link" href="javascript:void(0);">
-                                    {{ __('Esqueceu sua senha?') }}
+                                    {{ __('Esqueceu sua senha ?') }}
                                 </a>
                             </div>
                         </div>
