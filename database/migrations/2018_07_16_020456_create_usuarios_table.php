@@ -24,7 +24,8 @@ class CreateUsuariosTable extends Migration
             $table->integer('id_modificador');
             $table->timestamp('data_modificacao')->nullable();
             //TODO :: eu nao sei se faço tipo de usuario aqui
-            $table->char('tipo_conta',2);
+            $table->char('tipo_conta',2)->default('A')
+            ->comment('S = Solicitante | A = Aprovador | C = Comprador | AD = Administrador');
             $table->rememberToken();
         });
     }
