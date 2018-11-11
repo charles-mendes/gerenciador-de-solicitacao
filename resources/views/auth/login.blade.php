@@ -2,8 +2,20 @@
 
 @push('scripts')
     <script src="{{ asset('js/login.js') }}" defer></script>
+    @if($errors->has('email') && $errors->first() == "O campo e-mail não contém um endereço de email válido.")
+        <script>
+            $(function() {
+                $("#card-repassword").show();
+            });
+        </script>
+    @endif
+   
 @endpush
 
+
+@php
+    // dd(session()->all());
+@endphp
 @section('content')
 <div class="container">
 
@@ -12,6 +24,11 @@
         <div class="login-box card">
             <div class="card-body">
                 <form class="form-horizontal form-material m-4" method="POST" id="loginform" action="{{ route('login') }}">
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
                     @csrf
                     <h3 class="box-title m-b-20">Login</h3>
                     <div class="form-group">
@@ -21,10 +38,11 @@
                                 {{-- <span class="invalid-feedback" role="alert">
                                     <strong>{{ $errors->first('email') }}</strong>
                                 </span> --}}
-
-                                <div class="alert alert-danger" role="alert">
-                                    {{ $errors->first('email') }}
-                                </div>
+                                @if($errors->first() !== "O campo e-mail não contém um endereço de email válido.")
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ $errors->first('email') }}
+                                    </div>
+                                @endif
                             @endif
                         </div>
                     </div>
@@ -61,9 +79,13 @@
                                 <!-- <button type="submit" class="btn btn-primary">
                                     {{-- __('Login') --}}
                                 </button> -->
+                                
+                            <a class="btn btn-link" href="{{ route('cadastro_inicial') }}">
+                                        {{ __('Cadastrar nova conta ?') }}
+                                </a>
 
                                 <a id="recuperar-password" class="btn btn-link" href="javascript:void(0);">
-                                    {{ __('Forgot Your Password?') }}
+                                    {{ __('Esqueceu sua senha ?') }}
                                 </a>
                             </div>
                         </div>
@@ -87,14 +109,10 @@
 
                     <div class="form-group">
                         <div class="col-xs-12">
-                            <input class="form-control" type="text" id="email-recuperacao" name="email-recuperacao" required="" autofocus="" value="" placeholder="E-Mail">
-                            @if ($errors->has('email-recuperacao'))
-                                {{-- <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $errors->first('email-recuperacao') }}</strong>
-                                </span> --}}
-
+                            <input class="form-control" type="text" id="email-recuperacao" name="email" required="" autofocus="" value="" placeholder="E-Mail">
+                            @if ($errors->has('email'))
                                 <div class="alert alert-danger" role="alert">
-                                    {{ $errors->first('email-recuperacao') }}
+                                    {{ $errors->first('email') }}
                                 </div>
                             @endif
                         </div>

@@ -42,7 +42,9 @@
     @stack('styles')
     
 </head>
-
+@php
+    // dd(session()->all());
+@endphp
 <body class="fix-header fix-sidebar card-no-border">
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
@@ -123,7 +125,13 @@
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-                        <li> <a class="waves-effect waves-dark" href="/dashboard" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a>
+                        {{-- @php dd(session('menu'))@endphp --}}
+                        @if(session()->has('menu'))
+                            @foreach (session('menu') as $key => $item)
+                                <li> <a class="waves-effect waves-dark" href="{{$item['link']}}" aria-expanded="false"><i class="{{$item['icone']}}"></i><span class="hide-menu">{{$key}}</span></a>        
+                            @endforeach
+                        @endif
+                        {{-- <li> <a class="waves-effect waves-dark" href="/dashboard" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="/solicitacoes" aria-expanded="false"><i class="mdi mdi-account-check"></i><span class="hide-menu">Solicitação</span></a>
                         </li>
@@ -132,7 +140,7 @@
                         <li> <a class="waves-effect waves-dark" href="/fornecedores" aria-expanded="false"><i class="mdi mdi-emoticon"></i><span class="hide-menu">Fornecedor</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="/relatorios" aria-expanded="false"><i class="mdi mdi-earth"></i><span class="hide-menu">Relatorios</span></a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->

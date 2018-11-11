@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -30,6 +30,14 @@ class LoginController extends Controller
     protected function redirectTo(){
         return '/dashboard';
     }
+
+    protected function credentials(\Illuminate\Http\Request $request)
+    {
+        //return $request->only($this->username(), 'password');
+        return ['email' => $request->{$this->username()}, 'password' => $request->password, 'situacao' => 'A'];
+    }
+
+   
 
     /**
      * Create a new controller instance.
