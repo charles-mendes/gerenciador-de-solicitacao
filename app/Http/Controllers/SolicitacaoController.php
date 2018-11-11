@@ -328,23 +328,38 @@ class SolicitacaoController extends Controller
             $servico->descricao = session('novaSolicitacao')->servicos[$id]->descricao;
             $servico->link_oferta = session('novaSolicitacao')->servicos[$id]->link_oferta;
 
-            return view('modal.servico',['servico' => $servico , 'tipo' => 'solicitacao','id' => $id]);    
+            //habilita campos para colocar valor da solicitacao
+            $habilitaCampo = Auth::user()->tipo_conta !== 'S' ? true : false;
+
+            return view('solicitacao.modal.servico',['servico' => $servico , 'tipo' => 'solicitacao','id' => $id , 'habilitaCampo' => $habilitaCampo]);    
         }
         return back();
     }
 
 
     public function salvar_servico(Request $request){
-        $this->validate($request,[
-            'id_servico' => 'required',
-            'nome' => 'required',
-            // 'quantidade' => 'required',
-            'valor'=> 'required',
-            // 'imposto'=>'',
-            'descricao'=>'required',
-            // 'link-oferta'=>'',
-         ]);
+        if(Auth::user()->tipo_conta == 'S'){
+            $this->validate($request,[
+                'nome' => 'required',
+                 // 'quantidade' => 'required',
+                //  'valor'=> 'required',
+                 // 'imposto'=>'',
+                'descricao'=>'required',
+                // 'link-oferta'=>'',
+                'id_servico' => 'required',
+             ]);
+        }else{
+            $this->validate($request,[
+                'nome' => 'required',
+                 // 'quantidade' => 'required',
+                 'valor'=> 'required',
+                 // 'imposto'=>'',
+                'descricao'=>'required',
+                // 'link-oferta'=>'',
+                'id_servico' => 'required',
+             ]);
 
+        }
         
         //pegando o id do servico
         $id = $request->input('id_servico');
@@ -352,17 +367,15 @@ class SolicitacaoController extends Controller
         //pegando solicitacao da session
         $solicitacao = session('novaSolicitacao');
         
-        //alterar produto ja existente na session
-            // $solicitacao->servicos[$id]->nome = $request->input('nome');
-            // $solicitacao->servicos[$id]->quantidade = $request->input('quantidade');
-            // $solicitacao->servicos[$id]->valor = $request->input('valor');
-            // $solicitacao->servicos[$id]->valor_imposto =  $request->input('imposto');
-            // $solicitacao->servicos[$id]->descricao = $request->input('descricao');
-            // $solicitacao->servicos[$id]->link_oferta = $request->input('link_oferta');
-            // $solicitacao->servicos[$id]->id_criador = Auth::user()->id;
-            // $solicitacao->servicos[$id]->id_modificador = Auth::user()->id;
-        $servicoController = new ServicoController();
-        $solicitacao = $servicoController->salvar_servico($solicitacao, $id, $request);
+        //alterar servico ja existente na session
+        $solicitacao->servicos[$id]->nome = $request->input('nome');
+        $solicitacao->servicos[$id]->quantidade = $request->input('quantidade');
+        $solicitacao->servicos[$id]->valor = $request->input('valor');
+        $solicitacao->servicos[$id]->valor_imposto =  $request->input('imposto');
+        $solicitacao->servicos[$id]->descricao = $request->input('descricao');
+        $solicitacao->servicos[$id]->link_oferta = $request->input('link_oferta');
+        $solicitacao->servicos[$id]->id_criador = Auth::user()->id;
+        $solicitacao->servicos[$id]->id_modificador = Auth::user()->id;
         
         //adicionando alterações na solicitação 
         session()->put('novaSolicitacao', $solicitacao);
