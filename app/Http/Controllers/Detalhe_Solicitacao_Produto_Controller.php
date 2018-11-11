@@ -9,6 +9,7 @@ class Detalhe_Solicitacao_Produto_Controller extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('checkAccess');
     }
 
 

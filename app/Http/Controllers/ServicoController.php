@@ -10,6 +10,7 @@ class ServicoController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('checkAccess');
     }
     
     public function cadastrar_servico(Request $request, $item = null){

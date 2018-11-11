@@ -24,8 +24,8 @@ Route::group(['middleware' => 'menu'], function () {
 
 
 
-    // Route::get('/table', function () {return view('table');});
 
+    //tela de dashboard
     Route::get('/dashboard', function () {return view('layouts.principal');})->name('dashboard');
 
     // cadastrar novo usuario
@@ -58,19 +58,18 @@ Route::group(['middleware' => 'menu'], function () {
 
 
     //Solicitacao
-    Route::get('/solicitacoes', 'SolicitacaoController@listar')->name('listar_solicitacao');
+    Route::get('/solicitacao', 'SolicitacaoController@listar')->name('listar_solicitacao');
     Route::get('/solicitacao/nova', 'SolicitacaoController@nova')->name('nova_solicitacao');
     Route::post('/solicitacao/cadastrar_solicitacao', 'SolicitacaoController@cadastrar_solicitacao')->name('cadastrar_solicitacao');
 
     //Fornecedor
-    Route::get('/fornecedores', 'FornecedorController@listar')->name('listar_fornecedores');
+    Route::get('/fornecedor', 'FornecedorController@listar')->name('listar_fornecedores');
     Route::get('/fornecedor/novo/', 'FornecedorController@novo')->name('novo_fornecedor');
     Route::post('/fornecedor/cadastrar_fornecedor', 'FornecedorController@cadastrar_fornecedor')->name('cadastrar_fornecedor');
     Route::get('/fornecedor/cadastrar/{id}', 'FornecedorController@cadastrar')->name('cadastrar');
 
     //Fornecedor :: Produto
     Route::get('/fornecedor/novo-produto', 'FornecedorController@novo_produto');
-
     Route::post('/fornecedor/cadastrar_produto', 'FornecedorController@cadastrar_produto')->name('cadastrar_produto_fornecedor');
     Route::get('/fornecedor/edita-produto/{id}', 'FornecedorController@editar_produto');
     Route::post('/fornecedor/salvar_produto', 'FornecedorController@salvar_produto')->name('salvar_produto_fornecedor');

@@ -10,6 +10,7 @@ class ProdutoController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('checkAccess');
     }
     
     public function cadastrar_produto(Request $request, $item = null){
