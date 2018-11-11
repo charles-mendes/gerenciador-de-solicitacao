@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Detalhe_Solicitacao_Produto;
 
 class Detalhe_Solicitacao_Produto_Controller extends Controller
 {

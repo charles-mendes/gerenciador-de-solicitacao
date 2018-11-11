@@ -13,17 +13,17 @@ class ProdutoController extends Controller
         $this->middleware('checkAccess');
     }
     
-    public function cadastrar_produto(Request $request, $item = null){
-        $verifica = isset($item) ? true : false;
+    public function cadastrar_produto($item){
+        // $verifica = is_null($item) ? false : true;
         $produto = new Produto();
         //verificar nome do campo name ou nome
-        $produto->nome = $verifica? $item->nome : $request->input('nome');
-        $produto->quantidade = $verifica ? $item->quantidade : $request->input('quantidade');
-        $produto->valor = $verifica ? $item->valor : $request->input('valor');
+        $produto->nome = $item->nome;
+        $produto->quantidade = $item->quantidade;
+        $produto->valor = $item->valor;
         $produto->id_contrato = '0';
-        $produto->valor_imposto = $verifica ? $item->imposto : $request->input('imposto');
-        $produto->descricao = $verifica ? $item->descricao : $request->input('descricao');
-        $produto->link_oferta = $verifica ? $item->link_oferta : $request->input('link_oferta');
+        $produto->valor_imposto = $item->valor_imposto;
+        $produto->descricao = $item->descricao;
+        $produto->link_oferta = $item->link_oferta;
         $produto->id_criador = Auth::user()->id;
         $produto->data_criacao = time();
         $produto->id_modificador = Auth::user()->id;
