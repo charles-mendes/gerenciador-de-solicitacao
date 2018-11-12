@@ -42,9 +42,12 @@ Route::group(['middleware' => 'menu'], function () {
     Route::post('/usuarios/salvar_situacao', 'UsuarioController@salvar_situacao')->name('salvar_situacao');
 
 
-
-    //Solicitacao - Produto 
+    //Solicitacao
+    Route::get('/solicitacao', 'SolicitacaoController@listar')->name('listar_solicitacao');
+    Route::get('/solicitacao/nova', 'SolicitacaoController@nova')->name('nova_solicitacao');
+    Route::post('/solicitacao/cadastrar_solicitacao', 'SolicitacaoController@cadastrar_solicitacao')->name('cadastrar_solicitacao');
     
+    //Solicitacao - Produto 
     Route::get('/solicitacao/novo-produto/', 'SolicitacaoController@mostrar_form_produto');
     Route::post('/solicitacao/novo-produto', 'SolicitacaoController@cadastrar_produto')->name('cadastrar_produto_solicitacao');
     Route::get('/solicitacao/edita-produto/{id}', 'SolicitacaoController@editar_produto');
@@ -55,13 +58,6 @@ Route::group(['middleware' => 'menu'], function () {
     Route::post('/solicitacao/novo-servico', 'SolicitacaoController@cadastrar_servico')->name('cadastrar_servico_solicitacao');
     Route::get('/solicitacao/edita-servico/{id}', 'SolicitacaoController@editar_servico');
     Route::post('/solicitacao/salvar_servico', 'SolicitacaoController@salvar_servico')->name('salvar_servico_solicitacao');
-
-
-
-    //Solicitacao
-    Route::get('/solicitacao', 'SolicitacaoController@listar')->name('listar_solicitacao');
-    Route::get('/solicitacao/nova', 'SolicitacaoController@nova')->name('nova_solicitacao');
-    Route::post('/solicitacao/cadastrar_solicitacao', 'SolicitacaoController@cadastrar_solicitacao')->name('cadastrar_solicitacao');
 
     //Fornecedor
     Route::get('/fornecedor', 'FornecedorController@listar')->name('listar_fornecedores');

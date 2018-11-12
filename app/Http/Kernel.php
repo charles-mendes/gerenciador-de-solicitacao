@@ -44,6 +44,7 @@ class Kernel extends HttpKernel
         'menu' => [
             \App\Http\Middleware\BuildMenu::class,
         ],
+        
     ];
 
     /**

@@ -20,17 +20,17 @@ class ProdutoController extends Controller
         $produto->nome = $item->nome;
         $produto->quantidade = $item->quantidade;
         $produto->valor = $item->valor;
-        $produto->id_contrato = '0';
+        $produto->id_contrato = $item->id_contrato;
         $produto->valor_imposto = $item->valor_imposto;
         $produto->descricao = $item->descricao;
         $produto->link_oferta = $item->link_oferta;
-        $produto->id_criador = Auth::user()->id;
-        $produto->data_criacao = time();
-        $produto->id_modificador = Auth::user()->id;
-        $produto->data_modificacao = time();
-    
+        $produto->id_criador = $item->id_criador;
+        $produto->data_criacao = isset($item->data_criacao) ? $item->data_criacao : time() ;
+        $produto->id_modificador = $item->id_modificador;
+        $produto->data_modificacao = isset($item->data_modificacao) ? $item->data_modificacao : time();
+        $produto->save();
+
         return $produto;
-       
     }
 
 
