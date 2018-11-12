@@ -22,6 +22,8 @@
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <!-- You can change the theme colors from here -->
     <link href="{{ asset('css/colors/blue.css') }}" id="theme" rel="stylesheet">
+    <!-- Nosso CSS-->
+    <link href="{{ asset('css/tcc.css') }}" rel="stylesheet">
     <!-- Datatables-->
     {{-- <link href="{{ asset('plugins/datatables/media/css/dataTables.min.css') }}" rel="stylesheet"> --}}
     <link href="{{ asset('plugins/datatables/media/css/jquery.dataTables_themeroller.css') }}" rel="stylesheet">
@@ -103,12 +105,14 @@
                         <button type="button" class="btn btn-default" href="{{ route('logout') }}"
                             onclick="event.preventDefault();
                                             document.getElementById('logout-form').submit();">
-                            {{ __('Logout') }}
+                            {{ __('Logouat') }}
                         </button>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form> 
-                        <li></li>
+                        <li> 
+                           
+                        </li>
                     </ul>
                 </div>
             </nav>

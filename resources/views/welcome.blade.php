@@ -79,7 +79,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Charlinho GOSTOSO
+                    Charlinho 
                 </div>
 
                 <div class="links">
