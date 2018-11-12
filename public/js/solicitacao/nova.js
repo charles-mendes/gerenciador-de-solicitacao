@@ -49,8 +49,8 @@ function editarServico(servico){
     
     let id = $(servico).attr("data-id");
 
-    $('#produto .modal-content').load('/solicitacao/edita-servico/'+ id, function () {
-        $('#produto').modal('show');
+    $('#servico .modal-content').load('/solicitacao/edita-servico/'+ id, function () {
+        $('#servico').modal('show');
         $('table.display').DataTable();
     });
     

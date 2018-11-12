@@ -9,17 +9,18 @@
 </div>
 <div class="modal-body">
     <p>itens obrigatorios (*)</p>
-    <form id="cria-edita-servico" action="{{route( !isset($id) ? 'cadastrar_servico' : 'salvar_servico')}}" method="POST">
+    <form id="cria-edita-servico" action="{{route( !isset($id) ? 'cadastrar_servico_solicitacao' : 'salvar_servico_solicitacao')}}" method="POST">
         @csrf
         <input type="hidden" name="id_servico" value="{{isset($id) ? $id :''}}">
         <div class="form-group mb-0">
-            <label for="name" class="col-form-label">Nome do Serviço*</label>
-            <input type="text" class="form-control" id="name" name="name" value="{{isset($id) ? session('novaSolicitacao')->servicos[$id]->nome : ''}}">
+            <label for="nome" class="col-form-label">Nome do Serviço*</label>
+            <input type="text" class="form-control" id="nome" name="nome" value="{{isset($id) ? session('novaSolicitacao')->servicos[$id]->nome : ''}}">
         </div>
         {{-- <div class="form-group mb-0">
             <label for="quantidade" min="1" class="col-form-label">Quantidade *</label>
             <input type="number" class="form-control" id="quantidade" name="quantidade" value="{{isset($id) ? session('novaSolicitacao')->servicos[$id]->quantidade : ''}}">
         </div> --}}
+        @if($habilitaCampo)
         <div class="form-group mb-0">
             <label for="valor" class="col-form-label">Valor Serviço *</label>
             <input type="number" class="form-control" id="valor" name="valor" value="{{isset($id) ? session('novaSolicitacao')->servicos[$id]->valor : ''}}">
@@ -28,6 +29,7 @@
             <label for="imposto" class="col-form-label">Valor Imposto (Total)</label>
             <input type="number" class="form-control" id="imposto" name="imposto" value="{{isset($id) ? session('novaSolicitacao')->servicos[$id]->valor_imposto : ''}}">
         </div>
+        @endif
         <div class="form-group mb-0">
             <label for="descricao" class="col-form-label">Descricao *</label>
             <textarea class="form-control" id="descricao" name="descricao">{{isset($id) ? session('novaSolicitacao')->servicos[$id]->descricao : ''}}</textarea>

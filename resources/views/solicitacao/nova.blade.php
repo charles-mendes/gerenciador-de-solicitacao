@@ -22,6 +22,7 @@
 
 @php
     // session()->forget('novaSolicitacao');
+    // dd(session('novaSolicitacao')->produtos);
     // dd(Auth::user());
 @endphp
 
@@ -32,43 +33,50 @@
           <div class="card-block">
               <h4 class="card-title">
                   Cadastrar Produto
-                  {{-- cadastrarProduto() --}}
                   <button type="button" onclick="cadastrarProduto()" class="btn btn-primary">Cadastrar produto</button>
               </h4>
               <div class="table-responsive">
                   <table id="" class="display" style="width:100%">
                       <thead>
                           <tr>
-                            <th>Nome</th>
-                            <th>Quantidade</th>
-                            <th>Valor</th>
-                            <th>Valor Imposto</th>
-                            <th>Descricao</th>
-                            <th>Link Oferta</th>
-                            <th>Ações</th>
+                            @if(Auth::user()->tipo_conta == 'S')    
+                                <th>Nome</th>
+                                <th>Quantidade</th>
+                                <th>Descricao</th>
+                                <th>Ações</th>
+                            @else
+                                <th>Nome</th>
+                                <th>Quantidade</th>
+                                <th>Valor</th>
+                                <th>Valor Imposto</th>
+                                <th>Descricao</th>
+                                <th>Link Oferta</th>
+                                <th>Ações</th>
+                            @endif
                           </tr>
                       </thead>
                   
                       <tbody>
                         @if ( isset(session('novaSolicitacao')->produtos) )
                           @foreach(session('novaSolicitacao')->produtos as $key => $produto)
-                              <tr>      
-                                <td>{{$produto->nome}}</td>
-                                <td>{{$produto->quantidade}}</td>
-                                <td>{{$produto->valor}}</td>
-                                <td>{{$produto->valor_imposto}}</td>
-                                <td>{{$produto->descricao}}</td>
-                                <td>{{$produto->link_oferta}}</td> 
-                                <th>
-                                  <button id="btn-edit" type="button" class="btn btn-primary" data-id="{{$key}}" 
-                                    {{-- data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap" --}}
-                                    onclick="editarProduto(this)"
-                                  ><i class="ti-pencil"></i></button>
-                                  {{-- <button type="button" class="btn btn-primary" data-id="{{$key}}" data-toggle="tooltip" data-target="#exampleModal" data-whatever="@getbootstrap"  data-placement="left" --}}
-                                      {{-- data-original-title="Clique aqui para editar o produto"> --}}
-                                          
-                                  {{-- </button>    --}}
-                                </th>                          
+                              <tr>
+                                @if(Auth::user()->tipo_conta == 'S')    
+                                    <td>{{$produto->nome}}</td>
+                                    <td>{{$produto->quantidade}}</td>
+                                    <td>{{$produto->descricao}}</td>
+                                @else   
+                                    <td>{{$produto->nome}}</td>
+                                    <td>{{$produto->quantidade}}</td>
+                                    <td>{{$produto->valor}}</td>
+                                    <td>{{$produto->valor_imposto}}</td>
+                                    <td>{{$produto->descricao}}</td>
+                                    <td>{{$produto->link_oferta}}</td> 
+                                @endif
+                                    <td>
+                                        <button id="btn-edit" type="button" class="btn btn-primary" data-id="{{$key}}" onclick="editarProduto(this)">
+                                            <i class="ti-pencil"></i>
+                                        </button>
+                                    </td>                          
                               </tr>
                           @endforeach
                         @endif 
@@ -83,32 +91,44 @@
               <h4 class="card-title">
                 Cadastrar Servicos
                 <button type="button" onclick="cadastrarServico()" class="btn btn-primary">Cadastrar servico</button>
-                {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalServico" data-whatever="@getbootstrap">Cadastrar solicitacao</button> --}}
               </h4>
               {{-- <h6 class="card-subtitle">Cadastrar Servicos</h6> --}}
               <div class="table-responsive">
                   <table id="" class="display" style="width:100%">
-                      <thead>
-                          <tr>
-                            <th>Nome</th>
-                            <th>Valor</th>
-                            <th>Valor Imposto</th>
-                            <th>Descricao</th>
-                            <th>Ações</th>
-                          </tr>
-                      </thead>
+                        <thead>
+                            <tr>
+                                @if(Auth::user()->tipo_conta == 'S')
+                                    <th>Nome</th>
+                                    <th>Descricao</th>
+                                    <th>Ações</th>
+                                @else
+                                    <th>Nome</th>
+                                    <th>Valor</th>
+                                    <th>Valor Imposto</th>
+                                    <th>Descricao</th>
+                                    <th>Ações</th>
+                                @endif
+                            </tr>
+                        </thead>
                       
                       <tbody>
-                        @if ( isset(session('novaSolicitacao')->servicos) )
+                        @if (isset(session('novaSolicitacao')->servicos))
                           @foreach(session('novaSolicitacao')->servicos as $key => $servico)
                             <tr>
-                                <td>{{$servico->nome}}</td>
-                                <td>{{$servico->valor}}</td>
-                                <td>{{$servico->valor_imposto}}</td>
-                                <td>{{$servico->descricao}}</td>
-                                <th>
-                                  <button id="btn-edit" type="button" class="btn btn-primary" data-id="{{$key}}" onclick="editarServico(this)"><i class="ti-pencil"></i></button>
-                                </th> 
+                                @if(Auth::user()->tipo_conta == 'S')
+                                    <td>{{$servico->nome}}</td>
+                                    <td>{{$servico->descricao}}</td>
+                                @else
+                                    <td>{{$servico->nome}}</td>
+                                    <td>{{$servico->valor}}</td>
+                                    <td>{{$servico->valor_imposto}}</td>
+                                    <td>{{$servico->descricao}}</td>
+                                @endif
+                                    <td>
+                                        <button id="btn-edit" type="button" class="btn btn-primary" data-id="{{$key}}" onclick="editarServico(this)">
+                                            <i class="ti-pencil"></i>
+                                        </button>
+                                    </td> 
                             </tr>
                           @endforeach
                         @endif
@@ -126,7 +146,7 @@
                   @csrf
                   <div class="form-group mb-0">
                       <label for="descricao" class="col-form-label">Descricao da solicitação</label>
-                      <textarea placeholder="charles delicia " required class="form-control" id="descricao" name="descricao">{{isset($id) ? session('novaSolicitacao')->produtos[$id]->descricao : ''}}</textarea>
+                      <textarea placeholder="Esta solicitação tem o objetivo de ..." required class="form-control" id="descricao" name="descricao">{{isset($id) ? session('novaSolicitacao')->produtos[$id]->descricao : ''}}</textarea>
                   </div>
                   <button  type="submit" class="btn btn-primary float-right">Salvar Solicitação</button>
               </form>

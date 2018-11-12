@@ -13,24 +13,22 @@ class ServicoController extends Controller
         $this->middleware('checkAccess');
     }
     
-    public function cadastrar_servico(Request $request, $item = null){
-        $verifica = isset($item) ? true : false;
+    public function cadastrar_servico($item){
+       
         $servico = new Servico();
         //verificar nome do campo name ou nome
-        $servico->nome = $verifica? $item->nome : $request->input('nome');
-        $servico->quantidade = $verifica ? $item->quantidade : $request->input('quantidade');
-        $servico->valor = $verifica ? $item->valor : $request->input('valor');
-        $servico->id_contrato = '0';
-        $servico->valor_imposto = $verifica ? $item->imposto : $request->input('imposto');
-        $servico->descricao = $verifica ? $item->descricao : $request->input('descricao');
-        $servico->link_oferta = $verifica ? $item->link_oferta : $request->input('link_oferta');
-        $servico->id_criador = Auth::user()->id;
-        $servico->data_criacao = time();
-        $servico->id_modificador = Auth::user()->id;
-        $servico->data_modificacao = time();
-    
+        $servico->nome = $item->nome;
+        $servico->valor = $item->valor;
+        $servico->id_contrato = $item->id_contrato;
+        $servico->valor_imposto = isset($item->imposto) ? $item->imposto : '0' ;
+        $servico->descricao = $item->descricao;
+        // $servico->id_criador = $item->id_criador;
+        // $servico->data_criacao = isset($item->data_criacao) ?  $item->data_criacao : time();
+        // $servico->id_modificador = $item->id_modificador;
+        // $servico->data_modificacao = isset($item->data_modificacao) ? $item->data_modificacao : time();
+        $servico->save();
+        
         return $servico;
-       
     }
 
 
