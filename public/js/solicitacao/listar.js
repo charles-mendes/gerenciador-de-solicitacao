@@ -38,5 +38,7 @@ $(document).ready(function () {
     //     }]
     // });
 
-    $('#example').DataTable({});
+    $('#example').DataTable({
+        "language": {"url":"/plugins/datatables/language/Portuguese-Brasil.json"},
+    });
 });

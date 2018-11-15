@@ -52,12 +52,16 @@ Route::group(['middleware' => 'menu'], function () {
     Route::post('/solicitacao/novo-produto', 'SolicitacaoController@cadastrar_produto')->name('cadastrar_produto_solicitacao');
     Route::get('/solicitacao/edita-produto/{id}', 'SolicitacaoController@editar_produto');
     Route::post('/solicitacao/salvar_produto', 'SolicitacaoController@salvar_produto')->name('salvar_produto_solicitacao');
+    Route::get('/solicitacao/excluir-produto/{id}', 'SolicitacaoController@mostrar_verificacao_produto');
+    Route::post('/solicitacao/excluir-produto', 'SolicitacaoController@excluir_produto')->name('excluir_produto_solicitacao');
 
     //Solicitacao - Servico
     Route::get('/solicitacao/novo-servico/', 'SolicitacaoController@mostrar_form_servico');
     Route::post('/solicitacao/novo-servico', 'SolicitacaoController@cadastrar_servico')->name('cadastrar_servico_solicitacao');
     Route::get('/solicitacao/edita-servico/{id}', 'SolicitacaoController@editar_servico');
     Route::post('/solicitacao/salvar_servico', 'SolicitacaoController@salvar_servico')->name('salvar_servico_solicitacao');
+    Route::get('/solicitacao/excluir-servico/{id}', 'SolicitacaoController@mostrar_verificacao_servico');
+    Route::post('/solicitacao/excluir-servico', 'SolicitacaoController@excluir_servico')->name('excluir_servico_solicitacao');
 
     //Fornecedor
     Route::get('/fornecedor', 'FornecedorController@listar')->name('listar_fornecedores');

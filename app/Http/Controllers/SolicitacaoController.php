@@ -273,6 +273,42 @@ class SolicitacaoController extends Controller
         return redirect()->route('nova_solicitacao');
     }
 
+    public function mostrar_verificacao_produto($id){
+        //verifica se a session existe, se não existir ele redireciona a nova solicitacao
+        if($id != null && session()->has('novaSolicitacao')){
+            $id = (int) $id;
+            $solicitacao = session('novaSolicitacao');
+            //verifica se existe o vetor produtos e se o produto que foi escolhido existe no array de produtos cadastrados
+            if($solicitacao->produtos !== [] && isset($solicitacao->produtos[$id]) ){
+                return view('solicitacao.modal.verifica_produto',['id'=> $id]);    
+            }
+        }
+        return back();
+    }
+
+    public function excluir_produto(Request $request){
+        $this->validate($request,[
+            'id_produto' => 'required',
+        ]);
+        $id_produto = (int) request()->input('id_produto');
+
+        if(session()->has('novaSolicitacao')){
+            $solicitacao = session('novaSolicitacao');
+            if( isset($solicitacao->produtos) && isset($solicitacao->produtos[$id_produto])){
+                $produtos = $solicitacao->produtos;
+                //excluindo produto
+                unset($produtos[$id_produto]);
+                //ordenando vetor depois da exclusão de um produto
+                $produtos = array_values($produtos);
+                session('novaSolicitacao')->produtos = $produtos;
+                return redirect()->route('nova_solicitacao');
+            }
+
+        }
+        return back();
+
+    }
+
 
     public function mostrar_form_servico(){
         //verifica se a session existe, se não existir ele redireciona a nova solicitacao        
@@ -405,6 +441,43 @@ class SolicitacaoController extends Controller
         session()->put('novaSolicitacao', $solicitacao);
 
         return redirect()->route('nova_solicitacao');
+    }
+
+
+    public function mostrar_verificacao_servico($id){
+        //verifica se a session existe, se não existir ele redireciona a nova solicitacao
+        if($id != null && session()->has('novaSolicitacao')){
+            $id = (int) $id;
+            $solicitacao = session('novaSolicitacao');
+            //verifica se existe o vetor produtos e se o produto que foi escolhido existe no array de produtos cadastrados
+            if($solicitacao->servicos !== [] && isset($solicitacao->servicos[$id]) ){
+                return view('solicitacao.modal.verifica_servico',['id'=> $id]);    
+            }
+        }
+        return back();
+    }
+
+    public function excluir_servico(Request $request){
+        $this->validate($request,[
+            'id_servico' => 'required',
+        ]);
+        $id_servico = (int) request()->input('id_servico');
+
+        if(session()->has('novaSolicitacao')){
+            $solicitacao = session('novaSolicitacao');
+            if( isset($solicitacao->servicos) && isset($solicitacao->servicos[$id_servico])){
+                $servicos = $solicitacao->servicos;
+                //excluindo servico
+                unset($servicos[$id_servico]);
+                //ordenando vetor depois da exclusão de um servico
+                $servicos = array_values($servicos);
+                session('novaSolicitacao')->servicos = $servicos;
+                return redirect()->route('nova_solicitacao');
+            }
+
+        }
+        return back();
+
     }
 
 
