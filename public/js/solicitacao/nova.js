@@ -9,7 +9,15 @@ $(document).ready(function () {
     //     }]
     // });
 
-    $('table.display').DataTable();
+    $('table.display').DataTable({
+        "language": {"url":"/plugins/datatables/language/Portuguese-Brasil.json"},
+        "searching": false,
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": true,
+        "bInfo": false,
+        "bAutoWidth": false 
+    });
 
 
 });
