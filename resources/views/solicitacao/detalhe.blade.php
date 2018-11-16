@@ -45,29 +45,7 @@
             @else
                 <div class="table-responsive">
                     <table id="table-produto" class="display" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Quantidade</th>
-                                <th>Valor</th>
-                                <th>Valor Imposto</th>
-                                <th>Descricao</th>
-                                <th>Link Oferta</th>
-                            </tr>
-                        </thead>
-                        
-                        <tbody>
-                            @foreach ($solicitacao->produtos as $produto)
-                                <tr>
-                                    <td>{{$produto->nome}}</td>
-                                    <td>{{$produto->quantidade}}</td>
-                                    <td>{{$produto->valor}}</td>
-                                    <td>{{$produto->valor_imposto}}</td>
-                                    <td>{{$produto->descricao}}</td>
-                                    <td>{{$produto->link_oferta}}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
+                        @component('component.produtos', ['solicitacao' => $solicitacao])@endcomponent
                     </table>
                 </div>                
 
@@ -79,25 +57,7 @@
             @else
             <div class="table-responsive">
                 <table id="table-servico" class="display" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Valor</th>
-                            <th>Valor Imposto</th>
-                            <th>Descricao</th>
-                        </tr>
-                    </thead>
-                    
-                    <tbody>
-                        @foreach ($solicitacao->servicos as $servico)
-                            <tr>
-                                <td>{{$servico->nome}}</td>
-                                <td>{{$servico->valor}}</td>
-                                <td>{{$servico->valor_imposto}}</td>
-                                <td>{{$servico->descricao}}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
+                    @component('component.servicos', ['solicitacao' => $solicitacao])@endcomponent
                 </table>
             </div>                
 

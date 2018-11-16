@@ -26,53 +26,7 @@
                 </h4>
                 <div class="table-responsive">
                     <table id="" class="display" style="width:100%">
-                        <thead>
-                            <tr>
-                                @if(Auth::user()->tipo_conta == 'S')    
-                                    <th>Nome</th>
-                                    <th>Quantidade</th>
-                                    <th>Descricao</th>
-                                    <th>Ações</th>
-                                @else
-                                    <th>Nome</th>
-                                    <th>Quantidade</th>
-                                    <th>Valor</th>
-                                    <th>Valor Imposto</th>
-                                    <th>Descricao</th>
-                                    <th>Link Oferta</th>
-                                    <th>Ações</th>
-                                @endif
-                            </tr>
-                        </thead>
-                    
-                        <tbody>
-                            @if ( isset(session('novaSolicitacao')->produtos) )
-                            @foreach(session('novaSolicitacao')->produtos as $key => $produto)
-                                <tr>
-                                    @if(Auth::user()->tipo_conta == 'S')    
-                                        <td>{{$produto->nome}}</td>
-                                        <td>{{$produto->quantidade}}</td>
-                                        <td>{{$produto->descricao}}</td>
-                                    @else   
-                                        <td>{{$produto->nome}}</td>
-                                        <td>{{$produto->quantidade}}</td>
-                                        <td>{{$produto->valor}}</td>
-                                        <td>{{$produto->valor_imposto}}</td>
-                                        <td>{{$produto->descricao}}</td>
-                                        <td>{{$produto->link_oferta}}</td> 
-                                    @endif
-                                        <td>
-                                            <button id="btn-edit" type="button" class="btn btn-primary" data-id="{{$key}}" onclick="editarProduto(this)">
-                                                <i class="ti-pencil"></i>
-                                            </button>
-                                            <button id="btn-excluir" type="button" class="btn btn-danger" data-id="{{$key}}" onclick="excluirProduto(this)">
-                                                <i class="mdi mdi-close-box-outline"></i>
-                                            </button>
-                                        </td>                       
-                                </tr>
-                            @endforeach
-                            @endif 
-                        </tbody>
+                        @component('component.produtos', ['solicitacao' => session('novaSolicitacao'),'acao' => true])@endcomponent
                     </table>
                 </div>
                 
@@ -86,48 +40,7 @@
                 </h4>
                 <div class="table-responsive">
                     <table id="" class="display" style="width:100%">
-                            <thead>
-                                <tr>
-                                    @if(Auth::user()->tipo_conta == 'S')
-                                        <th>Nome</th>
-                                        <th>Descricao</th>
-                                        <th>Ações</th>
-                                    @else
-                                        <th>Nome</th>
-                                        <th>Valor</th>
-                                        <th>Valor Imposto</th>
-                                        <th>Descricao</th>
-                                        <th>Ações</th>
-                                    @endif
-                                </tr>
-                            </thead>
-                        
-                        <tbody>
-                            @if (isset(session('novaSolicitacao')->servicos))
-                            @foreach(session('novaSolicitacao')->servicos as $key => $servico)
-                                <tr>
-                                    @if(Auth::user()->tipo_conta == 'S')
-                                        <td>{{$servico->nome}}</td>
-                                        <td>{{$servico->descricao}}</td>
-                                    @else
-                                        <td>{{$servico->nome}}</td>
-                                        <td>{{$servico->valor}}</td>
-                                        <td>{{$servico->valor_imposto}}</td>
-                                        <td>{{$servico->descricao}}</td>
-                                    @endif
-                                        <td>
-                                            <button id="btn-edit" type="button" class="btn btn-primary" data-id="{{$key}}" onclick="editarServico(this)">
-                                                <i class="ti-pencil"></i>
-                                            </button>
-                                            <button id="btn-excluir" type="button" class="btn btn-danger" data-id="{{$key}}" onclick="excluirServico(this)">
-                                                <i class="mdi mdi-close-box-outline"></i>
-                                            </button>
-                                        </td> 
-                                        
-                                </tr>
-                            @endforeach
-                            @endif
-                        </tbody>
+                        @component('component.servicos', ['solicitacao' => session('novaSolicitacao'),'acao' => true])@endcomponent
                     </table>
                 </div>
             </div>  
