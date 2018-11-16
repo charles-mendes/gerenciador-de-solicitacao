@@ -5,6 +5,7 @@ function novaSolicitacao(){
 
 function editarSolicitacao(solicitacao){
     let id = $(solicitacao).attr("data-id");
+    console.log(id);
 
     window.location.href = '/solicitacao/editar/'+ id;
 }

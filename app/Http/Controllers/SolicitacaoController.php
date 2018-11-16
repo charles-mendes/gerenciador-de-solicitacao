@@ -55,7 +55,7 @@ class SolicitacaoController extends Controller
     public function detalhe($id){
         //pegando solicitacao
         $solicitacao = Solicitacao::find($id);
-        return view('solicitacao.detalhe',['solicitacao'=> $solicitacao]);        
+        return view('solicitacao.detalhe',['solicitacao'=> $solicitacao,'id'=> $id]);        
     }
 
 

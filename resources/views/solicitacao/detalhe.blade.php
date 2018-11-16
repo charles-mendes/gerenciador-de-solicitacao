@@ -116,6 +116,11 @@
             </div>                
 
         @endif
+        <div class="row">
+            <div class="col-12 text-center">
+                <button type="button" class="btn btn-primary" data-id="{{$id}}" onclick="editarSolicitacao(this);">Editar solicitação</button>
+            </div>
+        </div>
             
           
         </form>
