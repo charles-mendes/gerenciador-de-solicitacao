@@ -204,47 +204,35 @@ class SolicitacaoController extends Controller
             }
 
             return redirect()->route('listar_solicitacao');
-        
         }
-
-        
-        
-        if($solicitacao->produtos == []){
-            foreach ($solicitacaoSession as $key => $categoria) {
-                if($key == 'produtos'){
-                    foreach($categoria as $item){
-                        //criado produto para enviar
-                        $produto = new \stdClass;
-                        $produto->nome = $item->nome;
-                        $produto->quantidade = $item->quantidade;
-                        $produto->valor = $item->valor;
-                        $produto->id_contrato = $item->id_contrato;
-                        $produto->valor_imposto = $item->valor_imposto;
-                        $produto->descricao = $item->descricao;
-                        $produto->link_oferta = $item->link_oferta;
-                        $produto->id_criador = $item->id_criador;
-                        $produto->id_modificador = $item->id_modificador;
-                        $produto->data_modificacao = $item->data_modificacao;
-    
-                        //salva produto
-                        $produtoController = new ProdutoController();
-                        $produto = $produtoController->cadastrar_produto($produto);
-                        
-                        //salva registro na tabela auxiliar
-                        $solicitacao_produto = new Detalhe_Solicitacao_Produto();
-                        $solicitacao_produto->id_solicitacao = $solicitacao->id;
-                        $solicitacao_produto->id_produto = $produto->id;
-                        $solicitacao_produto->save();
-                    }
-                }
-
-            }
-        }
-
-        dd($solicitacao->produtos,$solicitacao->servicos);
-
-
     }
+
+
+    public function mostrar_verificacao_solicitacao($id){
+         //verifica se a session existe, se não existir ele redireciona a nova solicitacao
+        $id = (int) $id;
+        
+        if($id != null){
+            $solicitacao = Solicitacao::find($id);
+            return view('solicitacao.modal.verifica_solicitacao',['solicitacao'=> $solicitacao]);    
+        }
+        return back();
+    }
+
+    public function excluir_solicitacao(Request $request){
+        $this->validate($request,[
+            'id_solicitacao' => 'required|numeric',
+        ]);
+
+        $id_solicitacao = (int) request()->input('id_solicitacao');
+
+        $solicitacao = Solicitacao::find($id_solicitacao);
+        $solicitacao->status = 'E';
+        $solicitacao->save();
+
+        return redirect()->route('listar_solicitacao');
+    }
+
 
 
 

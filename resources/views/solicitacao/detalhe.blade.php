@@ -41,7 +41,7 @@
             </div>
             <h3>Produtos</h3>
             @if($solicitacao->produtos->first() == [])
-                <p>Nãao há produtos.</p>
+                <p>Não há produtos.</p>
             @else
                 <div class="table-responsive">
                     <table id="table-produto" class="display" style="width:100%">

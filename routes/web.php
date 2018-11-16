@@ -46,6 +46,8 @@ Route::group(['middleware' => 'menu'], function () {
     Route::post('/solicitacao/cadastrar_solicitacao', 'SolicitacaoController@cadastrar_solicitacao')->name('cadastrar_solicitacao');
     Route::get('/solicitacao/editar/{id}', 'SolicitacaoController@editar_solicitacao')->name('editar_solicitacao');
     Route::post('/solicitacao/salvar_solicitacao', 'SolicitacaoController@salvar_solicitacao')->name('salvar_solicitacao');
+    Route::get('/solicitacao/excluir-solicitacao/{id}', 'SolicitacaoController@mostrar_verificacao_solicitacao');
+    Route::post('/solicitacao/excluir-solicitacao', 'SolicitacaoController@excluir_solicitacao')->name('excluir_solicitacao');
 
     //Solicitacao - Produto 
     Route::get('/solicitacao/novo-produto/', 'SolicitacaoController@mostrar_form_produto');

@@ -75,7 +75,7 @@
                                                 <span class="label label-success">reprovado</span>
                                             @endif
                                             @if($solicitacao->status == 'E')
-                                                <span class="label label-alert">excluido</span>
+                                                <span class="label label-danger">excluido</span>
                                             @endif
                                         </td>                                        
                                         <td>
@@ -88,13 +88,11 @@
                                                     <i class="ti-settings"></i>
                                                 </button>
                                                 <div class="dropdown-menu" x-placement="bottom-start">
-                                                    <a class="dropdown-item" data-id="{{$solicitacao->id}}" onclick="alterarStatus(this);">Inativar</a>
-                                                </div>
-                                                <div class="dropdown-menu" x-placement="bottom-start">
                                                     <a class="dropdown-item" data-id="{{$solicitacao->id}}" onclick="editarSolicitacao(this);">Editar</a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" data-id="{{$solicitacao->id}}" onclick="excluirSolicitacao(this);">Inativar</a>
                                                 </div>
                                             </div>
-                                                  
                                         </td>
                                     </tr>
                                 @endforeach
@@ -110,6 +108,14 @@
                         
                 </div>
             </div>
-        </div>    
+        </div>   
+        
+        <div class="modal fade" id="excluir-solicitacao" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                        
+                </div>
+            </div>
+        </div>  
 @endsection
 

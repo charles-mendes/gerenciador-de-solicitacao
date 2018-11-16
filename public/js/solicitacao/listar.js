@@ -5,9 +5,19 @@ function novaSolicitacao(){
 
 function editarSolicitacao(solicitacao){
     let id = $(solicitacao).attr("data-id");
-    console.log(id);
-
     window.location.href = '/solicitacao/editar/'+ id;
+}
+
+function montando_tabela(){
+    return {
+        "language": {"url":"/plugins/datatables/language/Portuguese-Brasil.json"},
+        "searching": false,
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": true,
+        "bInfo": false,
+        "bAutoWidth": false ,
+    };
 }
 
 function visualizarSoliciticoes(solicitacao){
@@ -16,34 +26,25 @@ function visualizarSoliciticoes(solicitacao){
 
     $('#detalhe-solicitacao .modal-content').load('/solicitacao/detalhe/'+ id, function () {
         $('#detalhe-solicitacao').modal('show');
-        $('table-produto').DataTable({
-            "searching": false
-        });
-        $('table-servico').DataTable({
-            "searching": false
-        });
+        $('#table-produto').DataTable(montando_tabela());
+        $('#table-servico').DataTable(montando_tabela());
     });
 
     
 }
 
-function alterarStatus(soliciticao){
+function excluirSolicitacao(solicitacao){
+    let id = $(solicitacao).attr("data-id");
+
+    $('#excluir-solicitacao .modal-content').load('/solicitacao/excluir-solicitacao/'+ id, function () {
+        $('#excluir-solicitacao').modal('show');
+        $('#table-produto').DataTable(montando_tabela());
+        $('#table-servico').DataTable(montando_tabela());
+    });
 
 }
 
-// function submit_form(){
-//     $('#cadastrar_produto').submit();
-// }
-
 $(document).ready(function () {
-    // $('#example').DataTable({
-    //     "language": {"url":"/plugins/datatables-plugins/i18n/Portuguese-Brasil.lang"},
-    //     "columnDefs": [ {
-    //         "targets"  : 'no-sort',
-    //         "orderable": false,
-    //         "order": []
-    //     }]
-    // });
 
     $('#example').DataTable({
         "language": {"url":"/plugins/datatables/language/Portuguese-Brasil.json"},
