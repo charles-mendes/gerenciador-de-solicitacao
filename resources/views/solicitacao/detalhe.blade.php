@@ -53,7 +53,6 @@
                                 <th>Valor Imposto</th>
                                 <th>Descricao</th>
                                 <th>Link Oferta</th>
-                                <th>Ações</th>
                             </tr>
                         </thead>
                         
@@ -66,12 +65,6 @@
                                     <td>{{$produto->valor_imposto}}</td>
                                     <td>{{$produto->descricao}}</td>
                                     <td>{{$produto->link_oferta}}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary" data-id="{{$produto->id}}" onclick="#" data-toggle="tooltip" data-placement="right" title=""
-                                                data-original-title="Clique aqui para visualizar os detalhes deste usuário">
-                                                    <i class="ti-pencil"></i>
-                                        </button>
-                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -92,7 +85,6 @@
                             <th>Valor</th>
                             <th>Valor Imposto</th>
                             <th>Descricao</th>
-                            <th>Ações</th>
                         </tr>
                     </thead>
                     
@@ -103,12 +95,6 @@
                                 <td>{{$servico->valor}}</td>
                                 <td>{{$servico->valor_imposto}}</td>
                                 <td>{{$servico->descricao}}</td>
-                                <td>
-                                    <button type="button" class="btn btn-primary" data-id="{{$servico->id}}" onclick="#" data-toggle="tooltip" data-placement="right" title=""
-                                            data-original-title="Clique aqui para visualizar os detalhes deste usuário">
-                                                <i class="ti-pencil"></i>
-                                    </button>
-                                </td>
                             </tr>
                         @endforeach
                     </tbody>
