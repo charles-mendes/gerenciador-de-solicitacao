@@ -33,8 +33,9 @@ class SolicitacaoController extends Controller
         if(!session()->has('novaSolicitacao') || $previous == 'solicitacao'){
             session(['novaSolicitacao' => new \stdClass() ]);
         }
+        $solicitacao = session('novaSolicitacao');
         
-        return view('solicitacao.nova');      
+        return view('solicitacao.solicitacao',['solicitacao' => $solicitacao ,'status' => 'criando']);
     }
     
     public function listar(){
@@ -138,6 +139,116 @@ class SolicitacaoController extends Controller
 
     }
 
+    public function editar_solicitacao($id){
+        
+        if($id){
+            //pegando a url da onde o usuario venho 
+            $url_previous = explode('/',url()->previous());
+            $previous = end($url_previous);
+            //verifica se usuario venho ta url solicitação, caso venho faz o find da solicitação requerida e coloca na session novaSolicitação
+            if(!is_numeric($previous)){
+                $solicitacao = Solicitacao::find($id);
+                session(['novaSolicitacao' => $solicitacao ]);
+            }
+            return view('solicitacao.solicitacao',['status' => 'editando' ,'id_solicitacao' => $id]);
+        }
+        return back();
+    }
+
+
+    public function salvar_solicitacao(Request $request){
+        // dd($request->input());
+        $this->validate($request,[
+            // 'id_solicitacao'=>'required',
+            'descricao' => 'required',
+        ]);
+
+        if(session()->has('novaSolicitacao')){
+            $solicitacao = session('novaSolicitacao');
+            $solicitacao->descricao = $request->input('descricao');
+            $solicitacao->id_modificador = Auth::user()->id;
+            $solicitacao->data_modificacao = time();
+            
+            foreach($solicitacao->produtos as $produto){
+                if(isset($produto->id) && is_numeric($produto->id)){
+                    //salvando alteração em objeto
+                    $produto->save();
+                }else{
+                    //salva produto
+                    $produtoController = new ProdutoController();
+                    $produto = $produtoController->cadastrar_produto($produto);
+                    
+                    //salva registro na tabela auxiliar
+                    $solicitacao_produto = new Detalhe_Solicitacao_Produto();
+                    $solicitacao_produto->id_solicitacao = $solicitacao->id;
+                    $solicitacao_produto->id_produto = $produto->id;
+                    $solicitacao_produto->save();
+                }
+            }
+
+
+            foreach($solicitacao->servicos as $servico){
+                if(isset($servico->id) && is_numeric($servico->id)){
+                    //salvando alteração em objeto
+                    $servico->save();
+                }else{
+                    $servicoController = new ServicoController();
+                    $servico = $servicoController->cadastrar_servico($servico);
+
+                    //salva registro na tabela auxiliar
+                    $solicitacao_servico  = new Detalhe_Solicitacao_Servico();
+                    $solicitacao_servico->id_solicitacao = $solicitacao->id;
+                    $solicitacao_servico->id_servico = $servico->id;
+                    $solicitacao_servico->save();
+                }
+            }
+
+            return redirect()->route('listar_solicitacao');
+        
+        }
+
+        
+        
+        if($solicitacao->produtos == []){
+            foreach ($solicitacaoSession as $key => $categoria) {
+                if($key == 'produtos'){
+                    foreach($categoria as $item){
+                        //criado produto para enviar
+                        $produto = new \stdClass;
+                        $produto->nome = $item->nome;
+                        $produto->quantidade = $item->quantidade;
+                        $produto->valor = $item->valor;
+                        $produto->id_contrato = $item->id_contrato;
+                        $produto->valor_imposto = $item->valor_imposto;
+                        $produto->descricao = $item->descricao;
+                        $produto->link_oferta = $item->link_oferta;
+                        $produto->id_criador = $item->id_criador;
+                        $produto->id_modificador = $item->id_modificador;
+                        $produto->data_modificacao = $item->data_modificacao;
+    
+                        //salva produto
+                        $produtoController = new ProdutoController();
+                        $produto = $produtoController->cadastrar_produto($produto);
+                        
+                        //salva registro na tabela auxiliar
+                        $solicitacao_produto = new Detalhe_Solicitacao_Produto();
+                        $solicitacao_produto->id_solicitacao = $solicitacao->id;
+                        $solicitacao_produto->id_produto = $produto->id;
+                        $solicitacao_produto->save();
+                    }
+                }
+
+            }
+        }
+
+        dd($solicitacao->produtos,$solicitacao->servicos);
+
+
+    }
+
+
+
+
     public function mostrar_form_produto(){
         //verifica se a session existe, se não existir ele redireciona a nova solicitacao        
         if(session()->has('novaSolicitacao')){
@@ -155,6 +266,18 @@ class SolicitacaoController extends Controller
             return view('solicitacao.modal.produto',['produto' => $produto , 'habilitaCampo' => $habilitaCampo]);
         }
         return redirect()->route('nova_solicitacao');
+    }
+
+    private function redireciona_solicitacao(){
+        $url_previous = explode('/',url()->previous());
+        
+        if(end($url_previous) == 'nova'){
+            return route('nova_solicitacao');
+        }else if(is_numeric(end($url_previous))){   
+            $id = (int) end($url_previous);
+            return route('editar_solicitacao',[$id]);
+        }
+        
     }
 
     public function cadastrar_produto(Request $request){
@@ -201,8 +324,9 @@ class SolicitacaoController extends Controller
         $solicitacao->produtos[]= $produto;
 
         session()->put('novaSolicitacao', $solicitacao);
-
-        return redirect()->route('nova_solicitacao');
+    
+        //redireciona solicitação
+        return redirect($this->redireciona_solicitacao());
     }
 
     public function editar_produto($id){
@@ -270,7 +394,8 @@ class SolicitacaoController extends Controller
         //adicionando alterações na solicitação 
         session()->put('novaSolicitacao', $solicitacao);
 
-        return redirect()->route('nova_solicitacao');
+        //redirecionando solicitação
+        return redirect($this->redireciona_solicitacao());
     }
 
     public function mostrar_verificacao_produto($id){
@@ -301,7 +426,9 @@ class SolicitacaoController extends Controller
                 //ordenando vetor depois da exclusão de um produto
                 $produtos = array_values($produtos);
                 session('novaSolicitacao')->produtos = $produtos;
-                return redirect()->route('nova_solicitacao');
+                
+                //redirecionando solicitação
+                return redirect($this->redireciona_solicitacao());
             }
 
         }
@@ -326,7 +453,7 @@ class SolicitacaoController extends Controller
 
             return view('solicitacao.modal.servico',['servico' => $servico , 'habilitaCampo' => $habilitaCampo]);
         }
-        return redirect()->route('nova_solicitacao');
+        return back();
     }
 
     public function cadastrar_servico(Request $request){
@@ -372,7 +499,8 @@ class SolicitacaoController extends Controller
 
         session()->put('novaSolicitacao', $solicitacao);
         
-        return redirect()->route('nova_solicitacao');
+        //redirecionando solicitação
+        return redirect($this->redireciona_solicitacao());
     }
 
 
@@ -440,7 +568,8 @@ class SolicitacaoController extends Controller
         //adicionando alterações na solicitação 
         session()->put('novaSolicitacao', $solicitacao);
 
-        return redirect()->route('nova_solicitacao');
+        //redirecionando solicitação
+        return redirect($this->redireciona_solicitacao());
     }
 
 
@@ -472,7 +601,9 @@ class SolicitacaoController extends Controller
                 //ordenando vetor depois da exclusão de um servico
                 $servicos = array_values($servicos);
                 session('novaSolicitacao')->servicos = $servicos;
-                return redirect()->route('nova_solicitacao');
+                
+                //redirecionando solicitação
+                return redirect($this->redireciona_solicitacao());
             }
 
         }

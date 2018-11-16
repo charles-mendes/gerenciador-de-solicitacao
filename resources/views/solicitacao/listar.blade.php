@@ -90,6 +90,9 @@
                                                 <div class="dropdown-menu" x-placement="bottom-start">
                                                     <a class="dropdown-item" data-id="{{$solicitacao->id}}" onclick="alterarStatus(this);">Inativar</a>
                                                 </div>
+                                                <div class="dropdown-menu" x-placement="bottom-start">
+                                                    <a class="dropdown-item" data-id="{{$solicitacao->id}}" onclick="editarSolicitacao(this);">Editar</a>
+                                                </div>
                                             </div>
                                                   
                                         </td>

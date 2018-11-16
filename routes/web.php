@@ -23,8 +23,6 @@ Route::group(['middleware' => 'menu'], function () {
     Route::get('/', function () { return view('auth.login');});
 
 
-
-
     //tela de dashboard
     Route::get('/dashboard', function () {return view('layouts.principal');})->name('dashboard');
 
@@ -46,7 +44,9 @@ Route::group(['middleware' => 'menu'], function () {
     Route::get('/solicitacao', 'SolicitacaoController@listar')->name('listar_solicitacao');
     Route::get('/solicitacao/nova', 'SolicitacaoController@nova')->name('nova_solicitacao');
     Route::post('/solicitacao/cadastrar_solicitacao', 'SolicitacaoController@cadastrar_solicitacao')->name('cadastrar_solicitacao');
-    
+    Route::get('/solicitacao/editar/{id}', 'SolicitacaoController@editar_solicitacao')->name('editar_solicitacao');
+    Route::post('/solicitacao/salvar_solicitacao', 'SolicitacaoController@salvar_solicitacao')->name('salvar_solicitacao');
+
     //Solicitacao - Produto 
     Route::get('/solicitacao/novo-produto/', 'SolicitacaoController@mostrar_form_produto');
     Route::post('/solicitacao/novo-produto', 'SolicitacaoController@cadastrar_produto')->name('cadastrar_produto_solicitacao');

@@ -3,6 +3,12 @@ function novaSolicitacao(){
     window.location.href = '/solicitacao/nova';
 }
 
+function editarSolicitacao(solicitacao){
+    let id = $(solicitacao).attr("data-id");
+
+    window.location.href = '/solicitacao/editar/'+ id;
+}
+
 function visualizarSoliciticoes(solicitacao){
     
     let id = $(solicitacao).attr("data-id");

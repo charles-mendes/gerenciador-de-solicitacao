@@ -1,31 +1,20 @@
 @extends('layouts.principal')
 
+@php
+    // dd($status);
+@endphp
 @section('breadcrumb')
-    @component(
-        'layouts.component.breadcrumb',
-        [
-          'title' => 'Nova Solicitacao',
-          'localizacoes' => [ ['Home', route('dashboard') ],['nova-solicitacao', ''] ] 
+    @component('layouts.component.breadcrumb',[
+          'title' => ($status == 'criando') ? 'Nova Solicitacao' : 'Editando Solicitacao',
+          'localizacoes' => [ ['Home', route('dashboard') ],[($status == 'criando') ? 'Nova Solicitacao' : 'Editando Solicitacao', ''] ] 
         ]
     )
     @endcomponent
 @endsection
 
 @push('scripts')
-  <script> 
-    function submit_form(){
-      $('#cadastrar_produto').submit();
-    }
-  </script>
   <script src="{{ asset('js/solicitacao/nova.js') }}"></script>
 @endpush
-
-@php
-    // session()->forget('novaSolicitacao');
-    // dd(session('novaSolicitacao')->produtos);
-    // dd(Auth::user());
-@endphp
-
 
 @section('content')
     <div class="col-lg-12">
@@ -95,7 +84,6 @@
                     Cadastrar Servicos
                     <button type="button" onclick="cadastrarServico()" class="btn btn-primary">Cadastrar servico</button>
                 </h4>
-                {{-- <h6 class="card-subtitle">Cadastrar Servicos</h6> --}}
                 <div class="table-responsive">
                     <table id="" class="display" style="width:100%">
                             <thead>
@@ -146,11 +134,11 @@
         </div>  
         <div class="card"> 
             <div class="card-block">
-                <form id="cadastra_solicitacao" action="{{route('cadastrar_solicitacao')}}" method="POST">
+                <form id="cadastra_solicitacao" action="{{route(($status == 'criando') ? 'cadastrar_solicitacao' : 'salvar_solicitacao')}}" method="POST">
                     @csrf
                     <div class="form-group mb-0">
                         <label for="descricao" class="col-form-label">Descricao da solicitação</label>
-                        <textarea placeholder="Esta solicitação tem o objetivo de ..." required class="form-control" id="descricao" name="descricao">{{isset($id) ? session('novaSolicitacao')->produtos[$id]->descricao : ''}}</textarea>
+                        <textarea id="descricao" name="descricao" class="form-control" placeholder="Esta solicitação tem o objetivo de ..." required >{{isset(session('novaSolicitacao')->descricao)? session('novaSolicitacao')->descricao : ''}}</textarea>
                     </div>
                     <button  type="submit" class="btn btn-primary float-right">Salvar Solicitação</button>
                 </form>
