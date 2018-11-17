@@ -25,6 +25,15 @@
 
 @section('content')
         <div class="col-lg-12">
+            @if(count($errors)>0)
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{$error}}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <div class="card">
                 <div class="card-block">
                     <h4 class="card-title">Listar Usuarios
@@ -57,7 +66,20 @@
                                                 <span class="label label-danger">Inativo</span>
                                             @endif                                            
                                         </td>     
-                                        <td>{{$usuario->tipo_conta}}</td>                                   
+                                        <td>
+                                            @if($usuario->tipo_conta == 'A')
+                                                <span class="label label-success">Aprovador</span>
+                                            @endif
+                                            @if($usuario->tipo_conta == 'C')
+                                                <span class="label label-success">Comprador</span>
+                                            @endif
+                                            @if($usuario->tipo_conta == 'AD')
+                                                <span class="label label-danger">Administrador</span>
+                                            @endif
+                                            @if($usuario->tipo_conta == 'S')
+                                                <span class="label label-danger">Solicitante</span>
+                                            @endif
+                                        </td>                                   
                                         <td>
                                             <button type="button" class="btn btn-primary" data-id="{{$usuario->id}}" onclick="editaUsuario(this)" data-toggle="tooltip" data-placement="left" title=""
                                                 data-original-title="Clique aqui para editar usuário">

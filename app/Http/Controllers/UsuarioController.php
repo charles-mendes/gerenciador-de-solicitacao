@@ -23,10 +23,8 @@ class UsuarioController extends Controller
   
 
   public function listar(){
-    $usuarios = Usuario::all();
-    // dd($usuarios);
+    $usuarios = Usuario::where('tipo_conta','A')->orwhere('tipo_conta','C')->orwhere('tipo_conta','S')->get();
 
-    // $usuario = new Usuario();
     return view('usuario.listar', ['usuarios'=> $usuarios]);
   }
 
@@ -35,11 +33,11 @@ class UsuarioController extends Controller
   }
 
   public function cadastrar_usuario(Request $request){
-
     $this->validate($request,[
       'nome' => 'required|string|max:255',
       'email' => 'required|string|email|max:255|unique:usuario',
       'senha' => 'required|string|min:6',
+      'tipo_conta' => 'required|regex:/^[A,C,S]$/u',
     ]);
 
     // adiciona um novo usuario
@@ -48,13 +46,12 @@ class UsuarioController extends Controller
     $usuario->email = $request->input('email');
     $usuario->senha = Hash::make($request->input('senha'));    
     $usuario->situacao = 'A';
-    $usuario->tipo_conta = 'A';
+    $usuario->tipo_conta = $request->input('tipo_conta');
     $usuario->id_criador = Auth::user()->id;
     $usuario->data_criacao = time();
     $usuario->id_modificador = Auth::user()->id;
     $usuario->data_modificacao = time();
     if($usuario->save()){
-      // dd('deu boa');
       return redirect()->route('listar_usuarios');
     }
     
@@ -74,26 +71,29 @@ class UsuarioController extends Controller
       'id_usuario' => 'required',
     ]);
 
-    if ($valida_id->fails()) return back()->withErrors($valida_id)->withInput();
+    if ($valida_id->fails()){
+      return back()->withErrors($valida_id)->withInput();
+    }
     
     $usuario = Usuario::find($request->input('id_usuario'));
     
+    //quando usuario envia o mesmo email, alterando outras informações
     if($usuario->email == $request->input('email') ){
-      //quando usuario envia o mesmo email, alterando outras informações
+      
       $this->validate($request,[
-        // 'id_usuario' => 'required',
         'nome' => 'required|string|max:255',
         'email' => 'required|string|email|max:255',
         'senha' => 'required|string|min:6',
+        'tipo_conta' => 'required|regex:/^[A,C,S]$/u',
       ]);
   
     }else{
       //quando usuario envia o email diferente, alterando outras informações
       $this->validate($request,[
-        // 'id_usuario' => 'required',
         'nome' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:usuario',
         'senha' => 'required|string|min:6',
+        'tipo_conta' => 'required|regex:/^[A,C,S]$/u',
       ]);
     }
 
@@ -101,7 +101,7 @@ class UsuarioController extends Controller
     $usuario->email = $request->input('email');
     $usuario->senha = Hash::make($request->input('senha'));    
     $usuario->situacao = 'A';
-    $usuario->tipo_conta = 'A';
+    $usuario->tipo_conta = $request->input('tipo_conta');
     // $usuario->id_criador = Auth::user()->id;
     // $usuario->data_criacao = time();
     $usuario->id_modificador = Auth::user()->id;
@@ -134,3 +134,4 @@ class UsuarioController extends Controller
   }
 
 }
+
