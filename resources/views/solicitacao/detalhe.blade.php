@@ -18,7 +18,7 @@
 
             <div class="form-group mb-3">
                 <label class="col-form-label">Data Criação</label>
-                <p>{{$solicitacao->data_criacao}}</p>
+                <p>{{ date('d/m/Y H:i:s' , strtotime($solicitacao->data_criacao))}}</p>
             </div>
 
             <div class="form-group mb-3">
@@ -28,7 +28,7 @@
 
             <div class="form-group mb-3">
                 <label class="col-form-label">Ultima Modificacao</label>
-                <p>{{$solicitacao->data_modificacao}}</p>
+                <p>{{date('d/m/Y H:i:s' , strtotime($solicitacao->data_modificacao))}}</p>
             </div>
 
             <div class="form-group mb-3">
