@@ -92,6 +92,7 @@ Route::group(['middleware' => 'menu'], function () {
         
     // });
 
+  
 
 
     // Route::post('/solicitacao/cadastrar_servico', 'SolicitacaoController@cadastrar_servico')->name('cadastrar_servico');
@@ -111,3 +112,7 @@ Route::group(['middleware' => 'menu'], function () {
 Auth::routes();
 
 // Route::get('/home', 'HomeController@index')->name('home');
+
+  //relatorio 
+
+  Route::get('/relatorios', function(){return view(relatorio.relatorio);})->name('relatorio');
