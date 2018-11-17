@@ -25,9 +25,9 @@ function visualizarSoliciticoes(solicitacao){
     let id = $(solicitacao).attr("data-id");
 
     $('#detalhe-solicitacao .modal-content').load('/solicitacao/detalhe/'+ id, function () {
+        $('#table-produto-detalhe').DataTable(montando_tabela());
+        $('#table-servico-detalhe').DataTable(montando_tabela());
         $('#detalhe-solicitacao').modal('show');
-        $('#table-produto').DataTable(montando_tabela());
-        $('#table-servico').DataTable(montando_tabela());
     });
 
     
@@ -37,9 +37,9 @@ function excluirSolicitacao(solicitacao){
     let id = $(solicitacao).attr("data-id");
 
     $('#excluir-solicitacao .modal-content').load('/solicitacao/excluir-solicitacao/'+ id, function () {
+        $('#table-produto-solicitacao').DataTable(montando_tabela());
+        $('#table-servico-solicitacao').DataTable(montando_tabela());
         $('#excluir-solicitacao').modal('show');
-        $('#table-produto').DataTable(montando_tabela());
-        $('#table-servico').DataTable(montando_tabela());
     });
 
 }

@@ -70,9 +70,9 @@
                                         {{-- <td>{{$solicitacao->id}}</td> --}}
                                         <td>{{$solicitacao->descricao}}</td>
                                         <td>{{App\Usuario::find($solicitacao->id_criador)->nome}}</td>
-                                        <td>{{ date( 'd/m/Y H:i:s' , strtotime($solicitacao->data_criacao))}}</td>
+                                        <td>{{ date('d/m/Y H:i:s' , strtotime($solicitacao->data_criacao))}}</td>
                                         <td>{{App\Usuario::find($solicitacao->id_modificador)->nome}}</td>
-                                        <td>{{ date( 'd/m/Y H:i:s' , strtotime($solicitacao->data_modificacao))}}</td>
+                                        <td>{{ date('d/m/Y H:i:s' , strtotime($solicitacao->data_modificacao))}}</td>
                                         <td>
                                             @if($solicitacao->status == 'A')
                                                 <span class="label label-success">aprovado</span>

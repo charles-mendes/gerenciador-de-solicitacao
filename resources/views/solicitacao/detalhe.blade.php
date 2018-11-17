@@ -44,7 +44,7 @@
                 <p>Não há produtos.</p>
             @else
                 <div class="table-responsive">
-                    <table id="table-produto" class="display" style="width:100%">
+                    <table id="table-produto-detalhe" class="display" style="width:100%">
                         @component('component.produtos', ['solicitacao' => $solicitacao])@endcomponent
                     </table>
                 </div>                
@@ -56,7 +56,7 @@
                 <p>Não há serviços.</p>
             @else
             <div class="table-responsive">
-                <table id="table-servico" class="display" style="width:100%">
+                <table id="table-servico-detalhe" class="display" style="width:100%">
                     @component('component.servicos', ['solicitacao' => $solicitacao])@endcomponent
                 </table>
             </div>                
