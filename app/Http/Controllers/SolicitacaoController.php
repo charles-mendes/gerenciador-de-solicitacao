@@ -5,6 +5,7 @@ use App\Solicitacao;
 use App\Produto;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\ServicoController;
+use App\Http\Controllers\MailController;
 use App\Servico;
 use App\Detalhe_Solicitacao_Produto;
 use App\Detalhe_Solicitacao_Servico;
@@ -142,6 +143,10 @@ class SolicitacaoController extends Controller
 
             }
         }
+
+        $mailController = new MailController();
+        $mailController->solicitacaoPendente($solicitacao->id);
+
 
         return redirect()->route('listar_solicitacao');
 
