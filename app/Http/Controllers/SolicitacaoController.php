@@ -168,7 +168,9 @@ class SolicitacaoController extends Controller
             $solicitacao->descricao = $request->input('descricao');
             $solicitacao->id_modificador = Auth::user()->id;
             $solicitacao->data_modificacao = time();
+            $solicitacao->save();
             
+            //salvando alterações no produto
             foreach($solicitacao->produtos as $produto){
                 if(isset($produto->id) && is_numeric($produto->id)){
                     //salvando alteração em objeto
@@ -186,7 +188,7 @@ class SolicitacaoController extends Controller
                 }
             }
 
-
+            //salvando alterações no servico
             foreach($solicitacao->servicos as $servico){
                 if(isset($servico->id) && is_numeric($servico->id)){
                     //salvando alteração em objeto
@@ -202,6 +204,9 @@ class SolicitacaoController extends Controller
                     $solicitacao_servico->save();
                 }
             }
+
+            //salvando alteração na descricao
+
 
             return redirect()->route('listar_solicitacao');
         }
@@ -410,24 +415,23 @@ class SolicitacaoController extends Controller
             if( isset($solicitacao->produtos) && isset($solicitacao->produtos[$id_produto])){
                 
                 if(isset($solicitacao->produtos[$id_produto]->id)){
-                    dd($solicitacao->produtos);
                     //deleta servico no banco
-                    $servico = Servico::find($solicitacao->produtos[$id_produto]->id);
-                    dd($servico);
-                    $servico->delete();
+                    $produto = Produto::find($solicitacao->produtos[$id_produto]->id);
+                    $produto->delete();
 
                     //detelar relação entre servico e solicitacao
-                    $solicitacao_servico = Detalhe_Solicitacao_Servico::where('id_servico',$solicitacao->produtos[$id_produto]->id)->get()->first();
-                    $solicitacao_servico->delete();
+                    $solicitacao_produto = Detalhe_Solicitacao_Produto::where('id_produto',$solicitacao->produtos[$id_produto]->id)->get()->first();
+                    $solicitacao_produto->delete();
                 
                 }
                 
                 $produtos = $solicitacao->produtos;
-                //ordenando vetor depois da exclusão de um produto
                 if(count($produtos) !== 0){
-                    $produtos = array_values($produtos);
                     //excluindo produto
                     unset($produtos[$id_produto]);
+                    
+                    //ordenando vetor depois da exclusão de um produto
+                    $produtos = array_values($produtos);
                 }
                 session('novaSolicitacao')->produtos = $produtos;
                 
@@ -614,10 +618,10 @@ class SolicitacaoController extends Controller
                 //para ajustar visualização de edição de solicitação
                 $servicos = $solicitacao->servicos;
                 
-                //ordenando vetor depois da exclusão de um servico
                 if(count($servicos) !== 0){
                     //excluindo servico
                     unset($servicos[$id_servico]);
+                    //ordenando vetor depois da exclusão de um servico
                     $servicos = array_values($servicos);
                 }
                 session('novaSolicitacao')->servicos = $servicos;
