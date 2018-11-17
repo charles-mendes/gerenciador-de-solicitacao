@@ -19,8 +19,6 @@ class ServicoController extends Controller
         //verificar nome do campo name ou nome
         $servico->nome = $item->nome;
         $servico->valor = $item->valor;
-        $servico->id_contrato = $item->id_contrato;
-        $servico->valor_imposto = isset($item->imposto) ? $item->imposto : '0' ;
         $servico->descricao = $item->descricao;
         // $servico->id_criador = $item->id_criador;
         // $servico->data_criacao = isset($item->data_criacao) ?  $item->data_criacao : time();

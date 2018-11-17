@@ -27,20 +27,10 @@
             <input type="number" class="form-control" id="valor" name="valor" value="{{$produto->valor}}">
         </div>
         @endif
-        {{-- <div class="form-group mb-0">
-            <label for="imposto" class="col-form-label">Valor Imposto (Total)</label>
-            <input type="number" class="form-control" id="imposto" name="imposto" value="{{$produto->valor_imposto}}">
-        </div> --}}
         <div class="form-group mb-0">
             <label for="descricao" class="col-form-label">Descricao *</label>
             <textarea class="form-control" id="descricao" name="descricao">{{$produto->descricao}}</textarea>
         </div>
-        @if($habilitaCampo)
-        <div class="form-group mb-0">
-            <label for="link_oferta" class="col-form-label">Link Oferta</label>
-            <textarea class="form-control" type="text" id="link_oferta" name="link_oferta">{{$produto->link_oferta}}</textarea>
-        </div>
-        @endif
     </form>
 </div>
 <div class="modal-footer">

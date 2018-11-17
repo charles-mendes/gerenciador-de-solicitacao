@@ -20,10 +20,7 @@ class ProdutoController extends Controller
         $produto->nome = $item->nome;
         $produto->quantidade = $item->quantidade;
         $produto->valor = $item->valor;
-        $produto->id_contrato = $item->id_contrato;
-        $produto->valor_imposto = $item->valor_imposto;
         $produto->descricao = $item->descricao;
-        $produto->link_oferta = $item->link_oferta;
         $produto->id_criador = $item->id_criador;
         $produto->data_criacao = isset($item->data_criacao) ? $item->data_criacao : time() ;
         $produto->id_modificador = $item->id_modificador;
@@ -40,9 +37,7 @@ class ProdutoController extends Controller
         $tipo->produtos[$id]->nome = $request->input('nome');
         $tipo->produtos[$id]->quantidade = $request->input('quantidade');
         $tipo->produtos[$id]->valor = $request->input('valor');
-        $tipo->produtos[$id]->valor_imposto =  $request->input('imposto');
         $tipo->produtos[$id]->descricao = $request->input('descricao');
-        $tipo->produtos[$id]->link_oferta = $request->input('link_oferta');
         $tipo->produtos[$id]->id_criador = Auth::user()->id;
         $tipo->produtos[$id]->id_modificador = Auth::user()->id;
         
