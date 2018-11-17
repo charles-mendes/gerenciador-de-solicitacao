@@ -145,6 +145,20 @@ class SolicitacaoController extends Controller
     public function editar_solicitacao($id){
         
         if($id){
+            //verifica se o usuario tipo solicitante tem permissão para editar essa soliciitação
+            if(Auth::user()->tipo_conta == "S"){
+                $solicitacoes = Solicitacao::all()->where('id_criador',Auth::user()->id);
+                $verify = false;
+                foreach($solicitacoes as $solicitacao){
+                    if($solicitacao->id == $id){
+                        $verify = true;
+                    }
+                }
+                if(!($verify)){
+                    return back()->withErrors('Você não tem permissão para editar esta solicitação.');
+                }
+            }
+
             //pegando a url da onde o usuario venho 
             $url_previous = explode('/',url()->previous());
             $previous = end($url_previous);
