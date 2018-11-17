@@ -11,11 +11,13 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-// Route::redirect('/login', '/', 301);
 
 Route::group(['middleware' => 'menu'], function () {
 
-    
+    // Route::get('/teste/{id}', 'MailController@solicitacaoPendente');
+    // Route::get('/testando', function () {return view('mail.solicitacao_pendente');});
+
+
     /**
      * LOGIN
      **/
@@ -48,6 +50,9 @@ Route::group(['middleware' => 'menu'], function () {
     Route::post('/solicitacao/salvar_solicitacao', 'SolicitacaoController@salvar_solicitacao')->name('salvar_solicitacao');
     Route::get('/solicitacao/excluir-solicitacao/{id}', 'SolicitacaoController@mostrar_verificacao_solicitacao');
     Route::post('/solicitacao/excluir-solicitacao', 'SolicitacaoController@excluir_solicitacao')->name('excluir_solicitacao');
+
+    //visualizar solicitação
+    Route::get('/solicitacao/visualizar/{id}', 'SolicitacaoController@visualizar')->name('visualizar_solicitacao');
 
     //Solicitacao - Produto 
     Route::get('/solicitacao/novo-produto/', 'SolicitacaoController@mostrar_form_produto');

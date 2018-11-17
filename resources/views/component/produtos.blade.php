@@ -5,17 +5,15 @@
             <th>Quantidade</th>
             <th>Descricao</th>
             @if(isset($acao) && $acao == true)
-            <th>Ações</th>
+                <th>Ações</th>
             @endif
         @else
             <th>Nome</th>
             <th>Quantidade</th>
             <th>Valor</th>
-            <th>Valor Imposto</th>
             <th>Descricao</th>
-            <th>Link Oferta</th>
             @if(isset($acao) && $acao == true)
-            <th>Ações</th>
+                <th>Ações</th>
             @endif
         @endif
     </tr>
@@ -33,9 +31,7 @@
                     <td>{{$produto->nome}}</td>
                     <td>{{$produto->quantidade}}</td>
                     <td>{{$produto->valor}}</td>
-                    <td>{{$produto->valor_imposto}}</td>
                     <td>{{$produto->descricao}}</td>
-                    <td>{{$produto->link_oferta}}</td> 
                 @endif
                 @if(isset($acao) && $acao == true)
                     <td>

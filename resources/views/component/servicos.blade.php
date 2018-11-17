@@ -4,15 +4,14 @@
                 <th>Nome</th>
                 <th>Descricao</th>
                 @if(isset($acao) && $acao == true)
-                <th>Ações</th>
+                    <th>Ações</th>
                 @endif
             @else
                 <th>Nome</th>
                 <th>Valor</th>
-                <th>Valor Imposto</th>
                 <th>Descricao</th>
                 @if(isset($acao) && $acao == true)
-                <th>Ações</th>
+                    <th>Ações</th>
                 @endif
             @endif
         </tr>
@@ -28,7 +27,6 @@
                 @else
                     <td>{{$servico->nome}}</td>
                     <td>{{$servico->valor}}</td>
-                    <td>{{$servico->valor_imposto}}</td>
                     <td>{{$servico->descricao}}</td>
                 @endif
                 @if(isset($acao) && $acao == true)

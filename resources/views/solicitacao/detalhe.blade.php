@@ -18,7 +18,7 @@
 
             <div class="form-group mb-3">
                 <label class="col-form-label">Data Criação</label>
-                <p>{{$solicitacao->data_criacao}}</p>
+                <p>{{ date('d/m/Y H:i:s' , strtotime($solicitacao->data_criacao))}}</p>
             </div>
 
             <div class="form-group mb-3">
@@ -28,7 +28,7 @@
 
             <div class="form-group mb-3">
                 <label class="col-form-label">Ultima Modificacao</label>
-                <p>{{$solicitacao->data_modificacao}}</p>
+                <p>{{date('d/m/Y H:i:s' , strtotime($solicitacao->data_modificacao))}}</p>
             </div>
 
             <div class="form-group mb-3">
@@ -44,7 +44,7 @@
                 <p>Não há produtos.</p>
             @else
                 <div class="table-responsive">
-                    <table id="table-produto" class="display" style="width:100%">
+                    <table id="table-produto-detalhe" class="display" style="width:100%">
                         @component('component.produtos', ['solicitacao' => $solicitacao])@endcomponent
                     </table>
                 </div>                
@@ -56,7 +56,7 @@
                 <p>Não há serviços.</p>
             @else
             <div class="table-responsive">
-                <table id="table-servico" class="display" style="width:100%">
+                <table id="table-servico-detalhe" class="display" style="width:100%">
                     @component('component.servicos', ['solicitacao' => $solicitacao])@endcomponent
                 </table>
             </div>                
