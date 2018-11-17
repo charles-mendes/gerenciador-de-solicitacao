@@ -61,6 +61,11 @@ class SolicitacaoController extends Controller
         return view('solicitacao.detalhe',['solicitacao'=> $solicitacao,'id'=> $id]);        
     }
 
+    public function visualizar($id){
+        $solicitacao = Solicitacao::find($id);
+        dd('deu boa');
+    }
+
 
     public function cadastrar_solicitacao(Request $request){
         $this->validate($request,[
