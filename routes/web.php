@@ -115,4 +115,4 @@ Auth::routes();
 
   //relatorio 
 
-  Route::get('/relatorios', function(){return view(relatorio.relatorio);})->name('relatorio');
+  Route::get('/relatorios', 'RelatorioController@index')->name('relatorio');
