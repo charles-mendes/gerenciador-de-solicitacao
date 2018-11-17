@@ -408,11 +408,27 @@ class SolicitacaoController extends Controller
         if(session()->has('novaSolicitacao')){
             $solicitacao = session('novaSolicitacao');
             if( isset($solicitacao->produtos) && isset($solicitacao->produtos[$id_produto])){
+                
+                if(isset($solicitacao->produtos[$id_produto]->id)){
+                    dd($solicitacao->produtos);
+                    //deleta servico no banco
+                    $servico = Servico::find($solicitacao->produtos[$id_produto]->id);
+                    dd($servico);
+                    $servico->delete();
+
+                    //detelar relação entre servico e solicitacao
+                    $solicitacao_servico = Detalhe_Solicitacao_Servico::where('id_servico',$solicitacao->produtos[$id_produto]->id)->get()->first();
+                    $solicitacao_servico->delete();
+                
+                }
+                
                 $produtos = $solicitacao->produtos;
-                //excluindo produto
-                unset($produtos[$id_produto]);
                 //ordenando vetor depois da exclusão de um produto
-                $produtos = array_values($produtos);
+                if(count($produtos) !== 0){
+                    $produtos = array_values($produtos);
+                    //excluindo produto
+                    unset($produtos[$id_produto]);
+                }
                 session('novaSolicitacao')->produtos = $produtos;
                 
                 //redirecionando solicitação
@@ -430,7 +446,6 @@ class SolicitacaoController extends Controller
         if(session()->has('novaSolicitacao')){
             $servico = new \stdClass;
             $servico->nome = "";
-            $servico->quantidade = "";
             $servico->valor = "";
             $servico->valor_imposto = "";
             $servico->descricao = "";
@@ -498,7 +513,6 @@ class SolicitacaoController extends Controller
             $id = (int) $id;
             $servico = new \stdClass;
             $servico->nome = session('novaSolicitacao')->servicos[$id]->nome;
-            $servico->quantidade = session('novaSolicitacao')->servicos[$id]->quantidade;
             $servico->valor = session('novaSolicitacao')->servicos[$id]->valor;
             $servico->valor_imposto = session('novaSolicitacao')->servicos[$id]->valor_imposto;
             $servico->descricao = session('novaSolicitacao')->servicos[$id]->descricao;
@@ -582,18 +596,36 @@ class SolicitacaoController extends Controller
 
         if(session()->has('novaSolicitacao')){
             $solicitacao = session('novaSolicitacao');
+            // tem que excluir no banco quando é objeto 
+
             if( isset($solicitacao->servicos) && isset($solicitacao->servicos[$id_servico])){
+                //verifica se produto ja esta cadastrado no banco
+                //caso tiver deleta do banco 
+                if(isset($solicitacao->servicos[$id_servico]->id)){
+                    //deleta servico no banco
+                    $servico = Servico::find($solicitacao->servicos[$id_servico]->id);
+                    $servico->delete();
+
+                    //detelar relação entre servico e solicitacao
+                    $solicitacao_servico = Detalhe_Solicitacao_Servico::where('id_servico',$solicitacao->servicos[$id_servico]->id)->get()->first();
+                    $solicitacao_servico->delete();
+                }
+
+                //para ajustar visualização de edição de solicitação
                 $servicos = $solicitacao->servicos;
-                //excluindo servico
-                unset($servicos[$id_servico]);
+                
                 //ordenando vetor depois da exclusão de um servico
-                $servicos = array_values($servicos);
+                if(count($servicos) !== 0){
+                    //excluindo servico
+                    unset($servicos[$id_servico]);
+                    $servicos = array_values($servicos);
+                }
                 session('novaSolicitacao')->servicos = $servicos;
                 
                 //redirecionando solicitação
                 return redirect($this->redireciona_solicitacao());
-            }
 
+            }   
         }
         return back();
 
