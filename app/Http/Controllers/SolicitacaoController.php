@@ -42,6 +42,9 @@ class SolicitacaoController extends Controller
         //caso usuario for do tipo 'S' == solicitante faz filtro mostrando apenas solicitações dele
         if(Auth::user()->tipo_conta == 'S'){
             $solicitacoes = Solicitacao::all()->where('id_criador',Auth::user()->id);
+        }else if(Auth::user()->tipo_conta == 'A'){
+            //so pode mostrar solicitações que estão pendentes
+            $solicitacoes = Solicitacao::all()->where('status','P');
         }else{
             $solicitacoes = Solicitacao::all();
         }
