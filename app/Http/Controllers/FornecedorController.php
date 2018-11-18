@@ -29,8 +29,42 @@ class FornecedorController extends Controller
     }
 
     public function novo(){
+        $fornecedor = new \stdClass;
+        $fornecedor->nome = '';
+        $fornecedor->cnpj = '';
+        $fornecedor->status = '';
+        $fornecedor->telefone = '';
+        $fornecedor->email = '';
+        $fornecedor->descricao = '';
+        $fornecedor->endereco = (object)[
+            'endereco' => '',
+            'bairro' => '',
+            'cidade' => '',
+            'estado' => '',
+            'numero' => '',
+            'cep' => '',
+            'pais' => '',
+        ];
+        $fornecedor->contrato = (object)[
+            'numero_contrato' => '',
+            'descricao' => '',
+            'data_vencimento' => '',
+        ];
+
+        // isso é para habilitar e desabilitar os check na hora de cadastrar/editar fornecedor
+        $check = new \stdClass;
+        $check->check_identificacao = false;
+        $check->check_endereco = false;
+        $check->check_contrato = false;
+
         //mostra modal para cadastrar novo fornecedor
-        return view('fornecedor.modal.fornecedor');
+        return view('fornecedor.modal.fornecedor',['fornecedor' => $fornecedor, 'status' => 'criando' , 'check' => $check]);
+    }
+
+    public function detalhe($id){
+        //pegando fornecedor
+        $fornecedor = Fornecedor::find($id);
+        return view('fornecedor.detalhe',['fornecedor'=> $fornecedor,'id'=> $id]);        
     }
 
    
@@ -66,6 +100,12 @@ class FornecedorController extends Controller
             ];  
         }
 
+        if(isset($array['id_fornecedor'])){
+            $id_contrato = [
+                'id_fornecedor' => 'required',
+            ];
+        }
+
         $checkPadrao = [
             'nome' => 'required',
             'telefone' => 'required',
@@ -78,6 +118,7 @@ class FornecedorController extends Controller
             isset($check_endereco) ? $check_endereco : [] ,
             isset($check_contrato) ? $check_contrato : [] ,
             isset($check_anexo) ? $check_anexo : [] ,
+            isset($id_contrato) ? $id_contrato : [] ,
             $checkPadrao
         );
         // dd($checkFinal);
@@ -150,6 +191,126 @@ class FornecedorController extends Controller
     
         return redirect()->route('listar_fornecedores');
         
+    }
+
+    public function editar_fornecedor($id){
+        $id = (int) $id;
+        if(is_numeric($id)){
+            
+            //pegando fornecedor
+            $fornecedor = Fornecedor::find($id);
+            $fornecedor->endereco = $fornecedor->endereco->first();
+            $fornecedor->contrato = $fornecedor->contrato->first();
+            
+            // isso é para habilitar e desabilitar os check na hora de cadastrar/editar fornecedor
+            $check = new \stdClass;
+            $check->check_identificacao = $fornecedor->cnpj !== null ? true : false;
+            $check->check_endereco = $fornecedor->endereco !== null ? true : false;
+            $check->check_contrato = $fornecedor->contrato !== null ? true : false;
+
+            //adicionando atributos dentro do objeto para passar para view
+            if($fornecedor->endereco == null){
+                $fornecedor->endereco = (object)[
+                    'endereco' => '',
+                    'bairro' => '',
+                    'cidade' => '',
+                    'estado' => '',
+                    'numero' => '',
+                    'cep' => '',
+                    'pais' => '',
+                ];
+            }   
+            if($fornecedor->contrato == null){
+                $fornecedor->contrato = (object)[
+                    'numero_contrato' => '',
+                    'descricao' => '',
+                    'data_vencimento' => '',
+                ];
+            }
+
+
+            //mostra modal para editar fornecedor
+            return view('fornecedor.modal.fornecedor',['fornecedor' => $fornecedor, 'check' => $check,'status' => 'editando' ,'id' => $id]);
+        }
+    }
+
+    public function salvar_fornecedor(Request $request){
+        $arrayCheck = [
+            'check_identificacao' => $request->input('check_identificacao'),
+            'check_endereco' => $request->input('check_endereco'),
+            'check_contrato' => $request->input('check_contrato'),
+            'check_anexo' => $request->input('check_anexo'),
+            'id_fornecedor' => $request->input('id_fornecedor'),
+        ];
+
+        //realizando validação
+        $this->validate($request,$this->makeVerify($arrayCheck));
+
+        $fornecedor = Fornecedor::find($request->input('id_fornecedor'));
+        $fornecedor->nome = $request->input('nome');
+        $fornecedor->cnpj = $request->input('identificacao');
+        $fornecedor->telefone = $request->input('telefone');
+        $fornecedor->email = $request->input('email');
+        $fornecedor->descricao = $request->input('descricao');
+        $fornecedor->id_modificador = Auth::user()->id;
+        $fornecedor->data_modificacao = time();
+        $fornecedor->save();
+
+        $endereco = Endereco::where('id_fornecedor',$request->input('id_fornecedor'))->get()->first();
+        if($endereco !== null){
+            $endereco->endereco = $request->input('endereco');
+            $endereco->bairro = $request->input('bairro');
+            $endereco->cidade = $request->input('cidade');
+            $endereco->estado = $request->input('estado');
+            $endereco->numero = $request->input('numero');
+            $endereco->cep = $request->input('cep');
+            $endereco->pais = $request->input('pais');
+            $endereco->save();
+        }else{
+            //verificar se foi preenchido o endereco
+            if($request->input('check_endereco') == 'on'){
+                $endereco = new Endereco();
+                $endereco->id_fornecedor = $fornecedor->id;           
+                $endereco->endereco =  $request->input('endereco');
+                $endereco->bairro =  $request->input('bairro');
+                $endereco->cidade =  $request->input('cidade');
+                $endereco->estado =  $request->input('estado');
+                $endereco->numero =  $request->input('numero');
+                $endereco->cep =  $request->input('cep');
+                $endereco->pais =  $request->input('pais');
+                $endereco->save();
+            }
+            
+        }
+        
+        
+        $contrato = Contrato::where('id_fornecedor',$request->input('id_fornecedor'))->get()->first();
+        if($contrato !== null){
+            $contrato->numero_contrato = $request->input('numero_contrato');
+            $contrato->descricao = $request->input('descricao_contrato');
+            $contrato->data_vencimento = $request->input('data_vencimento');
+            $contrato->id_modificador = Auth::user()->id;
+            $contrato->data_modificacao = time();
+            $contrato->save();
+        }else{
+            if( $request->input('check_contrato') == 'on'){
+                $contrato = new Contrato();
+                $contrato->id_fornecedor = $fornecedor->id;           
+                $contrato->numero_contrato = $request->input('numero_contrato');
+                $contrato->status = 'A';
+                $contrato->descricao = $request->input('descricao_contrato');
+                $contrato->id_criador = Auth::user()->id;
+                $contrato->data_criacao = time() ;
+                $contrato->id_modificador = Auth::user()->id  ;
+                $contrato->data_modificacao = time() ;
+                $contrato->data_vencimento = $request->input('data_vencimento') ;
+                $contrato->status_anexo = '0';
+                $contrato->save();
+            }
+        }
+        
+    
+        return redirect()->route('listar_fornecedores');
     }
 
 
@@ -416,7 +577,7 @@ public function mostrar_verificacao_servico($id){
         $servico = Servico::find($id);
         //verifica se existe o vetor produtos e se o produto que foi escolhido existe no array de produtos cadastrados
         if(isset($servico)){
-            return view('fornecedor.modal.verifica_servico',['servico'=> $servico]);    
+            return view('fornecedor.modal.verifica_servico',['servico'=> $servico, 'id' => $id]);    
         }
     }
     return back();
@@ -433,10 +594,10 @@ public function excluir_servico(Request $request){
 
     $id_servico = (int) request()->input('id_servico');
 
-    $servico = Produto::find($id_servico);
+    $servico = Servico::find($id_servico);
     if($servico){
-        //detelar relação entre produto e fornecedor
-        $fornecedor_servico = Detalhe_Fornecedor_Servico::where('id_produto',$servico->id)->get()->first();
+        //detelar relação entre servico e fornecedor
+        $fornecedor_servico = Detalhe_Fornecedor_Servico::where('id_servico',$servico->id)->get()->first();
         $fornecedor_servico->delete();
         
         //deletando produto

@@ -1,13 +1,20 @@
 $(document).ready(function () {
 
-    $('table.display').DataTable();
+    $('table.display').DataTable({
+        "language": {"url":"/plugins/datatables/language/Portuguese-Brasil.json"},
+        "searching": false,
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": true,
+        "bInfo": false,
+        "bAutoWidth": false 
+    });
 });
 
 
 function cadastrarProduto(){    
     $('#cadastrar-produto .modal-content').load('/fornecedor/novo-produto/', function () {
         $('#cadastrar-produto').modal('show');
-        $('table.display').DataTable();
     });
 }
 
@@ -18,7 +25,6 @@ function editarProduto(produto){
 
     $('#editar-produto .modal-content').load('/fornecedor/edita-produto/'+ id, function () {
         $('#editar-produto').modal('show');
-        $('table.display').DataTable();
     });
     
 }
@@ -29,7 +35,6 @@ function excluirProduto(produto){
 
     $('#excluir-produto .modal-content').load('/fornecedor/excluir-produto/'+ id, function () {
         $('#excluir-produto').modal('show');
-        // $('table.display').DataTable();
     });
     
 }
@@ -39,7 +44,6 @@ function cadastrarServico(){
     
     $('#cadastrar-servico .modal-content').load('/fornecedor/novo-servico/', function () {
         $('#cadastrar-servico').modal('show');
-        $('table.display').DataTable();
     });
 }
 
@@ -50,7 +54,6 @@ function editarServico(servico){
 
     $('#editar-servico .modal-content').load('/fornecedor/edita-servico/'+ id, function () {
         $('#editar-servico').modal('show');
-        $('table.display').DataTable();
     });
     
 }
@@ -62,9 +65,9 @@ function excluirServico(servico){
 
     $('#excluir-servico .modal-content').load('/fornecedor/excluir-servico/'+ id, function () {
         $('#excluir-servico').modal('show');
-        // $('table.display').DataTable();
     });
     
 }
+
 
 

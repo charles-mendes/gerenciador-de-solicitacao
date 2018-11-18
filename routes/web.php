@@ -50,9 +50,11 @@ Route::group(['middleware' => 'menu'], function () {
     Route::post('/solicitacao/salvar_solicitacao', 'SolicitacaoController@salvar_solicitacao')->name('salvar_solicitacao');
     Route::get('/solicitacao/excluir-solicitacao/{id}', 'SolicitacaoController@mostrar_verificacao_solicitacao');
     Route::post('/solicitacao/excluir-solicitacao', 'SolicitacaoController@excluir_solicitacao')->name('excluir_solicitacao');
+    Route::get('/solicitacao/detalhe/{id}', 'SolicitacaoController@detalhe')->where('id','[0-9]+');
 
     //visualizar solicitação
     Route::get('/solicitacao/visualizar/{id}', 'SolicitacaoController@visualizar')->name('visualizar_solicitacao');
+    
 
     //Solicitacao - Produto 
     Route::get('/solicitacao/novo-produto/', 'SolicitacaoController@mostrar_form_produto');
@@ -75,7 +77,10 @@ Route::group(['middleware' => 'menu'], function () {
     Route::get('/fornecedor/novo/', 'FornecedorController@novo')->name('novo_fornecedor');
     Route::post('/fornecedor/cadastrar_fornecedor', 'FornecedorController@cadastrar_fornecedor')->name('cadastrar_fornecedor');
     Route::get('/fornecedor/cadastrar/{id}', 'FornecedorController@cadastrar')->name('cadastrar');
-
+    Route::get('/fornecedor/editar/{id}', 'FornecedorController@editar_fornecedor')->name('editar_fornecedor');
+    Route::post('/fornecedor/salvar_fornecedor', 'FornecedorController@salvar_fornecedor')->name('salvar_fornecedor');
+    Route::get('/fornecedor/detalhe/{id}', 'FornecedorController@detalhe')->where('id','[0-9]+');
+    
 
     //Fornecedor :: Produto
     Route::get('/fornecedor/novo-produto', 'FornecedorController@novo_produto');
@@ -116,7 +121,7 @@ Route::group(['middleware' => 'menu'], function () {
 
     // Route::post('/solicitacao/cadastrar_servico', 'SolicitacaoController@cadastrar_servico')->name('cadastrar_servico');
 
-    Route::get('/solicitacao/detalhe/{id}', 'SolicitacaoController@detalhe')->where('id','[0-9]+');
+    
 
     // Route::get('user/{id}', function ($id) {
     //     //
