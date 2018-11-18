@@ -56,7 +56,7 @@
               {{-- <h6 class="card-subtitle">Cadastrar Servicos</h6> --}}
               <div class="table-responsive">
                   <table id="" class="display" style="width:100%">
-                        @component('component.servicos', ['item' => $fornecedor,'acao' => true])@endcomponent
+                        @component('component.servicos', ['item' => $fornecedor,'acao' => true, 'flag'=>true])@endcomponent
                   </table>
               </div>
           </div>  
@@ -72,6 +72,14 @@
     </div>    
 
     <div class="modal fade" id="editar-produto" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                    
+            </div>
+        </div>
+    </div> 
+    
+    <div class="modal fade" id="excluir-produto" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                     
@@ -94,6 +102,14 @@
             </div>
         </div>
     </div>   
+
+    <div class="modal fade" id="excluir-servico" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                    
+            </div>
+        </div>
+    </div>    
 
   
 @endsection

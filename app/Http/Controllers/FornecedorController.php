@@ -5,6 +5,7 @@ use App\Fornecedor;
 use App\Endereco;
 use App\Contrato;
 use App\Produto;
+use App\Servico;
 use App\DetalheFornecedorProduto;
 use App\Detalhe_Fornecedor_Servico;
 use App\Http\Controllers\DetalheFornecedorProdutoController;
@@ -212,18 +213,98 @@ class FornecedorController extends Controller
         return redirect()->route('cadastrar',['id' => $id_fornecedor]);
     }
 
-    public function editar_produto($id){
+    public function editar_produto($id , Request $request){
         //chamar modal para usuario
+        $id = (int) $id;
+        if(is_numeric($id)){
+            //pegar o id do fornecedor
+            $url = explode('/',$request->headers->get('referer'));
+            $id_fornecedor = end($url);  
 
-        // if($id){
             $produto = Produto::find($id);
-            return view('modal.produto',['produto' => $produto , 'tipo' => 'fornecedor']);    
-        // }
-        // return back();
-
-        
+            return view('fornecedor.modal.produto',['produto' => $produto,'id_fornecedor' => $id_fornecedor, 'id' => $id]);    
+        }
+        return back();
 
     }
+
+
+
+    public function salvar_produto(Request $request){
+
+            $this->validate($request,[
+                'nome' => 'required',
+                'quantidade' => 'required',
+                'valor'=> 'required',                
+                'descricao'=>'required',
+                'id_produto' => 'required',
+            ]);
+
+        //pegar o id do fornecedor
+        $url = explode('/',$request->headers->get('referer'));
+        $id_fornecedor = end($url);      
+        
+
+        //pegando o id do produto
+        $id_produto = $request->input('id_produto');
+         
+        //pegando produto
+        $produto = Produto::find($id_produto);
+    
+        //alterar produto ja existente 
+        $produto->nome = $request->input('nome');
+        $produto->quantidade = $request->input('quantidade');
+        $produto->valor = $request->input('valor');
+        $produto->descricao = $request->input('descricao');
+        $produto->id_modificador = Auth::user()->id;
+        $produto->data_modificacao = time();
+        $produto->save();
+
+        return redirect()->route('cadastrar',['id' => $id_fornecedor]);
+
+    }
+
+    public function mostrar_verificacao_produto($id){
+        //verifica se a session existe, se não existir ele redireciona a nova solicitacao
+        $id = (int) $id;
+        if(is_numeric($id) ){
+            $produto = Produto::find($id);
+            //verifica se existe o vetor produtos e se o produto que foi escolhido existe no array de produtos cadastrados
+            if(isset($produto)){
+                return view('fornecedor.modal.verifica_produto',['produto'=> $produto]);    
+            }
+        }
+        return back();
+    }
+
+    public function excluir_produto(Request $request){
+        $this->validate($request,[
+            'id_produto' => 'required',
+        ]);
+
+        //pegar o id do fornecedor
+        $url = explode('/',$request->headers->get('referer'));
+        $id_fornecedor = end($url);     
+
+        $id_produto = (int) request()->input('id_produto');
+
+        $produto = Produto::find($id_produto);
+        if($produto){
+            //detelar relação entre produto e fornecedor
+            $fornecedor_produto = DetalheFornecedorProduto::where('id_produto',$produto->id)->get()->first();
+            $fornecedor_produto->delete();
+            
+            //deletando produto
+            $produto->delete();
+
+            return redirect()->route('cadastrar',['id' => $id_fornecedor]);
+
+        }
+        return back();
+    }
+
+  
+
 
 
 
@@ -278,5 +359,95 @@ class FornecedorController extends Controller
         
         return redirect()->route('cadastrar',['id' => $id_fornecedor]);
     }
+
+    public function editar_servico($id , Request $request){
+        //chamar modal para usuario
+        $id = (int) $id;
+        if(is_numeric($id)){
+            //pegar o id do fornecedor
+            $url = explode('/',$request->headers->get('referer'));
+            $id_fornecedor = end($url);  
+
+            $servico = Servico::find($id);
+            return view('fornecedor.modal.servico',['servico' => $servico,'id_fornecedor' => $id_fornecedor, 'id' => $id]);    
+        }
+        return back();
+
+    }
+
+
+    public function salvar_servico(Request $request){
+
+        $this->validate($request,[
+            'nome' => 'required',
+            'valor'=> 'required',                
+            'descricao'=>'required',
+            'id_servico' => 'required',
+        ]);
+
+    //pegar o id do fornecedor
+    $url = explode('/',$request->headers->get('referer'));
+    $id_fornecedor = end($url);      
+    
+
+    //pegando o id do produto
+    $id_servico = $request->input('id_servico');
+     
+    //pegando produto
+    $servico = Servico::find($id_servico);
+
+    //alterar produto ja existente 
+    $servico->nome = $request->input('nome');
+    $servico->valor = $request->input('valor');
+    $servico->descricao = $request->input('descricao');
+    // $servico->id_modificador = Auth::user()->id;
+    // $servico->data_modificacao = time();
+    $servico->save();
+
+    return redirect()->route('cadastrar',['id' => $id_fornecedor]);
+
+}
+
+
+public function mostrar_verificacao_servico($id){
+    //verifica se a session existe, se não existir ele redireciona a nova solicitacao
+    $id = (int) $id;
+    if(is_numeric($id) ){
+        $servico = Servico::find($id);
+        //verifica se existe o vetor produtos e se o produto que foi escolhido existe no array de produtos cadastrados
+        if(isset($servico)){
+            return view('fornecedor.modal.verifica_servico',['servico'=> $servico]);    
+        }
+    }
+    return back();
+}
+
+public function excluir_servico(Request $request){
+    $this->validate($request,[
+        'id_servico' => 'required',
+    ]);
+
+    //pegar o id do fornecedor
+    $url = explode('/',$request->headers->get('referer'));
+    $id_fornecedor = end($url);     
+
+    $id_servico = (int) request()->input('id_servico');
+
+    $servico = Produto::find($id_servico);
+    if($servico){
+        //detelar relação entre produto e fornecedor
+        $fornecedor_servico = Detalhe_Fornecedor_Servico::where('id_produto',$servico->id)->get()->first();
+        $fornecedor_servico->delete();
+        
+        //deletando produto
+        $servico->delete();
+
+        return redirect()->route('cadastrar',['id' => $id_fornecedor]);
+
+    }
+    return back();
+}
+
+
 
 }

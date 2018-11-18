@@ -33,6 +33,6 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-    <button id="btn-cadastro-produto" onclick="$('#cria-edita-produto').submit();" type="submit" class="btn btn-primary">Cadastrar</button>
+    <button id="btn-cadastro-produto" onclick="$('#cria-edita-produto').submit();" type="submit" class="btn btn-primary">Salvar</button>
 </div>
 </div>

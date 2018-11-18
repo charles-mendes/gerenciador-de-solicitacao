@@ -14,17 +14,17 @@
         <input type="hidden" name="id_servico" value="{{isset($id) ? $id :''}}">
         <div class="form-group mb-0">
             <label for="nome" class="col-form-label">Nome do Serviço*</label>
-            <input type="text" class="form-control" id="nome" name="nome" value="{{isset($id) ? session('novaSolicitacao')->servicos[$id]->nome : ''}}">
+            <input type="text" class="form-control" id="nome" name="nome" value="{{$servico->nome}}">
         </div>
         @if($habilitaCampo)
         <div class="form-group mb-0">
             <label for="valor" class="col-form-label">Valor Serviço *</label>
-            <input type="number" class="form-control" id="valor" name="valor" value="{{isset($id) ? session('novaSolicitacao')->servicos[$id]->valor : ''}}">
+            <input type="number" class="form-control" id="valor" name="valor" value="{{$servico->valor}}">
         </div>
         @endif
         <div class="form-group mb-0">
             <label for="descricao" class="col-form-label">Descricao *</label>
-            <textarea class="form-control" id="descricao" name="descricao">{{isset($id) ? session('novaSolicitacao')->servicos[$id]->descricao : ''}}</textarea>
+            <textarea class="form-control" id="descricao" name="descricao">{{$servico->descricao}}</textarea>
         </div>
     </form>
 </div>

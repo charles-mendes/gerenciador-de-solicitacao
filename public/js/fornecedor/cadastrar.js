@@ -23,6 +23,17 @@ function editarProduto(produto){
     
 }
 
+function excluirProduto(produto){
+    
+    let id = $(produto).attr("data-id");
+
+    $('#excluir-produto .modal-content').load('/fornecedor/excluir-produto/'+ id, function () {
+        $('#excluir-produto').modal('show');
+        // $('table.display').DataTable();
+    });
+    
+}
+
 
 function cadastrarServico(){
     
@@ -43,3 +54,17 @@ function editarServico(servico){
     });
     
 }
+
+
+function excluirServico(servico){
+    
+    let id = $(servico).attr("data-id");
+
+    $('#excluir-servico .modal-content').load('/fornecedor/excluir-servico/'+ id, function () {
+        $('#excluir-servico').modal('show');
+        // $('table.display').DataTable();
+    });
+    
+}
+
+

@@ -76,20 +76,23 @@ Route::group(['middleware' => 'menu'], function () {
     Route::post('/fornecedor/cadastrar_fornecedor', 'FornecedorController@cadastrar_fornecedor')->name('cadastrar_fornecedor');
     Route::get('/fornecedor/cadastrar/{id}', 'FornecedorController@cadastrar')->name('cadastrar');
 
+
     //Fornecedor :: Produto
     Route::get('/fornecedor/novo-produto', 'FornecedorController@novo_produto');
     Route::post('/fornecedor/cadastrar_produto', 'FornecedorController@cadastrar_produto')->name('cadastrar_produto_fornecedor');
     Route::get('/fornecedor/edita-produto/{id}', 'FornecedorController@editar_produto');
     Route::post('/fornecedor/salvar_produto', 'FornecedorController@salvar_produto')->name('salvar_produto_fornecedor');
+    Route::get('/fornecedor/excluir-produto/{id}', 'FornecedorController@mostrar_verificacao_produto');
+    Route::post('/fornecedor/excluir-produto', 'FornecedorController@excluir_produto')->name('excluir_produto_fornecedor');
 
 
     //Fornecedor :: Servico
     Route::get('/fornecedor/novo-servico', 'FornecedorController@novo_servico');
     Route::post('/fornecedor/novo-servico', 'FornecedorController@cadastrar_servico')->name('cadastrar_servico_fornecedor');
-    // Route::get('/fornecedor/edita-servico/{id}', 'SolicitacaoController@editar_servico');
-    // Route::post('/fornecedor/salvar_servico', 'SolicitacaoController@salvar_servico')->name('salvar_servico_solicitacao');
-    // Route::get('/fornecedor/excluir-servico/{id}', 'SolicitacaoController@mostrar_verificacao_servico');
-    // Route::post('/fornecedor/excluir-servico', 'SolicitacaoController@excluir_servico')->name('excluir_servico_solicitacao');
+    Route::get('/fornecedor/edita-servico/{id}', 'FornecedorController@editar_servico');
+    Route::post('/fornecedor/salvar_servico', 'FornecedorController@salvar_servico')->name('salvar_servico_fornecedor');
+    Route::get('/fornecedor/excluir-servico/{id}', 'FornecedorController@mostrar_verificacao_servico');
+    Route::post('/fornecedor/excluir-servico', 'FornecedorController@excluir_servico')->name('excluir_servico_fornecedor');
 
 
 
