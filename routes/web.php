@@ -82,6 +82,17 @@ Route::group(['middleware' => 'menu'], function () {
     Route::get('/fornecedor/edita-produto/{id}', 'FornecedorController@editar_produto');
     Route::post('/fornecedor/salvar_produto', 'FornecedorController@salvar_produto')->name('salvar_produto_fornecedor');
 
+
+    //Fornecedor :: Servico
+    Route::get('/fornecedor/novo-servico', 'FornecedorController@novo_servico');
+    Route::post('/fornecedor/novo-servico', 'FornecedorController@cadastrar_servico')->name('cadastrar_servico_fornecedor');
+    // Route::get('/fornecedor/edita-servico/{id}', 'SolicitacaoController@editar_servico');
+    // Route::post('/fornecedor/salvar_servico', 'SolicitacaoController@salvar_servico')->name('salvar_servico_solicitacao');
+    // Route::get('/fornecedor/excluir-servico/{id}', 'SolicitacaoController@mostrar_verificacao_servico');
+    // Route::post('/fornecedor/excluir-servico', 'SolicitacaoController@excluir_servico')->name('excluir_servico_solicitacao');
+
+
+
     // Route::post('/fornecedor/cadastrar_produto', 'ProdutoController@cadastrar_produto')->name('cadastrar_produto');
     // Route::get('/solicitacao/edita-produto/{id}', 'ProdutoController@editar_produto');
     // Route::post('/solicitacao/salvar_produto', 'ProdutoController@salvar_produto')->name('salvar_produto');

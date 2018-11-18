@@ -5,8 +5,8 @@ $(document).ready(function () {
 
 
 function cadastrarProduto(){    
-    $('#produto .modal-content').load('/fornecedor/novo-produto/', function () {
-        $('#produto').modal('show');
+    $('#cadastrar-produto .modal-content').load('/fornecedor/novo-produto/', function () {
+        $('#cadastrar-produto').modal('show');
         $('table.display').DataTable();
     });
 }
@@ -16,8 +16,8 @@ function editarProduto(produto){
     
     let id = $(produto).attr("data-id");
 
-    $('#produto .modal-content').load('/fornecedor/edita-produto/'+ id, function () {
-        $('#produto').modal('show');
+    $('#editar-produto .modal-content').load('/fornecedor/edita-produto/'+ id, function () {
+        $('#editar-produto').modal('show');
         $('table.display').DataTable();
     });
     
@@ -26,8 +26,8 @@ function editarProduto(produto){
 
 function cadastrarServico(){
     
-    $('#servico .modal-content').load('/fornecedor/novo-servico/', function () {
-        $('#servico').modal('show');
+    $('#cadastrar-servico .modal-content').load('/fornecedor/novo-servico/', function () {
+        $('#cadastrar-servico').modal('show');
         $('table.display').DataTable();
     });
 }
@@ -37,8 +37,8 @@ function editarServico(servico){
     
     let id = $(servico).attr("data-id");
 
-    $('#produto .modal-content').load('/fornecedor/edita-servico/'+ id, function () {
-        $('#produto').modal('show');
+    $('#editar-servico .modal-content').load('/fornecedor/edita-servico/'+ id, function () {
+        $('#editar-servico').modal('show');
         $('table.display').DataTable();
     });
     

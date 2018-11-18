@@ -5,7 +5,10 @@ use App\Fornecedor;
 use App\Endereco;
 use App\Contrato;
 use App\Produto;
+use App\DetalheFornecedorProduto;
+use App\Detalhe_Fornecedor_Servico;
 use App\Http\Controllers\DetalheFornecedorProdutoController;
+use App\Http\Controllers\ServicoController;
 use App\Http\Controllers\ProdutoController;
 use Auth;
 
@@ -166,37 +169,44 @@ class FornecedorController extends Controller
         $produto->nome = "";
         $produto->quantidade = "";
         $produto->valor = "";
-        $produto->valor_imposto = "";
         $produto->descricao = "";
-        $produto->link_oferta = "";
         
-        return view('modal.produto',['produto' => $produto,'id_fornecedor' => $id_fornecedor , 'tipo' => 'fornecedor' ,]);    
+        return view('fornecedor.modal.produto',['produto' => $produto,'id_fornecedor' => $id_fornecedor]);    
     }
 
     public function cadastrar_produto(Request $request){        
         //validando entrada
         $this->validate($request,[
             'id_fornecedor' => 'required',
-            'name' => 'required',
+            'nome' => 'required',
             'quantidade' => 'required',
-             'valor'=> 'required',
-            // 'imposto'=>'',
-            // 'descricao'=>'required',
-            // 'link-oferta'=>'',
+            'valor'=> 'required',
+            'descricao' => 'required',
          ]);
 
         //id do fornecedor na rota
         $id_fornecedor = $request->input('id_fornecedor');
 
+        //criando produto que sera enviado para ser cadastrado
+        $produto = new \stdClass;
+        $produto->nome = $request->input('nome');
+        $produto->quantidade = $request->input('quantidade');
+        $produto->valor = $request->input('valor');
+        $produto->descricao = $request->input('descricao');
+        $produto->id_criador = Auth::user()->id;
+        $produto->data_criacao = time();
+        $produto->id_modificador = Auth::user()->id;
+        $produto->data_modificacao = time();
+
         //cadastrando produto 
         $produtoController = new ProdutoController();
-        $produto = $produtoController->cadastrar_produto($request);
-        $produto->save();
+        $produto = $produtoController->cadastrar_produto($produto);
 
         //cadastrando relacionamento entre fornecedor e produto
-        $detalhe = new DetalheFornecedorProdutoController();
-        $detalhe = $detalhe->cadastrar($id_fornecedor,$produto->id);
-        $detalhe->save();        
+        $fornecedor_produto = new DetalheFornecedorProduto();
+        $fornecedor_produto->id_fornecedor = $id_fornecedor;
+        $fornecedor_produto->id_produto = $produto->id;
+        $fornecedor_produto->save();
 
         
         return redirect()->route('cadastrar',['id' => $id_fornecedor]);
@@ -213,6 +223,60 @@ class FornecedorController extends Controller
 
         
 
+    }
+
+
+
+
+    public function novo_servico(Request $request){
+        //pegar o id do fornecedor
+        $url = explode('/',$request->headers->get('referer'));
+        $id_fornecedor = end($url);  
+        
+        $servico = new \stdClass;
+        $servico->nome = "";
+        $servico->valor = "";
+        $servico->descricao = "";
+        
+        return view('fornecedor.modal.servico',['servico' => $servico,'id_fornecedor' => $id_fornecedor]);    
+    }
+
+
+    public function cadastrar_servico(Request $request){        
+        //validando entrada
+        $this->validate($request,[
+            'id_fornecedor' => 'required',
+            'nome' => 'required',
+            'valor'=> 'required',
+            'descricao' => 'required',
+         ]);
+
+        //id do fornecedor na rota
+        $id_fornecedor = $request->input('id_fornecedor');
+
+        //criando produto que sera enviado para ser cadastrado
+        $servico = new \stdClass;
+        $servico->nome = $request->input('nome');
+        $servico->valor = $request->input('valor');
+        $servico->descricao = $request->input('descricao');
+        $servico->id_criador = Auth::user()->id;
+        $servico->data_criacao = time();
+        $servico->id_modificador = Auth::user()->id;
+        $servico->data_modificacao = time();
+
+        //cadastrando servico
+        $servicoController = new ServicoController();
+        $servico = $servicoController->cadastrar_servico($servico);
+
+
+        //cadastrando relacionamento entre fornecedor e produto
+        $fornecedor_servico = new Detalhe_Fornecedor_Servico();
+        $fornecedor_servico->id_fornecedor = $id_fornecedor;
+        $fornecedor_servico->id_servico = $servico->id;
+        $fornecedor_servico->save();
+
+        
+        return redirect()->route('cadastrar',['id' => $id_fornecedor]);
     }
 
 }

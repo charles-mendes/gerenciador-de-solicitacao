@@ -20,8 +20,8 @@
 </thead>
 
 <tbody>
-    @if ( isset($solicitacao->produtos) )
-        @foreach($solicitacao->produtos as $key => $produto)
+    @if ( isset($item->produtos) )
+        @foreach($item->produtos as $key => $produto)
             <tr>
                 @if(Auth::user()->tipo_conta == 'S')    
                     <td>{{$produto->nome}}</td>
@@ -35,10 +35,10 @@
                 @endif
                 @if(isset($acao) && $acao == true)
                     <td>
-                        <button id="btn-edit" type="button" class="btn btn-primary" data-id="{{$key}}" onclick="editarProduto(this)">
+                        <button id="btn-edit" type="button" class="btn btn-primary" data-id="{{isset($flag)? $produto->id : $key}}" onclick="editarProduto(this)">
                             <i class="ti-pencil"></i>
                         </button>
-                        <button id="btn-excluir" type="button" class="btn btn-danger" data-id="{{$key}}" onclick="excluirProduto(this)">
+                        <button id="btn-excluir" type="button" class="btn btn-danger" data-id="{{isset($flag) ? $produto->id : $key}}" onclick="excluirProduto(this)">
                             <i class="mdi mdi-close-box-outline"></i>
                         </button>
                     </td>   
