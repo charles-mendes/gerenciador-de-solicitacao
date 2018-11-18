@@ -7,6 +7,7 @@ use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\ServicoController;
 use App\Http\Controllers\MailController;
 use App\Servico;
+use App\Justificativa;
 use App\Detalhe_Solicitacao_Produto;
 use App\Detalhe_Solicitacao_Servico;
 use Validator;
@@ -65,6 +66,55 @@ class SolicitacaoController extends Controller
     public function visualizar($id){
         $solicitacao = Solicitacao::find($id);
         dd('deu boa');
+    }
+
+    public function aprovar_solicitacao($id){
+        $id = (int) $id;
+        if(is_numeric($id)){
+            $solicitacao = Solicitacao::find($id);
+            if($solicitacao == null){
+                return back()->withErrors('Solicitação não encontrada.');
+            }
+            $usuario = Auth::user()->tipo_conta;
+            if($usuario == 'AD' || $usuario == 'A' || $usuario == 'C' || $usuario == 'M'){
+                return view('solicitacao.aprova',['solicitacao'=> $solicitacao,'id'=> $id]);       
+            }
+        }
+        return back();
+    }
+
+    public function justificativa($id){
+        $id = (int) $id;
+        if(is_numeric($id)){
+            $solicitacao = Solicitacao::find($id);
+            if($solicitacao == null){
+                return back()->withErrors('Solicitação não encontrada.');
+            }
+            $usuario = Auth::user()->tipo_conta;
+            if($usuario == 'AD' || $usuario == 'A' || $usuario == 'C' || $usuario == 'M'){
+                return view('solicitacao.modal.justificativa',['solicitacao'=> $solicitacao,'id'=> $id]);       
+            }
+            return back();
+        }
+    }
+
+    public function cadastrar_justificativa(Request $request){
+        $this->validate($request,[
+            'id_solicitacao'=>'required',
+            'justificativa'=>'required',
+        ]);
+
+        $justificativa = new Justificativa();
+        $justificativa->id_solicitacao = $request->input('id_solicitacao');
+        $justificativa->justificativa = $request->input('justificativa');
+        $justificativa->id_criador = Auth::user()->id;
+        $justificativa->data_criacao = time();
+        $justificativa->save();
+
+        $solicitacao = Solicitacao::find($request->input('id_solicitacao'));
+        $solicitacao->status_atual = 'A';
+
+        return redirect()->route('listar_solicitacao');
     }
 
 

@@ -60,11 +60,17 @@
                     @component('component.servicos', ['item' => $solicitacao])@endcomponent
                 </table>
             </div>                
-
-        @endif
+            @endif
         <div class="row">
-            <div class="col-12 text-center">
-                <button type="button" class="btn btn-primary" data-id="{{$id}}" onclick="editarSolicitacao(this);">Editar solicitação</button>
+            <div class="col-12 text-center pt-3">
+                <div class="row">
+                    <div class="col-6">
+                        <button type="button" class="btn btn-primary" data-id="{{$id}}" onclick="editarSolicitacao(this);">Editar solicitação</button>
+                    </div>
+                    <div class="col-6"> 
+                        <button type="button" class="btn btn-primary" data-id="{{$id}}" onclick="aprovarSolicitacao(this);">Aprovar solicitação</button>
+                    </div>
+                </div>
             </div>
         </div>
             
