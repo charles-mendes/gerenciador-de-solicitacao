@@ -44,10 +44,10 @@ function excluirSolicitacao(solicitacao){
 
 }
 
-function aprovarSolicitacao(solicitacao){
+function avaliaSolicitacao(solicitacao){
     let id = $(solicitacao).attr("data-id");
 
-    window.location.href = '/solicitacao/aprovar/'+ id;
+    window.location.href = '/solicitacao/avalia/'+ id;
 
 }
 

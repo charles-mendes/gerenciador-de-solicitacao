@@ -4,8 +4,8 @@
     @component(
         'layouts.component.breadcrumb',
         [
-            'title' => 'Aprova Solicitaçao',
-            'localizacoes' => [ ['Home', route('dashboard') ],['aprova solicitacao', ''] ]
+            'title' => 'Avalia Solicitaçao',
+            'localizacoes' => [ ['Home', route('dashboard') ],['avalia solicitacao', ''] ]
         ]
     )
     @endcomponent
@@ -23,9 +23,13 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-block">
-                    <h4 class="card-title text-center">Aprova Solicitação</h4>
-                    <h4 class="card-title text-center">Tem certeza que deseja aprovar está solicitação ?</h4>
-
+                    @if($status !== 'Iniciou Cotação')
+                        <h4 class="card-title text-center">Avaliar Solicitação</h4>
+                        <h4 class="card-title text-center">Você deseja aprovar está solicitação ?</h4>
+                    @else
+                        <h4 class="card-title text-center">Finalize a Cotação</h4>
+                        <h4 class="card-title text-center">Você deseja finalizar o preenchimento da cotação ?</h4>
+                    @endif
                     <h3 class="pt-4 text-center">Produtos</h3>
                     @if($solicitacao->produtos->first() == [])
                         <p>Não há produtos.</p>
@@ -48,7 +52,25 @@
                         </table>
                     </div>                
                     @endif 
-
+                    @if($status == 'Iniciou Cotação')
+                    <div class="row">
+                        <div class="col-4 offset-4 text-center pt-3">
+                            <div class="row">
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-danger" data-id="{{$id}}" onclick="editarSolicitacao(this);">Editar Cotação</button>
+                                </div>
+                                <div class="col-6"> 
+                                    <button type="button" class="btn btn-primary" data-id="{{$id}}" onclick="finalizarCotacao(this);">Finalizar Cotação</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- <form id="finalizar_cotacao" action="{{route('finalizar_cotacao')}}" method="POST">
+                        @csrf
+                        <input type="hidden" name="id_solicitacao" value="{{isset($id) ? $id :''}}">
+                    </form> --}}
+                    
+                    @else
                     <div class="row">
                         <div class="col-4 offset-4 text-center pt-3">
                             <div class="row">
@@ -56,13 +78,16 @@
                                     <button type="button" class="btn btn-danger" data-id="{{$id}}" onclick="justificarMotivo(this);">Não</button>
                                 </div>
                                 <div class="col-6"> 
-                                    <button type="button" class="btn btn-primary" data-id="{{$id}}" onclick="aprovarSolicitacao(this);">Sim</button>
+                                    <button type="button" class="btn btn-primary" data-id="{{$id}}" onclick="aprovarSolicitacao();">Sim</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
+                    <form id="cadastrar_aprovacao" action="{{route('cadastrar_aprovacao')}}" method="POST">
+                        @csrf
+                        <input type="hidden" name="id_solicitacao" value="{{isset($id) ? $id :''}}">
+                    </form>
+                    @endif
                 </div>
             </div>
         </div>    
@@ -75,6 +100,13 @@
         </div>   
 
         <div class="modal fade" id="justificativa" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                        
+                </div>
+            </div>
+        </div>   
+        <div class="modal fade" id="finaliza_cotacao" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                         

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Solicitacao;
 use App\Produto;
+use App\Status;
+use App\HistoricoSolicitacao;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\ServicoController;
 use App\Http\Controllers\MailController;
@@ -45,8 +47,14 @@ class SolicitacaoController extends Controller
         if(Auth::user()->tipo_conta == 'S'){
             $solicitacoes = Solicitacao::all()->where('id_criador',Auth::user()->id);
         }else if(Auth::user()->tipo_conta == 'A'){
-            //so pode mostrar solicitações que estão pendentes
-            $solicitacoes = Solicitacao::all()->where('status','P');
+            //so pode mostrar solicitações que estão pendentes e que foram aprovadas e reprovados pelo Aprovador
+            $status_pendente = Status::where('tipo_status','Pendente')->get()->first();
+            $status_aprovador_aprovado = Status::where('tipo_status','Aprovado pelo Aprovador')->get()->first();
+            $status_aprovador_reprovado = Status::where('tipo_status','Reprovado pelo Aprovador')->get()->first();
+            
+            $solicitacoes = Solicitacao::where('id_status',$status_pendente->id)
+            ->orwhere('id_status',$status_aprovador_aprovado->id)
+            ->orwhere('id_status',$status_aprovador_reprovado->id)->get();
         }else{
             $solicitacoes = Solicitacao::all();
         }
@@ -68,7 +76,7 @@ class SolicitacaoController extends Controller
         dd('deu boa');
     }
 
-    public function aprovar_solicitacao($id){
+    public function avalia_solicitacao($id){
         $id = (int) $id;
         if(is_numeric($id)){
             $solicitacao = Solicitacao::find($id);
@@ -76,11 +84,57 @@ class SolicitacaoController extends Controller
                 return back()->withErrors('Solicitação não encontrada.');
             }
             $usuario = Auth::user()->tipo_conta;
-            if($usuario == 'AD' || $usuario == 'A' || $usuario == 'C' || $usuario == 'M'){
-                return view('solicitacao.aprova',['solicitacao'=> $solicitacao,'id'=> $id]);       
+            $status = '';
+            if(Status::find($solicitacao->id_status)->tipo_status == 'Iniciou Cotação'){
+                $status = 'Iniciou Cotação';
+            }
+            if($usuario == 'AD' || $usuario == 'A' || $usuario == 'C' || $usuario == 'D'){
+                return view('solicitacao.aprova',['solicitacao'=> $solicitacao,'id'=> $id, 'status' => $status]);       
             }
         }
         return back();
+    }
+
+    public function cadastrar_aprovacao(Request $request){
+        $this->validate($request,[
+            'id_solicitacao'=>'required|numeric',
+        ]);
+
+        $solicitacao = Solicitacao::find($request->input('id_solicitacao'));
+        
+        //pegando status
+        $tipo_conta = Auth::user()->tipo_conta;
+
+        if($tipo_conta == 'D'){
+            $status = Status::where('tipo_status','Aprovado pela Diretoria')->get()->first();
+        }else if($tipo_conta == 'A'){
+            $status = Status::where('tipo_status','Aprovado pelo Aprovador')->get()->first();
+        }else if($tipo_conta == 'C'){
+            //tenho que gravar no historico que foi aprovado pelo comprador e que inicio cotação
+            $status = Status::where('tipo_status','Aprovado pelo Comprador')->get()->first();
+
+            $solicitacao->id_status = $status->id;
+            $solicitacao->save();
+            
+            //enviando que foi aprovado
+            $this->setHistorico($solicitacao);
+
+            $status = Status::where('tipo_status','Iniciou Cotação')->get()->first();
+
+        }else if($tipo_conta == 'AD'){
+            $status = Status::where('tipo_status','Aprovado pelo Adminstrador')->get()->first();
+        }
+
+        if($status == null){
+            return back();
+        }
+
+        $solicitacao->id_status = $status->id;
+        $solicitacao->save();
+
+        $this->setHistorico($solicitacao);
+
+        return redirect()->route('listar_solicitacao');
     }
 
     public function justificativa($id){
@@ -104,17 +158,65 @@ class SolicitacaoController extends Controller
             'justificativa'=>'required',
         ]);
 
+        //pegando status
+        $tipo_conta = Auth::user()->tipo_conta;
+        if($tipo_conta == 'D'){
+            $status = Status::where('tipo_status','Reprovado pela Diretoria')->get()->first();
+        }else if($tipo_conta == 'A'){
+            $status = Status::where('tipo_status','Reprovado pelo Aprovador')->get()->first();
+        }else if($tipo_conta == 'C'){
+            $status = Status::where('tipo_status','Reprovado pelo Comprador')->get()->first();
+        }else if($tipo_conta == 'AD'){
+            $status = Status::where('tipo_status','Reprovado pelo Administrador')->get()->first();
+        }
+
+        if($status == null){
+            return back();
+        }
+
+        //adicionando status na solicitação
+        $solicitacao = Solicitacao::find($request->input('id_solicitacao'));
+        $solicitacao->id_status = $status->id;
+        $solicitacao->save();
+
+        //cadastra no histirico
+        $this->setHistorico($solicitacao);
+
+        //salva justificativa        
         $justificativa = new Justificativa();
-        $justificativa->id_solicitacao = $request->input('id_solicitacao');
+        $justificativa->id_solicitacao = $solicitacao->id;
         $justificativa->justificativa = $request->input('justificativa');
         $justificativa->id_criador = Auth::user()->id;
         $justificativa->data_criacao = time();
         $justificativa->save();
-
-        $solicitacao = Solicitacao::find($request->input('id_solicitacao'));
-        $solicitacao->status_atual = 'A';
-
+        
         return redirect()->route('listar_solicitacao');
+    }
+
+    // public function mostrar_verificacao_cotacao($id){
+    //     //verifica se a solicitacao existe
+    //     $id = (int) $id;
+    
+    //     if($id !== null){
+    //         $solicitacao = Solicitacao::find($id);
+    //         return view('solicitacao.modal.verifica_cotacao',['solicitacao'=> $solicitacao]);    
+    //     }
+    //     return back();
+    // }
+
+    // public function finaliza_cotacao(Request $request){
+
+    // }
+
+    private function setHistorico($solicitacao){
+        //salvando historico da solicitação
+        $historico = new HistoricoSolicitacao();
+        $historico->id_solicitacao = $solicitacao->id;
+        $historico->id_solicitacao = $solicitacao->id_status;
+        $historico->id_status = $solicitacao->id_status;
+        $historico->id_usuario = Auth::user()->id;
+        $historico->data_modificacao = time();
+        $historico->save();
     }
 
 
@@ -126,13 +228,18 @@ class SolicitacaoController extends Controller
         
         //cria uma solicitacao
         $solicitacao = new Solicitacao();
-        $solicitacao->status = 'P';
+        //pegar status de pendente
+        $status = Status::where('tipo_status','Pendente')->get()->first();
+        $solicitacao->id_status = $status->id;
         $solicitacao->descricao = $request->input('descricao');
         $solicitacao->id_criador = Auth::user()->id;
         $solicitacao->data_criacao = time();
         $solicitacao->id_modificador = Auth::user()->id;
         $solicitacao->data_modificacao = time();
         $solicitacao->save();
+
+        //salvando historico da solicitação
+        $this->setHistorico($solicitacao);
         
         //pegando solicitacao da session
         $solicitacaoSession = session('novaSolicitacao');
@@ -196,12 +303,13 @@ class SolicitacaoController extends Controller
         return redirect()->route('listar_solicitacao');
     }
 
+
     public function editar_solicitacao($id){
         
         if($id){
             //verifica se o usuario tipo solicitante tem permissão para editar essa soliciitação
             if(Auth::user()->tipo_conta == "S"){
-                $solicitacoes = Solicitacao::all()->where('id_criador',Auth::user()->id);
+                $solicitacoes = Solicitacao::all()->where('id_criador',Auth::user()->id)->get()->first();
                 $verify = false;
                 foreach($solicitacoes as $solicitacao){
                     if($solicitacao->id == $id){
@@ -303,8 +411,14 @@ class SolicitacaoController extends Controller
         $id_solicitacao = (int) request()->input('id_solicitacao');
 
         $solicitacao = Solicitacao::find($id_solicitacao);
-        $solicitacao->status = 'E';
+
+        $status = Status::where('tipo_status','Inativada')->get()->first();
+        $solicitacao->id_status = $status->id;
         $solicitacao->save();
+
+        //salvando historico da solicitação
+        $this->setHistorico($solicitacao);
+
 
         return redirect()->route('listar_solicitacao');
     }
