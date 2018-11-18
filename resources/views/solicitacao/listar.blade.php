@@ -34,6 +34,15 @@
 
 @section('content')
         <div class="col-lg-12">
+            @if(count($errors)>0)
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{$error}}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <div class="card">
                 <div class="card-block">
                     <h4 class="card-title">Listar Solicitações 
@@ -61,9 +70,9 @@
                                         {{-- <td>{{$solicitacao->id}}</td> --}}
                                         <td>{{$solicitacao->descricao}}</td>
                                         <td>{{App\Usuario::find($solicitacao->id_criador)->nome}}</td>
-                                        <td>{{$solicitacao->data_criacao}}</td>
+                                        <td>{{ date('d/m/Y H:i:s' , strtotime($solicitacao->data_criacao))}}</td>
                                         <td>{{App\Usuario::find($solicitacao->id_modificador)->nome}}</td>
-                                        <td>{{$solicitacao->data_modificacao}}</td>
+                                        <td>{{ date('d/m/Y H:i:s' , strtotime($solicitacao->data_modificacao))}}</td>
                                         <td>
                                             @if($solicitacao->status == 'A')
                                                 <span class="label label-success">aprovado</span>

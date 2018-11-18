@@ -37,14 +37,7 @@ function mudarSituacao(usuario){
 
 
 $(document).ready(function () {
-    // $('#example').DataTable({
-    //     "language": {"url":"/plugins/datatables-plugins/i18n/Portuguese-Brasil.lang"},
-    //     "columnDefs": [ {
-    //         "targets"  : 'no-sort',
-    //         "orderable": false,
-    //         "order": []
-    //     }]
-    // });
-
-    $('#example').DataTable({});
+    $('#example').DataTable({
+        "language": {"url":"/plugins/datatables/language/Portuguese-Brasil.json"},
+    });
 });

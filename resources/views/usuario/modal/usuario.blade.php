@@ -23,16 +23,17 @@
             <input type="password" class="form-control" id="senha" name="senha" value="{{isset($usuario) ? '' : ''}}">
         </div>
         <div class="form-group mb-0">
-            <label for="descricao" class="col-form-label">Tipo do Perfil *</label>
-            {{-- <textarea class="form-control" id="descricao" name="descricao">{{isset($id) ? session('novaSolicitacao')->produtos[$id]->descricao : ''}}</textarea> --}}
+            <label for="tipo_conta" class="col-form-label">Tipo do Conta *</label>
+            <select class="form-control" name="tipo_conta" >
+                <option value="S" {{isset($usuario)&& $usuario->tipo_conta == 'S' ? 'selected' :''}} {{!isset($usuario)?'selected':''}}>Solicitante</option>
+                <option value="A" {{isset($usuario)&& $usuario->tipo_conta == 'A' ? 'selected' :''}} >Aprovador</option>
+                <option value="C" {{isset($usuario)&& $usuario->tipo_conta == 'C' ? 'selected' :''}} >Comprador</option>
+            </select>
         </div>
-        {{-- <a href="acoes/up-status-empresa.php?id=397&amp;status=I" data-placement="top" data-toggle="tooltip" data-original-title="Habilitado" class="btn btn-success tooltip-button" onclick="if(confirm('Tem certeza que deseja desabilitar a empresa(a) Acao_ItauPF')) { event.returnValue = true; return true; } event.returnValue = false; return false;">
-            <i class="glyph-icon icon-check-circle"></i>
-        </a> --}}
     </form>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-    <button id="btn-cadastro-produto" onclick="$('#cria-edita-usuario').submit();" type="submit" class="btn btn-primary">{{isset($usuario->id)?'Editar': 'Cadastrar'}}</button>
+    <button id="btn-cadastro-produto" onclick="$('#cria-edita-usuario').submit();" type="submit" class="btn btn-primary">{{isset($usuario->id)?'Editar': 'Cadastrar'}}</button>    
 </div>
 </div>

@@ -18,6 +18,16 @@
 
 @section('content')
     <div class="col-lg-12">
+        @if(count($errors)>0)
+            <div class="alert alert-danger">
+                <ul class="mb-0">
+                    @foreach($errors->all() as $error)
+                        <li>{{$error}}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    
         <div class="card">
             <div class="card-block">
                 <h4 class="card-title">
@@ -26,7 +36,7 @@
                 </h4>
                 <div class="table-responsive">
                     <table id="" class="display" style="width:100%">
-                        @component('component.produtos', ['solicitacao' => session('novaSolicitacao'),'acao' => true])@endcomponent
+                        @component('component.produtos', ['item' => session('novaSolicitacao'),'acao' => true])@endcomponent
                     </table>
                 </div>
                 
@@ -40,7 +50,7 @@
                 </h4>
                 <div class="table-responsive">
                     <table id="" class="display" style="width:100%">
-                        @component('component.servicos', ['solicitacao' => session('novaSolicitacao'),'acao' => true])@endcomponent
+                        @component('component.servicos', ['item' => session('novaSolicitacao'),'acao' => true])@endcomponent
                     </table>
                 </div>
             </div>  

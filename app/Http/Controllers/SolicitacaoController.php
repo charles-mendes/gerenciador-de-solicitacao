@@ -5,6 +5,7 @@ use App\Solicitacao;
 use App\Produto;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\ServicoController;
+use App\Http\Controllers\MailController;
 use App\Servico;
 use App\Detalhe_Solicitacao_Produto;
 use App\Detalhe_Solicitacao_Servico;
@@ -42,6 +43,9 @@ class SolicitacaoController extends Controller
         //caso usuario for do tipo 'S' == solicitante faz filtro mostrando apenas solicitações dele
         if(Auth::user()->tipo_conta == 'S'){
             $solicitacoes = Solicitacao::all()->where('id_criador',Auth::user()->id);
+        }else if(Auth::user()->tipo_conta == 'A'){
+            //so pode mostrar solicitações que estão pendentes
+            $solicitacoes = Solicitacao::all()->where('status','P');
         }else{
             $solicitacoes = Solicitacao::all();
         }
@@ -56,6 +60,11 @@ class SolicitacaoController extends Controller
         //pegando solicitacao
         $solicitacao = Solicitacao::find($id);
         return view('solicitacao.detalhe',['solicitacao'=> $solicitacao,'id'=> $id]);        
+    }
+
+    public function visualizar($id){
+        $solicitacao = Solicitacao::find($id);
+        dd('deu boa');
     }
 
 
@@ -78,7 +87,6 @@ class SolicitacaoController extends Controller
         //pegando solicitacao da session
         $solicitacaoSession = session('novaSolicitacao');
         // dd($solicitacaoSession);
-        // dd($solicitacaoSession);
         foreach ($solicitacaoSession as $key => $categoria) {
             if($key == 'produtos'){
                 foreach($categoria as $item){
@@ -87,10 +95,7 @@ class SolicitacaoController extends Controller
                     $produto->nome = $item->nome;
                     $produto->quantidade = $item->quantidade;
                     $produto->valor = $item->valor;
-                    $produto->id_contrato = $item->id_contrato;
-                    $produto->valor_imposto = $item->valor_imposto;
                     $produto->descricao = $item->descricao;
-                    $produto->link_oferta = $item->link_oferta;
                     $produto->id_criador = $item->id_criador;
                     $produto->id_modificador = $item->id_modificador;
                     $produto->data_modificacao = $item->data_modificacao;
@@ -115,8 +120,6 @@ class SolicitacaoController extends Controller
                     $servico = new \stdClass;
                     $servico->nome = $item->nome;
                     $servico->valor = $item->valor;
-                    $servico->id_contrato = $item->id_contrato;
-                    $servico->valor_imposto = $item->valor_imposto;
                     $servico->descricao = $item->descricao;
                     $servico->id_criador = $item->id_criador;
                     $servico->id_modificador = $item->id_modificador;
@@ -135,13 +138,31 @@ class SolicitacaoController extends Controller
             }
         }
 
-        return redirect()->route('listar_solicitacao');
+        //envia email após criar solicitação
+        $mailController = new MailController();
+        $mailController->solicitacaoPendente($solicitacao->id);
 
+
+        return redirect()->route('listar_solicitacao');
     }
 
     public function editar_solicitacao($id){
         
         if($id){
+            //verifica se o usuario tipo solicitante tem permissão para editar essa soliciitação
+            if(Auth::user()->tipo_conta == "S"){
+                $solicitacoes = Solicitacao::all()->where('id_criador',Auth::user()->id);
+                $verify = false;
+                foreach($solicitacoes as $solicitacao){
+                    if($solicitacao->id == $id){
+                        $verify = true;
+                    }
+                }
+                if(!($verify)){
+                    return back()->withErrors('Você não tem permissão para editar esta solicitação.');
+                }
+            }
+
             //pegando a url da onde o usuario venho 
             $url_previous = explode('/',url()->previous());
             $previous = end($url_previous);
@@ -168,7 +189,9 @@ class SolicitacaoController extends Controller
             $solicitacao->descricao = $request->input('descricao');
             $solicitacao->id_modificador = Auth::user()->id;
             $solicitacao->data_modificacao = time();
+            $solicitacao->save();
             
+            //salvando alterações no produto
             foreach($solicitacao->produtos as $produto){
                 if(isset($produto->id) && is_numeric($produto->id)){
                     //salvando alteração em objeto
@@ -186,7 +209,7 @@ class SolicitacaoController extends Controller
                 }
             }
 
-
+            //salvando alterações no servico
             foreach($solicitacao->servicos as $servico){
                 if(isset($servico->id) && is_numeric($servico->id)){
                     //salvando alteração em objeto
@@ -202,6 +225,9 @@ class SolicitacaoController extends Controller
                     $solicitacao_servico->save();
                 }
             }
+
+            //salvando alteração na descricao
+
 
             return redirect()->route('listar_solicitacao');
         }
@@ -234,9 +260,6 @@ class SolicitacaoController extends Controller
     }
 
 
-
-
-
     public function mostrar_form_produto(){
         //verifica se a session existe, se não existir ele redireciona a nova solicitacao        
         if(session()->has('novaSolicitacao')){
@@ -244,11 +267,11 @@ class SolicitacaoController extends Controller
             $produto->nome = "";
             $produto->quantidade = "";
             $produto->valor = "";
-            $produto->valor_imposto = "";
+            // $produto->valor_imposto = "";
             $produto->descricao = "";
-            $produto->link_oferta = "";
+            // $produto->link_oferta = "";
 
-            //habilita campos para colocar valor da solicitacao
+            //habilita campos para colocar valor na solicitacao
             $habilitaCampo = Auth::user()->tipo_conta !== 'S' ? true : false;
 
             return view('solicitacao.modal.produto',['produto' => $produto , 'habilitaCampo' => $habilitaCampo]);
@@ -257,6 +280,7 @@ class SolicitacaoController extends Controller
     }
 
     private function redireciona_solicitacao(){
+        //gerencia quando usuario esta criando uma nova solicitação ou quando ele esta editando uma nova solicitação
         $url_previous = explode('/',url()->previous());
         
         if(end($url_previous) == 'nova'){
@@ -274,9 +298,7 @@ class SolicitacaoController extends Controller
                 'nome' => 'required',
                 'quantidade' => 'required',
                 //  'valor'=> 'required',
-                // 'imposto'=>'',
                 'descricao'=>'required',
-                // 'link-oferta'=>'',
              ]);
 
         }else{
@@ -284,9 +306,7 @@ class SolicitacaoController extends Controller
                 'nome' => 'required',
                 'quantidade' => 'required',
                 'valor'=> 'required',
-                // 'imposto'=>'',
                 'descricao'=>'required',
-                // 'link-oferta'=>'',
              ]);
 
         }
@@ -299,10 +319,7 @@ class SolicitacaoController extends Controller
         $produto->nome = $request->input('nome');
         $produto->quantidade = $request->input('quantidade');
         $produto->valor = $request->input('valor');
-        $produto->valor_imposto = $request->input('imposto');
-        $produto->id_contrato = '0';
         $produto->descricao = $request->input('descricao');
-        $produto->link_oferta = $request->input('link_oferta');
         $produto->id_criador = Auth::user()->id;
         $produto->data_criacao = time();
         $produto->id_modificador = Auth::user()->id;
@@ -325,9 +342,7 @@ class SolicitacaoController extends Controller
             $produto->nome = session('novaSolicitacao')->produtos[$id]->nome;
             $produto->quantidade = session('novaSolicitacao')->produtos[$id]->quantidade;
             $produto->valor = session('novaSolicitacao')->produtos[$id]->valor;
-            $produto->valor_imposto = session('novaSolicitacao')->produtos[$id]->valor_imposto;
             $produto->descricao = session('novaSolicitacao')->produtos[$id]->descricao;
-            $produto->link_oferta = session('novaSolicitacao')->produtos[$id]->link_oferta;
 
 
             //habilita campos para colocar valor da solicitacao
@@ -343,10 +358,7 @@ class SolicitacaoController extends Controller
             $this->validate($request,[
                 'nome' => 'required',
                 'quantidade' => 'required',
-                //  'valor'=> 'required',
-                // 'imposto'=>'',
                 'descricao'=>'required',
-                // 'link-oferta'=>'',
                 'id_produto' => 'required'
              ]);
 
@@ -354,10 +366,8 @@ class SolicitacaoController extends Controller
             $this->validate($request,[
                 'nome' => 'required',
                 'quantidade' => 'required',
-                'valor'=> 'required',
-                // 'imposto'=>'',
+                'valor'=> 'required',                
                 'descricao'=>'required',
-                // 'link-oferta'=>'',
                 'id_produto' => 'required'
              ]);
 
@@ -373,9 +383,7 @@ class SolicitacaoController extends Controller
         $solicitacao->produtos[$id]->nome = $request->input('nome');
         $solicitacao->produtos[$id]->quantidade = $request->input('quantidade');
         $solicitacao->produtos[$id]->valor = $request->input('valor');
-        $solicitacao->produtos[$id]->valor_imposto =  $request->input('imposto');
         $solicitacao->produtos[$id]->descricao = $request->input('descricao');
-        $solicitacao->produtos[$id]->link_oferta = $request->input('link_oferta');
         $solicitacao->produtos[$id]->id_criador = Auth::user()->id;
         $solicitacao->produtos[$id]->id_modificador = Auth::user()->id;
         
@@ -408,11 +416,26 @@ class SolicitacaoController extends Controller
         if(session()->has('novaSolicitacao')){
             $solicitacao = session('novaSolicitacao');
             if( isset($solicitacao->produtos) && isset($solicitacao->produtos[$id_produto])){
+                
+                if(isset($solicitacao->produtos[$id_produto]->id)){
+                    //deleta produto do  banco na hora que usuario esta editando solicitação
+                    $produto = Produto::find($solicitacao->produtos[$id_produto]->id);
+                    $produto->delete();
+
+                    //detelar relação entre produto e solicitacao
+                    $solicitacao_produto = Detalhe_Solicitacao_Produto::where('id_produto',$solicitacao->produtos[$id_produto]->id)->get()->first();
+                    $solicitacao_produto->delete();
+                
+                }
+                
                 $produtos = $solicitacao->produtos;
-                //excluindo produto
-                unset($produtos[$id_produto]);
-                //ordenando vetor depois da exclusão de um produto
-                $produtos = array_values($produtos);
+                if(count($produtos) !== 0){
+                    //excluindo produto
+                    unset($produtos[$id_produto]);
+                    
+                    //ordenando vetor depois da exclusão de um produto
+                    $produtos = array_values($produtos);
+                }
                 session('novaSolicitacao')->produtos = $produtos;
                 
                 //redirecionando solicitação
@@ -430,11 +453,8 @@ class SolicitacaoController extends Controller
         if(session()->has('novaSolicitacao')){
             $servico = new \stdClass;
             $servico->nome = "";
-            $servico->quantidade = "";
             $servico->valor = "";
-            $servico->valor_imposto = "";
             $servico->descricao = "";
-            $servico->link_oferta = "";
 
             //habilita campos para colocar valor da solicitacao
             $habilitaCampo = Auth::user()->tipo_conta !== 'S' ? true : false;
@@ -448,20 +468,13 @@ class SolicitacaoController extends Controller
         if(Auth::user()->tipo_conta == 'S'){
             $this->validate($request,[
                 'nome' => 'required',
-                 // 'quantidade' => 'required',
-                //  'valor'=> 'required',
-                 // 'imposto'=>'',
                 'descricao'=>'required',
-                // 'link-oferta'=>'',
              ]);
         }else{
             $this->validate($request,[
                 'nome' => 'required',
-                 // 'quantidade' => 'required',
                  'valor'=> 'required',
-                 // 'imposto'=>'',
                 'descricao'=>'required',
-                // 'link-oferta'=>'',
              ]);
 
         }
@@ -474,8 +487,6 @@ class SolicitacaoController extends Controller
         $servico = new \stdClass;
         $servico->nome = $request->input('nome');
         $servico->valor = $request->input('valor');
-        $servico->valor_imposto = $request->input('imposto');
-        $servico->id_contrato = '0';
         $servico->descricao = $request->input('descricao');
         $servico->id_criador = Auth::user()->id;
         $servico->data_criacao = time();
@@ -498,11 +509,8 @@ class SolicitacaoController extends Controller
             $id = (int) $id;
             $servico = new \stdClass;
             $servico->nome = session('novaSolicitacao')->servicos[$id]->nome;
-            $servico->quantidade = session('novaSolicitacao')->servicos[$id]->quantidade;
             $servico->valor = session('novaSolicitacao')->servicos[$id]->valor;
-            $servico->valor_imposto = session('novaSolicitacao')->servicos[$id]->valor_imposto;
             $servico->descricao = session('novaSolicitacao')->servicos[$id]->descricao;
-            $servico->link_oferta = session('novaSolicitacao')->servicos[$id]->link_oferta;
 
             //habilita campos para colocar valor da solicitacao
             $habilitaCampo = Auth::user()->tipo_conta !== 'S' ? true : false;
@@ -517,21 +525,14 @@ class SolicitacaoController extends Controller
         if(Auth::user()->tipo_conta == 'S'){
             $this->validate($request,[
                 'nome' => 'required',
-                 // 'quantidade' => 'required',
-                //  'valor'=> 'required',
-                 // 'imposto'=>'',
                 'descricao'=>'required',
-                // 'link-oferta'=>'',
                 'id_servico' => 'required',
              ]);
         }else{
             $this->validate($request,[
                 'nome' => 'required',
-                 // 'quantidade' => 'required',
                  'valor'=> 'required',
-                 // 'imposto'=>'',
                 'descricao'=>'required',
-                // 'link-oferta'=>'',
                 'id_servico' => 'required',
              ]);
 
@@ -545,11 +546,8 @@ class SolicitacaoController extends Controller
         
         //alterar servico ja existente na session
         $solicitacao->servicos[$id]->nome = $request->input('nome');
-        $solicitacao->servicos[$id]->quantidade = $request->input('quantidade');
         $solicitacao->servicos[$id]->valor = $request->input('valor');
-        $solicitacao->servicos[$id]->valor_imposto =  $request->input('imposto');
         $solicitacao->servicos[$id]->descricao = $request->input('descricao');
-        $solicitacao->servicos[$id]->link_oferta = $request->input('link_oferta');
         $solicitacao->servicos[$id]->id_criador = Auth::user()->id;
         $solicitacao->servicos[$id]->id_modificador = Auth::user()->id;
         
@@ -560,7 +558,7 @@ class SolicitacaoController extends Controller
         return redirect($this->redireciona_solicitacao());
     }
 
-
+    //o que é verificacao
     public function mostrar_verificacao_servico($id){
         //verifica se a session existe, se não existir ele redireciona a nova solicitacao
         if($id != null && session()->has('novaSolicitacao')){
@@ -582,18 +580,35 @@ class SolicitacaoController extends Controller
 
         if(session()->has('novaSolicitacao')){
             $solicitacao = session('novaSolicitacao');
+            // tem que excluir no banco quando é objeto 
+
             if( isset($solicitacao->servicos) && isset($solicitacao->servicos[$id_servico])){
+                //verifica se o servico ja esta cadastrado no banco, caso tiver deleta do banco 
+                if(isset($solicitacao->servicos[$id_servico]->id)){
+                    //deleta servico no banco
+                    $servico = Servico::find($solicitacao->servicos[$id_servico]->id);
+                    $servico->delete();
+
+                    //detelar relação entre servico e solicitacao
+                    $solicitacao_servico = Detalhe_Solicitacao_Servico::where('id_servico',$solicitacao->servicos[$id_servico]->id)->get()->first();
+                    $solicitacao_servico->delete();
+                }
+
+                //para ajustar visualização de edição de solicitação
                 $servicos = $solicitacao->servicos;
-                //excluindo servico
-                unset($servicos[$id_servico]);
-                //ordenando vetor depois da exclusão de um servico
-                $servicos = array_values($servicos);
+                
+                if(count($servicos) !== 0){
+                    //excluindo servico
+                    unset($servicos[$id_servico]);
+                    //ordenando vetor depois da exclusão de um servico
+                    $servicos = array_values($servicos);
+                }
                 session('novaSolicitacao')->servicos = $servicos;
                 
                 //redirecionando solicitação
                 return redirect($this->redireciona_solicitacao());
-            }
 
+            }   
         }
         return back();
 

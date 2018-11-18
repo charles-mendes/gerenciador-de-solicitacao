@@ -5,25 +5,23 @@
             <th>Quantidade</th>
             <th>Descricao</th>
             @if(isset($acao) && $acao == true)
-            <th>Ações</th>
+                <th>Ações</th>
             @endif
         @else
             <th>Nome</th>
             <th>Quantidade</th>
             <th>Valor</th>
-            <th>Valor Imposto</th>
             <th>Descricao</th>
-            <th>Link Oferta</th>
             @if(isset($acao) && $acao == true)
-            <th>Ações</th>
+                <th>Ações</th>
             @endif
         @endif
     </tr>
 </thead>
 
 <tbody>
-    @if ( isset($solicitacao->produtos) )
-        @foreach($solicitacao->produtos as $key => $produto)
+    @if ( isset($item->produtos) )
+        @foreach($item->produtos as $key => $produto)
             <tr>
                 @if(Auth::user()->tipo_conta == 'S')    
                     <td>{{$produto->nome}}</td>
@@ -33,16 +31,14 @@
                     <td>{{$produto->nome}}</td>
                     <td>{{$produto->quantidade}}</td>
                     <td>{{$produto->valor}}</td>
-                    <td>{{$produto->valor_imposto}}</td>
                     <td>{{$produto->descricao}}</td>
-                    <td>{{$produto->link_oferta}}</td> 
                 @endif
                 @if(isset($acao) && $acao == true)
                     <td>
-                        <button id="btn-edit" type="button" class="btn btn-primary" data-id="{{$key}}" onclick="editarProduto(this)">
+                        <button id="btn-edit" type="button" class="btn btn-primary" data-id="{{isset($flag)? $produto->id : $key}}" onclick="editarProduto(this)">
                             <i class="ti-pencil"></i>
                         </button>
-                        <button id="btn-excluir" type="button" class="btn btn-danger" data-id="{{$key}}" onclick="excluirProduto(this)">
+                        <button id="btn-excluir" type="button" class="btn btn-danger" data-id="{{isset($flag) ? $produto->id : $key}}" onclick="excluirProduto(this)">
                             <i class="mdi mdi-close-box-outline"></i>
                         </button>
                     </td>   
