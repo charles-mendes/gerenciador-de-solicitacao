@@ -27,4 +27,16 @@ class Fornecedor extends Model
     {
         return $this->belongsToMany('App\Servico','detalhe_fornecedor_servico','id_fornecedor','id_servico');
     }
+
+    public function endereco()
+    {
+        //um fornecedor tem varios enderecos
+        // return $this->belongsToMany('App\Servico','detalhe_fornecedor_servico','id_fornecedor','id_servico');
+        return $this->hasMany('App\Endereco','id_fornecedor','id');
+    }
+
+    public function contrato()
+    {
+        return $this->hasMany('App\Contrato','id_fornecedor','id');
+    }
 }

@@ -28,7 +28,31 @@ function cadastrar(fornecedor){
     let id = $(fornecedor).attr("data-id");
 
     window.location.href = '/fornecedor/cadastrar/'+ id;
+}
 
+function editarFornecedor(fornecedor){
+    let id = $(fornecedor).attr("data-id");
+
+    $('#fornecedor .modal-content').load('/fornecedor/editar/'+ id, function () {
+        $('#fornecedor').modal('show');
+
+        // ocultar/mostrar campo do endereco
+        $("#check_endereco").click(function(){
+            required(this,'#fields_endereco','.verify-required');
+        }); 
+
+
+        // ocultar/mostrar campo do CPF/CNPJ
+        $("#check_identificacao").click(function(){
+            required(this,'#field_identificacao','#identificacao');        
+        }); 
+
+        
+         // ocultar/mostrar campo do documento em anexo
+         $("#check_contrato").click(function(){
+            required(this,'#fields_contrato','.verify-required-contrato');
+        }); 
+    });
 
 }
 
@@ -66,21 +90,35 @@ function alterarStatus(soliciticao){
 }
 
 $(document).ready(function () {
-    // $('#example').DataTable({
-    //     "language": {"url":"/plugins/datatables-plugins/i18n/Portuguese-Brasil.lang"},
-    //     "columnDefs": [ {
-    //         "targets"  : 'no-sort',
-    //         "orderable": false,
-    //         "order": []
-    //     }]
-    // });
-
-    $('#example').DataTable({});
-
-
-
-   
-
-
+    $('#example').DataTable({
+        "language": {"url":"/plugins/datatables/language/Portuguese-Brasil.json"},
+    });
 
 });
+
+
+function visualizarFornecedor(fornecedor){
+    
+    let id = $(fornecedor).attr("data-id");
+
+    $('#detalhe-fornecedor .modal-content').load('/fornecedor/detalhe/'+ id, function () {
+        $('#table-produto-detalhe').DataTable(montando_tabela());
+        $('#table-servico-detalhe').DataTable(montando_tabela());
+        $('#detalhe-fornecedor').modal('show');
+    });
+
+    
+}
+
+
+function montando_tabela(){
+    return {
+        "language": {"url":"/plugins/datatables/language/Portuguese-Brasil.json"},
+        "searching": false,
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": true,
+        "bInfo": false,
+        "bAutoWidth": false ,
+    };
+}

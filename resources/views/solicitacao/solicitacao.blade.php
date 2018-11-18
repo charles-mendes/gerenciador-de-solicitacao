@@ -36,7 +36,7 @@
                 </h4>
                 <div class="table-responsive">
                     <table id="" class="display" style="width:100%">
-                        @component('component.produtos', ['solicitacao' => session('novaSolicitacao'),'acao' => true])@endcomponent
+                        @component('component.produtos', ['item' => session('novaSolicitacao'),'acao' => true])@endcomponent
                     </table>
                 </div>
                 
@@ -50,7 +50,7 @@
                 </h4>
                 <div class="table-responsive">
                     <table id="" class="display" style="width:100%">
-                        @component('component.servicos', ['solicitacao' => session('novaSolicitacao'),'acao' => true])@endcomponent
+                        @component('component.servicos', ['item' => session('novaSolicitacao'),'acao' => true])@endcomponent
                     </table>
                 </div>
             </div>  
