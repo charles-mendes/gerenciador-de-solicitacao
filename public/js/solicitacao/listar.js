@@ -44,6 +44,13 @@ function excluirSolicitacao(solicitacao){
 
 }
 
+function avaliaSolicitacao(solicitacao){
+    let id = $(solicitacao).attr("data-id");
+
+    window.location.href = '/solicitacao/avalia/'+ id;
+
+}
+
 $(document).ready(function () {
 
     $('#example').DataTable({

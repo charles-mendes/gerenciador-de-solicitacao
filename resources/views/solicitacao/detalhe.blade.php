@@ -45,7 +45,7 @@
             @else
                 <div class="table-responsive">
                     <table id="table-produto-detalhe" class="display" style="width:100%">
-                        @component('component.produtos', ['solicitacao' => $solicitacao])@endcomponent
+                        @component('component.produtos', ['item' => $solicitacao])@endcomponent
                     </table>
                 </div>                
 
@@ -57,14 +57,20 @@
             @else
             <div class="table-responsive">
                 <table id="table-servico-detalhe" class="display" style="width:100%">
-                    @component('component.servicos', ['solicitacao' => $solicitacao])@endcomponent
+                    @component('component.servicos', ['item' => $solicitacao])@endcomponent
                 </table>
             </div>                
-
-        @endif
+            @endif
         <div class="row">
-            <div class="col-12 text-center">
-                <button type="button" class="btn btn-primary" data-id="{{$id}}" onclick="editarSolicitacao(this);">Editar solicitação</button>
+            <div class="col-12 text-center pt-3">
+                <div class="row">
+                    <div class="col-6">
+                        <button type="button" class="btn btn-success" data-id="{{$id}}" onclick="editarSolicitacao(this);">Editar solicitação</button>
+                    </div>
+                    <div class="col-6"> 
+                        <button type="button" class="btn btn-primary" data-id="{{$id}}" onclick="avaliaSolicitacao(this);">Avaliar solicitação</button>
+                    </div>
+                </div>
             </div>
         </div>
             

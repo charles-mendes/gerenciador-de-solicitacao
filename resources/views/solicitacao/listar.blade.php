@@ -59,7 +59,7 @@
                                     <th>Data Criacao</th>
                                     <th>Ultima Modificacao</th>
                                     <th>Data Modificacao</th>
-                                    <th>Situação</th>
+                                    <th>Status</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
@@ -73,21 +73,8 @@
                                         <td>{{ date('d/m/Y H:i:s' , strtotime($solicitacao->data_criacao))}}</td>
                                         <td>{{App\Usuario::find($solicitacao->id_modificador)->nome}}</td>
                                         <td>{{ date('d/m/Y H:i:s' , strtotime($solicitacao->data_modificacao))}}</td>
-                                        <td>
-                                            @if($solicitacao->status == 'A')
-                                                <span class="label label-success">aprovado</span>
-                                            @endif
-                                            @if($solicitacao->status == 'P')
-                                                <span class="label label-success">pendente</span>
-                                            @endif
-                                            @if($solicitacao->status == 'R')
-                                                <span class="label label-success">reprovado</span>
-                                            @endif
-                                            @if($solicitacao->status == 'E')
-                                                <span class="label label-danger">excluido</span>
-                                            @endif
-                                        </td>                                        
-                                        <td>
+                                        <td><span class="label label-success">{{App\Status::find($solicitacao->id_status)->tipo_status}}</span><td>
+                                            
                                             <button type="button" class="btn btn-primary" data-id="{{$solicitacao->id}}" onclick="visualizarSoliciticoes(this);" data-toggle="tooltip" data-placement="right" title=""
                                                 data-original-title="Clique aqui para visualizar os detalhes deste usuário">
                                                     <i class="ti-eye"></i>

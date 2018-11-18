@@ -51,6 +51,13 @@ Route::group(['middleware' => 'menu'], function () {
     Route::get('/solicitacao/excluir-solicitacao/{id}', 'SolicitacaoController@mostrar_verificacao_solicitacao');
     Route::post('/solicitacao/excluir-solicitacao', 'SolicitacaoController@excluir_solicitacao')->name('excluir_solicitacao');
     Route::get('/solicitacao/detalhe/{id}', 'SolicitacaoController@detalhe')->where('id','[0-9]+');
+    Route::get('/solicitacao/avalia/{id}', 'SolicitacaoController@avalia_solicitacao')->name('aprovar_solicitacao');
+    Route::post('/solicitacao/aprovar', 'SolicitacaoController@cadastrar_aprovacao')->name('cadastrar_aprovacao');
+    // Route::get('/solicitacao/finaliza_cotacao/{id}', 'SolicitacaoController@mostrar_verificacao_cotacao');
+    // Route::post('/solicitacao/finaliza_cotacao', 'SolicitacaoController@finalizar_cotacao')->name('finalizar_cotacao');
+    
+    Route::get('/solicitacao/justificativa/{id}', 'SolicitacaoController@justificativa')->name('justificativa_solicitacao');
+    Route::post('/solicitacao/cadastrar_justificativa', 'SolicitacaoController@cadastrar_justificativa')->name('cadastrar_justificativa');
 
     //visualizar solicitação
     Route::get('/solicitacao/visualizar/{id}', 'SolicitacaoController@visualizar')->name('visualizar_solicitacao');
