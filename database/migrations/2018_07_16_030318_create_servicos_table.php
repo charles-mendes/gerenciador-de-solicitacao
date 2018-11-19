@@ -15,15 +15,9 @@ class CreateServicosTable extends Migration
     {
         Schema::create('servico', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('id_contrato');
             $table->string('nome');
             $table->float('valor');
-            $table->float('valor_imposto');
             $table->string('descricao');
-
-            $table->foreign('id_contrato')
-                  ->references('id')->on('contrato')
-                  ->onDelete('cascade');
 
         });
     }
