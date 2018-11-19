@@ -11,7 +11,7 @@
     @endcomponent
 @endsection
 @php
-    // dd($solicitacao->justificativas);
+    // dd($justificativa);
 @endphp
 @push('styles')
     <link href="{{ asset('css/switch.css') }}" rel="stylesheet">
@@ -21,9 +21,11 @@
     <script src="{{ asset('js/solicitacao/aprova.js?t='.time()) }}"></script>
 @endpush
 
+
+
 @section('content')
         <div class="col-lg-12">
-            @if($justificativa->first() !== null)
+            @if($justificativa !== null)
                 <div class="alert alert-danger">
                     <p>Solicitação em estado de reprovação</p>
                     <p>Status : {{App\Status::find($solicitacao->id_status)->tipo_status}}</p>
