@@ -10,7 +10,9 @@
     )
     @endcomponent
 @endsection
-
+@php
+    // dd($solicitacao->justificativas);
+@endphp
 @push('styles')
     <link href="{{ asset('css/switch.css') }}" rel="stylesheet">
 @endpush
@@ -21,6 +23,14 @@
 
 @section('content')
         <div class="col-lg-12">
+            @if($justificativa->first() !== null)
+                <div class="alert alert-danger">
+                    <p>Solicitação em estado de reprovação</p>
+                    <p>Status : {{App\Status::find($solicitacao->id_status)->tipo_status}}</p>
+                    <p>Criador : {{App\Usuario::find($justificativa->id_criador)->nome}}</p>
+                    <p>Justificativa : {{$justificativa->justificativa}}</p>
+                </div>
+            @endif
             <div class="card">
                 <div class="card-block">
                     @if($status == 'Iniciou Cotação')    

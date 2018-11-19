@@ -13,6 +13,7 @@ use App\Usuario;
 use App\Justificativa;
 use App\Detalhe_Solicitacao_Produto;
 use App\Detalhe_Solicitacao_Servico;
+use Carbon\Carbon;
 use Validator;
 use Illuminate\Support\Facades\Hash;
 //use Request;
@@ -87,6 +88,27 @@ class SolicitacaoController extends Controller
             $falta_preencher = true;
             $total = 0;
 
+            //caso haja justificativa pegar a ultima que seria a mais valida
+            $justificativas = $solicitacao->justificativas;
+            if($justificativas->first() !== null){
+                $data_atual = new \stdClass;
+                $data_atual->data = new Carbon('2001-01-01 11:53:20');
+                $data_atual->id = "";
+                foreach($justificativas as $justificativa){
+                    if($data_atual->data < $justificativa->data_modificacao){
+                        $data_atual->data = $justificativa->data_modificacao;
+                        $data_atual->id = $justificativa->id;
+                    }
+                }
+                $justificativa = Justificativa::find($data_atual->id);
+            }else{
+                $justificativa = null;
+            }
+            
+
+            
+
+
             if(Status::find($solicitacao->id_status)->tipo_status == 'Iniciou Cotação'){
                 $status = 'Iniciou Cotação';
 
@@ -131,7 +153,9 @@ class SolicitacaoController extends Controller
                             'solicitacao'=> $solicitacao,
                             'id'=> $id, 'status' => $status, 
                             'falta_preencher' => $falta_preencher,
-                            'total' => $total]);       
+                            'total' => $total,
+                            'justificativa' => $justificativa,
+                            ]);       
             }
         }
         return back();
