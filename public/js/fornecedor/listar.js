@@ -1,7 +1,39 @@
+function mascaraIdentificacao(){
+    $("#identificacao").keydown(function(){
+        try {
+            $("#identificacao").unmask();
+        } catch (e) {}
+    
+        var tamanho = $("#identificacao").val().length;
+    
+        if(tamanho < 11){
+            $("#identificacao").mask("999.999.999-99");
+        } else if(tamanho >= 11){
+            $("#identificacao").mask("99.999.999/9999-99");
+        }
+    
+        // ajustando foco
+        var elem = this;
+        setTimeout(function(){
+            // mudo a posição do seletor
+            elem.selectionStart = elem.selectionEnd = 10000;
+        }, 0);
+        // reaplico o valor para mudar o foco
+        var currentValue = $(this).val();
+        $(this).val('');
+        $(this).val(currentValue);
+    });
+}
 
 function novoFornecedor(){
     $('#fornecedor .modal-content').load('/fornecedor/novo/', function () {
         $('#fornecedor').modal('show');
+        
+        //colocando mascara no cnpj/cpf
+        mascaraIdentificacao();
+
+
+
         $('table.display').DataTable();
 
         // ocultar/mostrar campo do endereco
@@ -36,6 +68,9 @@ function editarFornecedor(fornecedor){
     $('#fornecedor .modal-content').load('/fornecedor/editar/'+ id, function () {
         $('#fornecedor').modal('show');
 
+        //colocando mascara no cnpj/cpf
+        mascaraIdentificacao();
+
         // ocultar/mostrar campo do endereco
         $("#check_endereco").click(function(){
             required(this,'#fields_endereco','.verify-required');
@@ -55,6 +90,8 @@ function editarFornecedor(fornecedor){
     });
 
 }
+
+
 
 function required(botao,campo,identificador){
       //verificar se botão ta check 

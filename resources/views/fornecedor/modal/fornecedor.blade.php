@@ -22,7 +22,7 @@
         </div>
         <div  id="field_identificacao" class="form-group mb-0" style="{{ $check->check_identificacao == true ? '' : 'display:none'}}" >
             <label for="identificacao" class="col-form-label">CPF/CNPJ *</label>
-            <input type="number" class="form-control" id="identificacao" name="identificacao" value="{{$fornecedor->cnpj}}">
+            <input type="text" class="form-control" id="identificacao" name="identificacao" value="{{$fornecedor->cnpj}}">
         </div>
         <div class="form-group mb-0">
             <label for="telefone" class="col-form-label">Telefone *</label>

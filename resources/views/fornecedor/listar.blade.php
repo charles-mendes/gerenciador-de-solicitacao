@@ -16,6 +16,8 @@
 @endpush
 
 @push('scripts')
+    {{-- <script src="{{ asset('js/mask.js?t='.time()) }}"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
     <script src="{{ asset('js/fornecedor/listar.js?t='.time()) }}"></script>
 @endpush
 
