@@ -44,9 +44,17 @@ function excluirSolicitacao(solicitacao){
 
 }
 
+function avaliaSolicitacao(solicitacao){
+    let id = $(solicitacao).attr("data-id");
+
+    window.location.href = '/solicitacao/avalia/'+ id;
+
+}
+
 $(document).ready(function () {
 
     $('#example').DataTable({
         "language": {"url":"/plugins/datatables/language/Portuguese-Brasil.json"},
     });
+
 });

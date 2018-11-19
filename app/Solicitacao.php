@@ -27,5 +27,10 @@ class Solicitacao extends Model
                                    //tabela       nome da tab de relacionamento , 
         return $this->belongsToMany('App\Servico','detalhe_solicitacao_servico','id_solicitacao','id_servico');
     }
+
+    public function justificativas()
+    {
+        return $this->hasMany('App\Justificativa','id_solicitacao','id');
+    }
     
 }
