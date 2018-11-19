@@ -20,8 +20,8 @@ class RemoveSomeColumnsUm extends Migration
         });
 
         Schema::table('servico', function($table) {
-            $table->dropColumn('id_contrato');
-            $table->dropColumn('valor_imposto');
+            // $table->dropColumn('id_contrato');
+            // $table->dropColumn('valor_imposto');
         });
     }
 
