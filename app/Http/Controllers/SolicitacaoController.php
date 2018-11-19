@@ -8,7 +8,9 @@ use App\HistoricoSolicitacao;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\ServicoController;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\DetalheFornecedorProduto;
 use App\Servico;
+use App\Fornecedor;
 use App\Usuario;
 use App\Justificativa;
 use App\Detalhe_Solicitacao_Produto;
@@ -631,9 +633,34 @@ class SolicitacaoController extends Controller
             //habilita campos para colocar valor na solicitacao
             $habilitaCampo = Auth::user()->tipo_conta !== 'S' ? true : false;
 
-            return view('solicitacao.modal.produto',['produto' => $produto , 'habilitaCampo' => $habilitaCampo]);
+            //pegando os produtos que tem fornecedores
+            $fornecedores = Fornecedor::all();
+            $produtos_fornecedor = [];
+            foreach($fornecedores as $fornecedor){
+                foreach($fornecedor->produtos as $prod){
+                    $produtos_fornecedor[] = ['id'=> $prod->id,'nome'=> $prod->nome];
+                }
+            }
+            
+
+            return view('solicitacao.modal.produto',['produto' => $produto , 'produtos_fornecedor' => $produtos_fornecedor , 'habilitaCampo' => $habilitaCampo]);
         }
         return redirect()->route('nova_solicitacao');
+    }
+
+    public function pegaProduto(Request $request){
+        $this->validate($request,[
+            'produto' => 'required',
+            // 'produto' => 'required',
+        ]);
+        $produto = Produto::where('nome',$request->input('produto'))->first()->get();
+        $produto = $produto->first();
+        // dd($produto->valor);
+        if($produto !== null){
+            return ['valor'=>$produto->valor,'descricao'=>$produto->descricao];
+        }
+        return 0;
+
     }
 
     private function redireciona_solicitacao(){

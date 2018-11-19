@@ -17,4 +17,14 @@ class Produto extends Model
     {
         return $this->belongsToMany('App\Solicitacao','detalhe_solicitacao_produto','id_produto','id_solicitacao');
     }
+
+    public function fornecedores()
+    {
+        return $this->belongsToMany('App\Fornecedor','detalhe_fornecedor_produto','id_produto','id_fornecedor');
+    }
+
+    public function detalhe_fornecedor()
+    {
+        return $this->hasMany('App\DetalheFornecedor','id_produto','id');
+    }
 }
