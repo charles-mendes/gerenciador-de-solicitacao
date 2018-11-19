@@ -23,7 +23,7 @@ class statusTableSeeder extends Seeder
         DB::table('situacao')->insert(['tipo_status' => 'Esperando Aprovação da diretoria']);
         DB::table('situacao')->insert(['tipo_status' => 'Iniciou Cotação']);
         DB::table('situacao')->insert(['tipo_status' => 'Finalizou Cotação']);
-        DB::table('situacao')->insert(['tipo_status' => 'Processando solicitação']);
+        DB::table('situacao')->insert(['tipo_status' => 'Em processo de execução']);
         DB::table('situacao')->insert(['tipo_status' => 'Finalizada']);
         DB::table('situacao')->insert(['tipo_status' => 'Inativada']);
         

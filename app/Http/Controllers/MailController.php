@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MailSolicitacao;
+use App\Mail\MailDiretoria;
 use App\Usuario;
 use App\Solicitacao;
 
@@ -24,5 +25,15 @@ class MailController extends Controller
         }
         return back();
         
+    }
+
+    public function enviarEmailDiretoria($id, $usuario){
+        //$id da solicitação
+
+        //usuarios que irão receber email que foi criado uma nova solicitação
+        
+        $solicitacao = Solicitacao::find($id);
+
+        Mail::to($usuario->email)->send(new MailDiretoria($solicitacao, $usuario));
     }
 }

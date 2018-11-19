@@ -53,8 +53,16 @@ Route::group(['middleware' => 'menu'], function () {
     Route::get('/solicitacao/detalhe/{id}', 'SolicitacaoController@detalhe')->where('id','[0-9]+');
     Route::get('/solicitacao/avalia/{id}', 'SolicitacaoController@avalia_solicitacao')->name('aprovar_solicitacao');
     Route::post('/solicitacao/aprovar', 'SolicitacaoController@cadastrar_aprovacao')->name('cadastrar_aprovacao');
-    // Route::get('/solicitacao/finaliza_cotacao/{id}', 'SolicitacaoController@mostrar_verificacao_cotacao');
-    // Route::post('/solicitacao/finaliza_cotacao', 'SolicitacaoController@finalizar_cotacao')->name('finalizar_cotacao');
+    Route::get('/solicitacao/finaliza_cotacao/{id}', 'SolicitacaoController@mostrar_verificacao_cotacao');
+    Route::post('/solicitacao/finaliza_cotacao', 'SolicitacaoController@finaliza_cotacao')->name('finaliza_cotacao');
+    
+    Route::get('/solicitacao/finaliza_solicitacao/{id}', 'SolicitacaoController@finaliza_solicitacao');
+    
+    Route::get('/solicitacao/email_diretoria/{id}', 'SolicitacaoController@mostrar_verificacao_diretoria');
+    Route::post('/solicitacao/email_diretoria', 'SolicitacaoController@enviar_email_diretoria')->name('enviar_email_diretoria');
+
+    Route::get('/solicitacao/falta_preencher/{id}', 'SolicitacaoController@mostra_verificacao_falta_preencher');
+    // Route::post('/solicitacao/falta_preencher', 'SolicitacaoController@enviar_email_diretoria')->name('enviar_email_diretoria');
     
     Route::get('/solicitacao/justificativa/{id}', 'SolicitacaoController@justificativa')->name('justificativa_solicitacao');
     Route::post('/solicitacao/cadastrar_justificativa', 'SolicitacaoController@cadastrar_justificativa')->name('cadastrar_justificativa');

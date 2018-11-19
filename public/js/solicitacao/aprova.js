@@ -63,16 +63,42 @@ $(document).ready(function () {
 });
 
 function finalizarCotacao(solicitacao){
-    //verifica se solicitação esta a mais de 5000 mil 
 
-    //se tiver pede pra ele passar um email e cria esse usuario com o tipo D 
+    let id = $(solicitacao).attr("data-id");
+
+    $('#finaliza_cotacao .modal-content').load('/solicitacao/finaliza_cotacao/'+ id, function () {
+        $('#table-produto-solicitacao').DataTable(montando_tabela());
+        $('#table-servico-solicitacao').DataTable(montando_tabela());
+        $('#finaliza_cotacao').modal('show');
+    });
+}
+
+function finalizarProcesso(solicitacao){
+    let id = $(solicitacao).attr("data-id");
+
+    // $('#finaliza_solicitacao .modal-content').load('/solicitacao/finaliza_solicitacao/'+ id, function () {
+    //     // $('#table-produto-solicitacao').DataTable(montando_tabela());
+    //     // $('#table-servico-solicitacao').DataTable(montando_tabela());
+    //     $('#finaliza_solicitacao').modal('show');
+    // });
+
+    window.location.href = '/solicitacao/finaliza_solicitacao/'+ id;
+}
 
 
-    // let id = $(solicitacao).attr("data-id");
+function enviarEmailDiretoria(solicitacao){
+    let id = $(solicitacao).attr("data-id");
 
-    // $('#finaliza_cotacao .modal-content').load('/solicitacao/finaliza_cotacao/'+ id, function () {
-        // $('#table-produto-solicitacao').DataTable(montando_tabela());
-        // $('#table-servico-solicitacao').DataTable(montando_tabela());
-        // $('#finaliza_cotacao').modal('show');
+    $('#email .modal-content').load('/solicitacao/email_diretoria/'+ id, function () {
+        $('#email').modal('show');
+    });
+}
+
+
+function faltaPreencher(solicitacao){
+    let id = $(solicitacao).attr("data-id");
+
+    $('#falta_preencher .modal-content').load('/solicitacao/falta_preencher/'+ id, function () {
+        $('#falta_preencher').modal('show');
     });
 }
