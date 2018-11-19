@@ -9,10 +9,13 @@ use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\ServicoController;
 use App\Http\Controllers\MailController;
 use App\Servico;
+use App\Usuario;
 use App\Justificativa;
 use App\Detalhe_Solicitacao_Produto;
 use App\Detalhe_Solicitacao_Servico;
+use Carbon\Carbon;
 use Validator;
+use Illuminate\Support\Facades\Hash;
 //use Request;
 use Auth;
 //use Input;
@@ -71,10 +74,6 @@ class SolicitacaoController extends Controller
         return view('solicitacao.detalhe',['solicitacao'=> $solicitacao,'id'=> $id]);        
     }
 
-    public function visualizar($id){
-        $solicitacao = Solicitacao::find($id);
-        dd('deu boa');
-    }
 
     public function avalia_solicitacao($id){
         $id = (int) $id;
@@ -84,16 +83,160 @@ class SolicitacaoController extends Controller
                 return back()->withErrors('Solicitação não encontrada.');
             }
             $usuario = Auth::user()->tipo_conta;
+            
             $status = '';
+            $falta_preencher = true;
+            $total = 0;
+
+            //caso haja justificativa pegar a ultima que seria a mais valida
+            $justificativas = $solicitacao->justificativas;
+            if($justificativas->first() !== null){
+                $data_atual = new \stdClass;
+                $data_atual->data = new Carbon('2001-01-01 11:53:20');
+                $data_atual->id = "";
+                foreach($justificativas as $justificativa){
+                    if($data_atual->data < $justificativa->data_modificacao){
+                        $data_atual->data = $justificativa->data_modificacao;
+                        $data_atual->id = $justificativa->id;
+                    }
+                }
+                $justificativa = Justificativa::find($data_atual->id);
+            }else{
+                $justificativa = null;
+            }
+            
+
+            
+
+
             if(Status::find($solicitacao->id_status)->tipo_status == 'Iniciou Cotação'){
                 $status = 'Iniciou Cotação';
+
+                //soma valor da solicitação 
+                $total = null;
+                $falta_preencher = false;
+                if($solicitacao->produtos->first() == null && $solicitacao->servicos->first() == null){
+                    $falta_preencher = true;
+                }else{
+                    foreach($solicitacao->produtos as $produto){
+                        if(is_numeric($produto->valor)){
+                            $total += $produto->valor;
+                        }else{
+                            $falta_preencher = true;
+                        }
+                    }
+                    if($falta_preencher == false){
+                        foreach($solicitacao->servicos as $servico){
+                            if(is_numeric($servico->valor)){
+                                $total += $servico->valor;
+                            }else{
+                                $falta_preencher = true;
+                            }
+                        }
+                    }
+
+
+                } 
             }
+
+            if(Status::find($solicitacao->id_status)->tipo_status == 'Em processo de execução'){
+                $status = 'Em processo de execução';
+            }
+
+            if(Status::find($solicitacao->id_status)->tipo_status == 'Finalizada'){
+                $status = 'Finalizada';
+            }
+            
+            
             if($usuario == 'AD' || $usuario == 'A' || $usuario == 'C' || $usuario == 'D'){
-                return view('solicitacao.aprova',['solicitacao'=> $solicitacao,'id'=> $id, 'status' => $status]);       
+                return view('solicitacao.aprova',[
+                            'solicitacao'=> $solicitacao,
+                            'id'=> $id, 'status' => $status, 
+                            'falta_preencher' => $falta_preencher,
+                            'total' => $total,
+                            'justificativa' => $justificativa,
+                            ]);       
             }
         }
         return back();
     }
+
+    public function mostrar_verificacao_diretoria($id){
+
+        //verifica se a solicitacao existe
+        $id = (int) $id;
+    
+        if($id !== null){
+            $solicitacao = Solicitacao::find($id);
+            return view('solicitacao.modal.verifica_email_diretoria',['solicitacao'=> $solicitacao, 'id' => $id]);    
+        }
+        return back();
+    }
+
+    public function enviar_email_diretoria(Request $request){
+        $this->validate($request,[
+            'id_solicitacao'=>'required|numeric',
+            'email'=>'required|email',
+        ]);
+
+        $usuario = Usuario::where('email',$request->input('email'))->get()->first();
+        
+        if($usuario == null){
+            $usuario = new Usuario();
+            $usuario->email = $request->input('email');
+            $nome = explode('@',$request->input('email'));
+            $usuario->nome = $nome[0];
+            $usuario->senha = Hash::make('mudar12345');
+            $usuario->situacao = 'A';
+            $usuario->id_criador = Auth::user()->id;
+            $usuario->data_criacao = time();
+            $usuario->id_modificador = Auth::user()->id;
+            $usuario->data_modificacao = time();
+            $usuario->tipo_conta = 'D';
+            $usuario->save();
+        }
+
+        //envia email para diretoria, para esperar por alteração no status da solicitação 
+        $mailController = new MailController();
+        $mailController->enviarEmailDiretoria($request->input('id_solicitacao'),$usuario);
+
+        
+        $solicitacao = Solicitacao::find($request->input('id_solicitacao'));
+        
+        //muda status para aprovado
+        $status = Status::where('tipo_status','Aprovado pelo Comprador')->get()->first();
+        $solicitacao->id_status = $status->id;
+        $solicitacao->save();
+
+        $this->setHistorico($solicitacao);
+
+        //muda status para esperando diretoria
+        $status = Status::where('tipo_status','Esperando Aprovação da diretoria')->get()->first();
+        $solicitacao->id_status = $status->id;
+        $solicitacao->save();
+
+        $this->setHistorico($solicitacao);
+
+        return redirect()->route('listar_solicitacao');
+
+    }
+
+
+    public function mostra_verificacao_falta_preencher($id){
+        $id = (int) $id;
+        if(is_numeric($id)){
+            $solicitacao = Solicitacao::find($id);
+            if($solicitacao == null){
+                return back()->withErrors('Solicitação não encontrada.');
+            }
+            $usuario = Auth::user()->tipo_conta;
+            if($usuario == 'AD' || $usuario == 'A' || $usuario == 'C' || $usuario == 'D'){
+                return view('solicitacao.modal.falta_preencher',['solicitacao'=> $solicitacao,'id'=> $id]);       
+            }
+            return back();
+        }
+    }
+    
 
     public function cadastrar_aprovacao(Request $request){
         $this->validate($request,[
@@ -193,20 +336,70 @@ class SolicitacaoController extends Controller
         return redirect()->route('listar_solicitacao');
     }
 
-    // public function mostrar_verificacao_cotacao($id){
-    //     //verifica se a solicitacao existe
-    //     $id = (int) $id;
+    public function mostrar_verificacao_cotacao($id){
+        //verifica se a solicitacao existe
+        $id = (int) $id;
     
-    //     if($id !== null){
-    //         $solicitacao = Solicitacao::find($id);
-    //         return view('solicitacao.modal.verifica_cotacao',['solicitacao'=> $solicitacao]);    
-    //     }
-    //     return back();
-    // }
+        if($id !== null){
+            $solicitacao = Solicitacao::find($id);
+            return view('solicitacao.modal.verifica_cotacao',['solicitacao'=> $solicitacao]);    
+        }
+        return back();
+    }
 
-    // public function finaliza_cotacao(Request $request){
+    public function finaliza_cotacao(Request $request){
+        $this->validate($request,[
+            'id_solicitacao'=>'required',
+            // 'justificativa'=>'required',
+        ]);
+        //altera status da solicitacao
+        $status = Status::where('tipo_status','Finalizou Cotação')->get()->first();
 
-    // }
+        //adicionando status na solicitação
+        $solicitacao = Solicitacao::find($request->input('id_solicitacao'));
+        $solicitacao->id_status = $status->id;
+        $solicitacao->save();
+
+        //salva historico
+        $this->setHistorico($solicitacao);
+
+        //altera status da solicitacao
+        $status = Status::where('tipo_status','Em processo de execução')->get()->first();
+
+        //adicionando status na solicitação
+        $solicitacao = Solicitacao::find($request->input('id_solicitacao'));
+        $solicitacao->id_status = $status->id;
+        $solicitacao->save();
+
+        //cadastra no histirico
+        $this->setHistorico($solicitacao);
+
+        return redirect()->route('listar_solicitacao');
+
+    }
+
+
+    public function finaliza_solicitacao($id){
+        $id = (int) $id;
+        if(!is_numeric($id)){
+            return back();
+        }
+        
+        //altera status da solicitacao
+        $status = Status::where('tipo_status','Finalizada')->get()->first();
+
+        //adicionando status na solicitação
+        $solicitacao = Solicitacao::find($id);
+        $solicitacao->id_status = $status->id;
+        $solicitacao->save();
+
+        //salva historico
+        $this->setHistorico($solicitacao);
+
+        return redirect()->route('listar_solicitacao');
+    }
+
+
 
     private function setHistorico($solicitacao){
         //salvando historico da solicitação
@@ -593,6 +786,7 @@ class SolicitacaoController extends Controller
                 }
                 
                 $produtos = $solicitacao->produtos;
+                
                 if(count($produtos) !== 0){
                     //excluindo produto
                     unset($produtos[$id_produto]);

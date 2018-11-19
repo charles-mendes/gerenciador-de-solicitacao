@@ -6,7 +6,7 @@
 </div>
 <div class="modal-body">
     <p class="text-center">Tem certeza que deseja finalizar a cotação  ?</p>
-    <form method="POST" id="form-finalizar-cotacao" action="{{route('finalizar_cotacao')}}">
+    <form method="POST" id="form-finalizar-cotacao" action="{{route('finaliza_cotacao')}}">
         @csrf
         <input type="hidden" name="id_solicitacao" value="{{$solicitacao->id}}"">
     </form>
