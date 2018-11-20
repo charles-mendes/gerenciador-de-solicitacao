@@ -90,28 +90,50 @@ class SolicitacaoController extends Controller
             $falta_preencher = true;
             $total = 0;
 
+            $status_atual_solicitacao =  Status::find($solicitacao->id_status);
+
+
             //caso haja justificativa pegar a ultima que seria a mais valida
-            $justificativas = $solicitacao->justificativas;
-            if($justificativas->first() !== null){
-                $data_atual = new \stdClass;
-                $data_atual->data = new Carbon('2001-01-01 11:53:20');
-                $data_atual->id = "";
-                foreach($justificativas as $justificativa){
-                    if($data_atual->data < $justificativa->data_modificacao){
-                        $data_atual->data = $justificativa->data_modificacao;
-                        $data_atual->id = $justificativa->id;
+
+            //verifica quais são os reprovados para demostrar justificativa
+            $status_reprovado_aprovador = Status::where('tipo_status','Reprovado pelo Aprovador')->get()->first();
+            $status_reprovado_adm = Status::where('tipo_status','Reprovado pelo Administrador')->get()->first();
+            $status_reprovado_comprador = Status::where('tipo_status','Reprovado pelo Comprador')->get()->first();
+            $status_reprovado_diretoria = Status::where('tipo_status','Reprovado pela Diretoria')->get()->first();
+
+            $ids_reprovados = [
+                $status_reprovado_aprovador->id,
+                $status_reprovado_adm->id,
+                $status_reprovado_comprador->id,
+                $status_reprovado_diretoria->id,
+            ];
+
+            if(in_array($status_atual_solicitacao->id, $ids_reprovados )){
+                $justificativas = $solicitacao->justificativas;
+                if($justificativas->first() !== null){
+                    $data_atual = new \stdClass;
+                    $data_atual->data = new Carbon('2001-01-01 11:53:20');
+                    $data_atual->id = "";
+                    foreach($justificativas as $justificativa){
+                        if($data_atual->data < $justificativa->data_modificacao){
+                            $data_atual->data = $justificativa->data_modificacao;
+                            $data_atual->id = $justificativa->id;
+                        }
                     }
+                    $justificativa = Justificativa::find($data_atual->id);
+                }else{
+                    $justificativa = null;
                 }
-                $justificativa = Justificativa::find($data_atual->id);
             }else{
                 $justificativa = null;
             }
             
+            
 
             
 
 
-            if(Status::find($solicitacao->id_status)->tipo_status == 'Iniciou Cotação'){
+            if($status_atual_solicitacao->tipo_conta == 'Iniciou Cotação'){
                 $status = 'Iniciou Cotação';
 
                 //soma valor da solicitação 
@@ -141,11 +163,11 @@ class SolicitacaoController extends Controller
                 } 
             }
 
-            if(Status::find($solicitacao->id_status)->tipo_status == 'Em processo de execução'){
+            if($status_atual_solicitacao->tipo_conta == 'Em processo de execução'){
                 $status = 'Em processo de execução';
             }
 
-            if(Status::find($solicitacao->id_status)->tipo_status == 'Finalizada'){
+            if($status_atual_solicitacao->tipo_conta == 'Finalizada'){
                 $status = 'Finalizada';
             }
             
