@@ -272,7 +272,7 @@ class SolicitacaoController extends Controller
         
         //pegando status
         $tipo_conta = Auth::user()->tipo_conta;
-        
+
         if($tipo_conta == 'D'){
             $status = Status::where('tipo_status','Aprovado pela Diretoria')->get()->first();
         }else if($tipo_conta == 'A'){
@@ -292,12 +292,18 @@ class SolicitacaoController extends Controller
             $status = Status::where('tipo_status','Iniciou Cotação')->get()->first();
 
         }else if($tipo_conta == 'AD'){
-            $status = Status::where('tipo_status','Aprovado pelo Adminstrador')->get()->first();
+            $status = Status::where('tipo_status','Aprovado pelo Administrador')->get()->first();
         }
     
         if($status == null){
             return back()->withErrors('Status não encontrado.');
         }
+        
+        $solicitacao->id_status = $status->id;
+        $solicitacao->save();
+
+        //enviando que foi aprovado
+        $this->setHistorico($solicitacao);
         
         $message = '';
         if($solicitacao->save()){
@@ -305,8 +311,6 @@ class SolicitacaoController extends Controller
         }else{
             return back()->withErrors('Status da solicitacação não alterado.');
         }
-
-        $this->setHistorico($solicitacao);
 
         return redirect()->route('listar_solicitacao')->with('success', $message);
     }
