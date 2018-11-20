@@ -147,6 +147,9 @@ Route::group(['middleware' => 'menu'], function () {
     //Solicitacao Produtos
 
     //Solicitacao Servicos
+      //relatorio 
+    Route::get('/relatorios', 'RelatorioController@index')->name('relatorio');
+
 
 });
 
@@ -154,6 +157,5 @@ Auth::routes();
 
 // Route::get('/home', 'HomeController@index')->name('home');
 
-  //relatorio 
 
-  Route::get('/relatorios', 'RelatorioController@index')->name('relatorio');
+
