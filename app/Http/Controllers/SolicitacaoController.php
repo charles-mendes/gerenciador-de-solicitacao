@@ -242,14 +242,15 @@ class SolicitacaoController extends Controller
 
     public function cadastrar_aprovacao(Request $request){
         $this->validate($request,[
-            'id_solicitacao'=>'required|numeric',
+            'id_solicitacao'=>'required',
         ]);
 
         $solicitacao = Solicitacao::find($request->input('id_solicitacao'));
         
+        
         //pegando status
         $tipo_conta = Auth::user()->tipo_conta;
-
+        
         if($tipo_conta == 'D'){
             $status = Status::where('tipo_status','Aprovado pela Diretoria')->get()->first();
         }else if($tipo_conta == 'A'){
@@ -257,7 +258,9 @@ class SolicitacaoController extends Controller
         }else if($tipo_conta == 'C'){
             //tenho que gravar no historico que foi aprovado pelo comprador e que inicio cotação
             $status = Status::where('tipo_status','Aprovado pelo Comprador')->get()->first();
-
+            if($status == null){
+                return back()->withErrors('Status não encontrado.');
+            }
             $solicitacao->id_status = $status->id;
             $solicitacao->save();
             
@@ -269,17 +272,21 @@ class SolicitacaoController extends Controller
         }else if($tipo_conta == 'AD'){
             $status = Status::where('tipo_status','Aprovado pelo Adminstrador')->get()->first();
         }
-
+    
         if($status == null){
-            return back();
+            return back()->withErrors('Status não encontrado.');
         }
-
-        $solicitacao->id_status = $status->id;
-        $solicitacao->save();
+        
+        $message = '';
+        if($solicitacao->save()){
+            $message = "Status da Solicitação (".$solicitacao->descricao.") alterado com sucesso!, status alterado para : ".$status->tipo_status;
+        }else{
+            return back()->withErrors('Status da solicitacação não alterado.');
+        }
 
         $this->setHistorico($solicitacao);
 
-        return redirect()->route('listar_solicitacao');
+        return redirect()->route('listar_solicitacao')->with('success', $message);
     }
 
     public function justificativa($id){
