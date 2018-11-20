@@ -156,6 +156,10 @@
                                     </div>
                                 </div>
                             </div>
+                            <form id="cadastrar_aprovacao" action="{{route('cadastrar_aprovacao')}}" method="POST">
+                                @csrf
+                                <input type="hidden" name="id_solicitacao" value="{{isset($id) ? $id :''}}">
+                            </form>
                         </div>
                     @endif
                 </div>

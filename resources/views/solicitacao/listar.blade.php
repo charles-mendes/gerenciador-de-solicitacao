@@ -34,6 +34,12 @@
 
 @section('content')
         <div class="col-lg-12">
+            @if($message = Session::get('success'))
+                <div class="alert alert-success">
+                    {{$message}}
+                </div>
+            @endif
+
             @if(count($errors)>0)
                 <div class="alert alert-danger">
                     <ul class="mb-0">
@@ -43,6 +49,7 @@
                     </ul>
                 </div>
             @endif
+
             <div class="card">
                 <div class="card-block">
                     <h4 class="card-title">Listar Solicitações 

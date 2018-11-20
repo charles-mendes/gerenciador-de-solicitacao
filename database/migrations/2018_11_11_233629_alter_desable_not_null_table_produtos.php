@@ -14,9 +14,9 @@ class AlterDesableNotNullTableProdutos extends Migration
     public function up()
     {
         Schema::table('produto', function (Blueprint $table) {
-            $table->float('valor')->nullable()->change();
-            $table->float('valor_imposto')->nullable()->change();
-            $table->string('link_oferta')->nullable()->change();
+            // $table->float('valor')->nullable()->change();
+            // $table->float('valor_imposto')->nullable()->change();
+            // $table->string('link_oferta')->nullable()->change();
         });
     }
 
