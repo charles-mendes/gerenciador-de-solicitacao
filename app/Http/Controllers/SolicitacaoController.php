@@ -87,7 +87,7 @@ class SolicitacaoController extends Controller
             $usuario = Auth::user()->tipo_conta;
             
             $status = '';
-            $falta_preencher = true;
+            $falta_preencher = false;
             $total = 0;
 
             $status_atual_solicitacao =  Status::find($solicitacao->id_status);
@@ -133,44 +133,31 @@ class SolicitacaoController extends Controller
             
 
 
-            if($status_atual_solicitacao->tipo_conta == 'Iniciou Cotação'){
+            if($status_atual_solicitacao->tipo_status == 'Iniciou Cotação'){
                 $status = 'Iniciou Cotação';
-
-                //soma valor da solicitação 
-                $total = null;
-                $falta_preencher = false;
-                if($solicitacao->produtos->first() == null && $solicitacao->servicos->first() == null){
-                    $falta_preencher = true;
-                }else{
-                    foreach($solicitacao->produtos as $produto){
-                        if(is_numeric($produto->valor)){
-                            $total += $produto->valor;
-                        }else{
-                            $falta_preencher = true;
-                        }
-                    }
-                    if($falta_preencher == false){
-                        foreach($solicitacao->servicos as $servico){
-                            if(is_numeric($servico->valor)){
-                                $total += $servico->valor;
-                            }else{
-                                $falta_preencher = true;
-                            }
-                        }
-                    }
-
-
-                } 
+                $this->somaValorSolicitacao($solicitacao);
+                
             }
 
-            if($status_atual_solicitacao->tipo_conta == 'Em processo de execução'){
+            if($status_atual_solicitacao->tipo_status == 'Em processo de execução'){
                 $status = 'Em processo de execução';
             }
 
-            if($status_atual_solicitacao->tipo_conta == 'Finalizada'){
+            if($status_atual_solicitacao->tipo_status == 'Finalizada'){
                 $status = 'Finalizada';
             }
-            
+
+            if($status_atual_solicitacao->tipo_status == 'Aprovado pelo Administrador' && Auth::user()->tipo_conta == 'AD'){
+                $status = 'Aprovado pelo Administrador';
+            }else if($status_atual_solicitacao->tipo_status == 'Aprovado pelo Administrador' && Auth::user()->tipo_conta == 'C'){
+                $status = 'Iniciou Cotação';
+                $this->somaValorSolicitacao($solicitacao);
+            }
+
+            if($status_atual_solicitacao->tipo_status == 'Pendente'){
+                $status = 'Pendente';
+            }
+            // dd($falta_preencher);
             
             if($usuario == 'AD' || $usuario == 'A' || $usuario == 'C' || $usuario == 'D'){
                 return view('solicitacao.aprova',[
@@ -183,6 +170,34 @@ class SolicitacaoController extends Controller
             }
         }
         return back();
+    }
+
+    private function somaValorSolicitacao($solicitacao){
+        //soma valor da solicitação 
+        $total = null;
+        $falta_preencher = false;
+        if($solicitacao->produtos->first() == null && $solicitacao->servicos->first() == null){
+            $falta_preencher = true;
+        }else{
+            foreach($solicitacao->produtos as $produto){
+                if(is_numeric($produto->valor)){
+                    $total += $produto->valor;
+                }else{
+                    $falta_preencher = true;
+                }
+            }
+            if($falta_preencher == false){
+                foreach($solicitacao->servicos as $servico){
+                    if(is_numeric($servico->valor)){
+                        $total += $servico->valor;
+                    }else{
+                        $falta_preencher = true;
+                    }
+                }
+            }
+
+
+        } 
     }
 
     public function mostrar_verificacao_diretoria($id){
@@ -272,7 +287,7 @@ class SolicitacaoController extends Controller
         
         //pegando status
         $tipo_conta = Auth::user()->tipo_conta;
-        
+
         if($tipo_conta == 'D'){
             $status = Status::where('tipo_status','Aprovado pela Diretoria')->get()->first();
         }else if($tipo_conta == 'A'){
@@ -292,12 +307,18 @@ class SolicitacaoController extends Controller
             $status = Status::where('tipo_status','Iniciou Cotação')->get()->first();
 
         }else if($tipo_conta == 'AD'){
-            $status = Status::where('tipo_status','Aprovado pelo Adminstrador')->get()->first();
+            $status = Status::where('tipo_status','Aprovado pelo Administrador')->get()->first();
         }
     
         if($status == null){
             return back()->withErrors('Status não encontrado.');
         }
+        
+        $solicitacao->id_status = $status->id;
+        $solicitacao->save();
+
+        //enviando que foi aprovado
+        $this->setHistorico($solicitacao);
         
         $message = '';
         if($solicitacao->save()){
@@ -305,8 +326,6 @@ class SolicitacaoController extends Controller
         }else{
             return back()->withErrors('Status da solicitacação não alterado.');
         }
-
-        $this->setHistorico($solicitacao);
 
         return redirect()->route('listar_solicitacao')->with('success', $message);
     }
@@ -436,7 +455,6 @@ class SolicitacaoController extends Controller
         //salvando historico da solicitação
         $historico = new HistoricoSolicitacao();
         $historico->id_solicitacao = $solicitacao->id;
-        $historico->id_solicitacao = $solicitacao->id_status;
         $historico->id_status = $solicitacao->id_status;
         $historico->id_usuario = Auth::user()->id;
         $historico->data_modificacao = time();
@@ -467,10 +485,11 @@ class SolicitacaoController extends Controller
         
         //pegando solicitacao da session
         $solicitacaoSession = session('novaSolicitacao');
-        // dd($solicitacaoSession);
-        foreach ($solicitacaoSession as $key => $categoria) {
-            if($key == 'produtos'){
-                foreach($categoria as $item){
+        
+        //verificar se produto ou servico esta preenchido na solicitação 
+        if(isset($solicitacaoSession->produtos) || isset($solicitacaoSession->servicos)){
+            if(isset($solicitacaoSession->produtos)){                
+                foreach ($solicitacaoSession->produtos as $item) {
                     //criado produto para enviar
                     $produto = new \stdClass;
                     $produto->nome = $item->nome;
@@ -478,6 +497,7 @@ class SolicitacaoController extends Controller
                     $produto->valor = $item->valor;
                     $produto->descricao = $item->descricao;
                     $produto->id_criador = $item->id_criador;
+                    $produto->data_criacao = $item->data_criacao;
                     $produto->id_modificador = $item->id_modificador;
                     $produto->data_modificacao = $item->data_modificacao;
 
@@ -493,16 +513,15 @@ class SolicitacaoController extends Controller
                 }
             }
             
-           
-            if($key == 'servicos'){
-                // dd($categoria);
-                foreach($categoria as $item){
+            if(isset($solicitacaoSession->servicos)){
+                foreach($solicitacaoSession->servicos as $item){
                     //criado produto para enviar
                     $servico = new \stdClass;
                     $servico->nome = $item->nome;
                     $servico->valor = $item->valor;
                     $servico->descricao = $item->descricao;
                     $servico->id_criador = $item->id_criador;
+                    $servico->data_criacao = $item->data_criacao;
                     $servico->id_modificador = $item->id_modificador;
                     $servico->data_modificacao = $item->data_modificacao;
 
@@ -515,13 +534,13 @@ class SolicitacaoController extends Controller
                     $solicitacao_servico->id_servico = $servico->id;
                     $solicitacao_servico->save();
                 }
-
-            }
+            }    
+                
+            //envia email após criar solicitação 
+            //Para tipo A e tipo C
+            $mailController = new MailController();
+            $mailController->solicitacaoPendente($solicitacao->id);
         }
-
-        //envia email após criar solicitação
-        $mailController = new MailController();
-        $mailController->solicitacaoPendente($solicitacao->id);
 
 
         return redirect()->route('listar_solicitacao');
@@ -565,6 +584,20 @@ class SolicitacaoController extends Controller
             // 'id_solicitacao'=>'required',
             'descricao' => 'required',
         ]);
+        /*
+        {#248 ▼
+            +"produtos": array:2 [▼
+            0 => {#249 ▶}
+            1 => {#250 ▶}
+            ]
+            +"servicos": array:1 [▼
+            0 => {#251 ▶}
+            ]
+            +"descricao": "ertre eterte erter"
+            +"id_modificador": 6
+            +"data_modificacao": 1542781761
+        }
+        */
 
         if(session()->has('novaSolicitacao')){
             $solicitacao = session('novaSolicitacao');
@@ -574,37 +607,40 @@ class SolicitacaoController extends Controller
             $solicitacao->save();
             
             //salvando alterações no produto
-            foreach($solicitacao->produtos as $produto){
-                if(isset($produto->id) && is_numeric($produto->id)){
-                    //salvando alteração em objeto
-                    $produto->save();
-                }else{
-                    //salva produto
-                    $produtoController = new ProdutoController();
-                    $produto = $produtoController->cadastrar_produto($produto);
-                    
-                    //salva registro na tabela auxiliar
-                    $solicitacao_produto = new Detalhe_Solicitacao_Produto();
-                    $solicitacao_produto->id_solicitacao = $solicitacao->id;
-                    $solicitacao_produto->id_produto = $produto->id;
-                    $solicitacao_produto->save();
+            if(isset($solicitacao->produtos)){
+                foreach($solicitacao->produtos as $produto){
+                    if(isset($produto->id) && is_numeric($produto->id)){
+                        //salvando alteração em objeto
+                        $produto->save();
+                    }else{
+                        //salva produto
+                        $produtoController = new ProdutoController();
+                        $produto = $produtoController->cadastrar_produto($produto);
+                        
+                        //salva registro na tabela auxiliar
+                        $solicitacao_produto = new Detalhe_Solicitacao_Produto();
+                        $solicitacao_produto->id_solicitacao = $solicitacao->id;
+                        $solicitacao_produto->id_produto = $produto->id;
+                        $solicitacao_produto->save();
+                    }
                 }
-            }
+            }    
+            if(isset($solicitacao->servicos)){
+                //salvando alterações no servico
+                foreach($solicitacao->servicos as $servico){
+                    if(isset($servico->id) && is_numeric($servico->id)){
+                        //salvando alteração em objeto
+                        $servico->save();
+                    }else{
+                        $servicoController = new ServicoController();
+                        $servico = $servicoController->cadastrar_servico($servico);
 
-            //salvando alterações no servico
-            foreach($solicitacao->servicos as $servico){
-                if(isset($servico->id) && is_numeric($servico->id)){
-                    //salvando alteração em objeto
-                    $servico->save();
-                }else{
-                    $servicoController = new ServicoController();
-                    $servico = $servicoController->cadastrar_servico($servico);
-
-                    //salva registro na tabela auxiliar
-                    $solicitacao_servico  = new Detalhe_Solicitacao_Servico();
-                    $solicitacao_servico->id_solicitacao = $solicitacao->id;
-                    $solicitacao_servico->id_servico = $servico->id;
-                    $solicitacao_servico->save();
+                        //salva registro na tabela auxiliar
+                        $solicitacao_servico  = new Detalhe_Solicitacao_Servico();
+                        $solicitacao_servico->id_solicitacao = $solicitacao->id;
+                        $solicitacao_servico->id_servico = $servico->id;
+                        $solicitacao_servico->save();
+                    }
                 }
             }
 

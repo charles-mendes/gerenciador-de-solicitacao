@@ -35,6 +35,10 @@
             @endif
             <div class="card">
                 <div class="card-block">
+                    @if($status == 'Pendente')    
+                        <h4 class="card-title text-center">Avaliar Solicitação</h4>
+                        <h4 class="card-title text-center">Você deseja aprovar está solicitação ?</h4>
+                    @endif
                     @if($status == 'Iniciou Cotação')    
                         <h4 class="card-title text-center">Finalize a Cotação</h4>
                         <h4 class="card-title text-center">Você deseja finalizar o preenchimento da cotação ?</h4>
@@ -46,11 +50,11 @@
                     @if($status == 'Finalizada')    
                         <h4 class="card-title text-center">Solicitação Finalizada</h4>
                         {{-- <h4 class="card-title text-center">Você deseja finalizar o processo da solicitação ?</h4> --}}
-                    @else
-                        <h4 class="card-title text-center">Avaliar Solicitação</h4>
-                        <h4 class="card-title text-center">Você deseja aprovar está solicitação ?</h4>
                     @endif
-                    
+                    @if($status == 'Aprovado pelo Administrador')    
+                        <h4 class="card-title text-center">Solicitação Aprovada pelo Administrador</h4>
+                        {{-- <h4 class="card-title text-center">Você deseja finalizar o processo da solicitação ?</h4> --}}    
+                    @endif
                     
                     <h3 class="pt-4 text-center">Produtos</h3>
                     @if($solicitacao->produtos->first() == [])
@@ -134,7 +138,7 @@
                             </div>
                         </div>
                     @endif
-                    @if($status == 'Finalizada')
+                    @if($status == 'Finalizada' || $status == 'Aprovado pelo Administrador')
                         <div class="row">
                             <div class="col-4 offset-4 text-center pt-3">
                                 <div class="row">
@@ -144,15 +148,16 @@
                                 </div>
                             </div>
                         </div>
-                    @else
+                    @endif
+                    @if($status == 'Pendente')
                         <div class="row">
-                            <div class="col-4 offset-4 text-center pt-3">
+                            <div class="col-12 text-center pt-3">
                                 <div class="row">
                                     <div class="col-6">
-                                        <button type="button" class="btn btn-danger" data-id="{{$id}}" onclick="justificarMotivo(this);">Não</button>
+                                        <button type="button" class="btn btn-danger" data-id="{{$id}}" onclick="justificarMotivo(this);">Não Aprovar</button>
                                     </div>
                                     <div class="col-6"> 
-                                        <button type="button" class="btn btn-primary" data-id="{{$id}}" onclick="aprovarSolicitacao();">Sim</button>
+                                        <button type="button" class="btn btn-primary" data-id="{{$id}}" onclick="aprovarSolicitacao();">Aprovar</button>
                                     </div>
                                 </div>
                             </div>

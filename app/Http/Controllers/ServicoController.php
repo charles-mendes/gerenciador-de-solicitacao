@@ -20,10 +20,10 @@ class ServicoController extends Controller
         $servico->nome = $item->nome;
         $servico->valor = $item->valor;
         $servico->descricao = $item->descricao;
-        // $servico->id_criador = $item->id_criador;
-        // $servico->data_criacao = isset($item->data_criacao) ?  $item->data_criacao : time();
-        // $servico->id_modificador = $item->id_modificador;
-        // $servico->data_modificacao = isset($item->data_modificacao) ? $item->data_modificacao : time();
+        $servico->id_criador = $item->id_criador;
+        $servico->data_criacao = $item->data_criacao;
+        $servico->id_modificador = $item->id_modificador;
+        $servico->data_modificacao = $item->data_modificacao;
         $servico->save();
         
         return $servico;
