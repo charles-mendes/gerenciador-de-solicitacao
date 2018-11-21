@@ -471,58 +471,62 @@ class SolicitacaoController extends Controller
         
         //pegando solicitacao da session
         $solicitacaoSession = session('novaSolicitacao');
-        // dd($solicitacaoSession->produtos[2]);
+        
+        //verificar se produto ou servico esta preenchido na solicitação 
+        if(isset($solicitacaoSession->produtos) || isset($solicitacaoSession->servicos)){
+            if(isset($solicitacaoSession->produtos)){                
+                foreach ($solicitacaoSession->produtos as $item) {
+                    //criado produto para enviar
+                    $produto = new \stdClass;
+                    $produto->nome = $item->nome;
+                    $produto->quantidade = $item->quantidade;
+                    $produto->valor = $item->valor;
+                    $produto->descricao = $item->descricao;
+                    $produto->id_criador = $item->id_criador;
+                    $produto->data_criacao = $item->data_criacao;
+                    $produto->id_modificador = $item->id_modificador;
+                    $produto->data_modificacao = $item->data_modificacao;
 
-        foreach ($solicitacaoSession->produtos as $item) {
-            //criado produto para enviar
-            $produto = new \stdClass;
-            $produto->nome = $item->nome;
-            $produto->quantidade = $item->quantidade;
-            $produto->valor = $item->valor;
-            $produto->descricao = $item->descricao;
-            $produto->id_criador = $item->id_criador;
-            $produto->data_criacao = $item->data_criacao;
-            $produto->id_modificador = $item->id_modificador;
-            $produto->data_modificacao = $item->data_modificacao;
-
-            //salva produto
-            $produtoController = new ProdutoController();
-            $produto = $produtoController->cadastrar_produto($produto);
+                    //salva produto
+                    $produtoController = new ProdutoController();
+                    $produto = $produtoController->cadastrar_produto($produto);
+                    
+                    //salva registro na tabela auxiliar
+                    $solicitacao_produto = new Detalhe_Solicitacao_Produto();
+                    $solicitacao_produto->id_solicitacao = $solicitacao->id;
+                    $solicitacao_produto->id_produto = $produto->id;
+                    $solicitacao_produto->save();
+                }
+            }
             
-            //salva registro na tabela auxiliar
-            $solicitacao_produto = new Detalhe_Solicitacao_Produto();
-            $solicitacao_produto->id_solicitacao = $solicitacao->id;
-            $solicitacao_produto->id_produto = $produto->id;
-            $solicitacao_produto->save();
+            if(isset($solicitacaoSession->servicos)){
+                foreach($solicitacaoSession->servicos as $item){
+                    //criado produto para enviar
+                    $servico = new \stdClass;
+                    $servico->nome = $item->nome;
+                    $servico->valor = $item->valor;
+                    $servico->descricao = $item->descricao;
+                    $servico->id_criador = $item->id_criador;
+                    $servico->data_criacao = $item->data_criacao;
+                    $servico->id_modificador = $item->id_modificador;
+                    $servico->data_modificacao = $item->data_modificacao;
+
+                    $servicoController = new ServicoController();
+                    $servico = $servicoController->cadastrar_servico($servico);
+
+                    //salva registro na tabela auxiliar
+                    $solicitacao_servico  = new Detalhe_Solicitacao_Servico();
+                    $solicitacao_servico->id_solicitacao = $solicitacao->id;
+                    $solicitacao_servico->id_servico = $servico->id;
+                    $solicitacao_servico->save();
+                }
+            }    
+                
+            //envia email após criar solicitação 
+            //Para tipo A e tipo C
+            $mailController = new MailController();
+            $mailController->solicitacaoPendente($solicitacao->id);
         }
-        
-        
-        foreach($solicitacaoSession->servicos as $item){
-            //criado produto para enviar
-            $servico = new \stdClass;
-            $servico->nome = $item->nome;
-            $servico->valor = $item->valor;
-            $servico->descricao = $item->descricao;
-            $servico->id_criador = $item->id_criador;
-            $servico->data_criacao = $item->data_criacao;
-            $servico->id_modificador = $item->id_modificador;
-            $servico->data_modificacao = $item->data_modificacao;
-
-            $servicoController = new ServicoController();
-            $servico = $servicoController->cadastrar_servico($servico);
-
-            //salva registro na tabela auxiliar
-            $solicitacao_servico  = new Detalhe_Solicitacao_Servico();
-            $solicitacao_servico->id_solicitacao = $solicitacao->id;
-            $solicitacao_servico->id_servico = $servico->id;
-            $solicitacao_servico->save();
-        }
-        
-
-        //envia email após criar solicitação 
-        //Para tipo A e tipo C
-        $mailController = new MailController();
-        $mailController->solicitacaoPendente($solicitacao->id);
 
 
         return redirect()->route('listar_solicitacao');
