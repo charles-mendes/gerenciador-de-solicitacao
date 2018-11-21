@@ -87,7 +87,7 @@ class SolicitacaoController extends Controller
             $usuario = Auth::user()->tipo_conta;
             
             $status = '';
-            $falta_preencher = true;
+            $falta_preencher = false;
             $total = 0;
 
             $status_atual_solicitacao =  Status::find($solicitacao->id_status);
@@ -157,7 +157,7 @@ class SolicitacaoController extends Controller
             if($status_atual_solicitacao->tipo_status == 'Pendente'){
                 $status = 'Pendente';
             }
-            
+            // dd($falta_preencher);
             
             if($usuario == 'AD' || $usuario == 'A' || $usuario == 'C' || $usuario == 'D'){
                 return view('solicitacao.aprova',[
