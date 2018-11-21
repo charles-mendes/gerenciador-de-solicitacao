@@ -471,59 +471,56 @@ class SolicitacaoController extends Controller
         
         //pegando solicitacao da session
         $solicitacaoSession = session('novaSolicitacao');
-        // dd($solicitacaoSession);
-        foreach ($solicitacaoSession as $key => $categoria) {
-            if($key == 'produtos'){
-                foreach($categoria as $item){
-                    //criado produto para enviar
-                    $produto = new \stdClass;
-                    $produto->nome = $item->nome;
-                    $produto->quantidade = $item->quantidade;
-                    $produto->valor = $item->valor;
-                    $produto->descricao = $item->descricao;
-                    $produto->id_criador = $item->id_criador;
-                    $produto->id_modificador = $item->id_modificador;
-                    $produto->data_modificacao = $item->data_modificacao;
+        // dd($solicitacaoSession->produtos[2]);
 
-                    //salva produto
-                    $produtoController = new ProdutoController();
-                    $produto = $produtoController->cadastrar_produto($produto);
-                    
-                    //salva registro na tabela auxiliar
-                    $solicitacao_produto = new Detalhe_Solicitacao_Produto();
-                    $solicitacao_produto->id_solicitacao = $solicitacao->id;
-                    $solicitacao_produto->id_produto = $produto->id;
-                    $solicitacao_produto->save();
-                }
-            }
+        foreach ($solicitacaoSession->produtos as $item) {
+            //criado produto para enviar
+            $produto = new \stdClass;
+            $produto->nome = $item->nome;
+            $produto->quantidade = $item->quantidade;
+            $produto->valor = $item->valor;
+            $produto->descricao = $item->descricao;
+            $produto->id_criador = $item->id_criador;
+            $produto->data_criacao = $item->data_criacao;
+            $produto->id_modificador = $item->id_modificador;
+            $produto->data_modificacao = $item->data_modificacao;
+
+            //salva produto
+            $produtoController = new ProdutoController();
+            $produto = $produtoController->cadastrar_produto($produto);
             
-           
-            if($key == 'servicos'){
-                // dd($categoria);
-                foreach($categoria as $item){
-                    //criado produto para enviar
-                    $servico = new \stdClass;
-                    $servico->nome = $item->nome;
-                    $servico->valor = $item->valor;
-                    $servico->descricao = $item->descricao;
-                    $servico->id_criador = $item->id_criador;
-                    $servico->id_modificador = $item->id_modificador;
-                    $servico->data_modificacao = $item->data_modificacao;
-
-                    $servicoController = new ServicoController();
-                    $servico = $servicoController->cadastrar_servico($servico);
-
-                    //salva registro na tabela auxiliar
-                    $solicitacao_servico  = new Detalhe_Solicitacao_Servico();
-                    $solicitacao_servico->id_solicitacao = $solicitacao->id;
-                    $solicitacao_servico->id_servico = $servico->id;
-                    $solicitacao_servico->save();
-                }
-
-            }
+            //salva registro na tabela auxiliar
+            $solicitacao_produto = new Detalhe_Solicitacao_Produto();
+            $solicitacao_produto->id_solicitacao = $solicitacao->id;
+            $solicitacao_produto->id_produto = $produto->id;
+            $solicitacao_produto->save();
         }
+        
+        
+        foreach($solicitacaoSession->servicos as $item){
+            //criado produto para enviar
+            $servico = new \stdClass;
+            $servico->nome = $item->nome;
+            $servico->valor = $item->valor;
+            $servico->descricao = $item->descricao;
+            $servico->id_criador = $item->id_criador;
+            $servico->data_criacao = $item->data_criacao;
+            $servico->id_modificador = $item->id_modificador;
+            $servico->data_modificacao = $item->data_modificacao;
 
-        //envia email após criar solicitação
+            $servicoController = new ServicoController();
+            $servico = $servicoController->cadastrar_servico($servico);
+
+            //salva registro na tabela auxiliar
+            $solicitacao_servico  = new Detalhe_Solicitacao_Servico();
+            $solicitacao_servico->id_solicitacao = $solicitacao->id;
+            $solicitacao_servico->id_servico = $servico->id;
+            $solicitacao_servico->save();
+        }
+        
+
+        //envia email após criar solicitação 
+        //Para tipo A e tipo C
         $mailController = new MailController();
         $mailController->solicitacaoPendente($solicitacao->id);
 

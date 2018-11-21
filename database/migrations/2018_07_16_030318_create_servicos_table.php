@@ -18,6 +18,10 @@ class CreateServicosTable extends Migration
             $table->string('nome');
             $table->float('valor');
             $table->string('descricao');
+            $table->integer('id_criador');
+            $table->timestamp('data_criacao');
+            $table->integer('id_modificador');
+            $table->timestamp('data_modificacao')->nullable();
 
         });
     }

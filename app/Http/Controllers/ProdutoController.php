@@ -14,17 +14,15 @@ class ProdutoController extends Controller
     }
     
     public function cadastrar_produto($item){
-        // $verifica = is_null($item) ? false : true;
         $produto = new Produto();
-        //verificar nome do campo name ou nome
         $produto->nome = $item->nome;
         $produto->quantidade = $item->quantidade;
         $produto->valor = $item->valor;
         $produto->descricao = $item->descricao;
         $produto->id_criador = $item->id_criador;
-        $produto->data_criacao = isset($item->data_criacao) ? $item->data_criacao : time() ;
+        $produto->data_criacao = $item->data_criacao;
         $produto->id_modificador = $item->id_modificador;
-        $produto->data_modificacao = isset($item->data_modificacao) ? $item->data_modificacao : time();
+        $produto->data_modificacao = $item->data_modificacao;
         $produto->save();
 
         return $produto;
