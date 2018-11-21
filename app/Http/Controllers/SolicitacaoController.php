@@ -455,7 +455,6 @@ class SolicitacaoController extends Controller
         //salvando historico da solicitação
         $historico = new HistoricoSolicitacao();
         $historico->id_solicitacao = $solicitacao->id;
-        $historico->id_solicitacao = $solicitacao->id_status;
         $historico->id_status = $solicitacao->id_status;
         $historico->id_usuario = Auth::user()->id;
         $historico->data_modificacao = time();
