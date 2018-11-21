@@ -135,32 +135,8 @@ class SolicitacaoController extends Controller
 
             if($status_atual_solicitacao->tipo_status == 'Iniciou Cotação'){
                 $status = 'Iniciou Cotação';
-
-                //soma valor da solicitação 
-                $total = null;
-                $falta_preencher = false;
-                if($solicitacao->produtos->first() == null && $solicitacao->servicos->first() == null){
-                    $falta_preencher = true;
-                }else{
-                    foreach($solicitacao->produtos as $produto){
-                        if(is_numeric($produto->valor)){
-                            $total += $produto->valor;
-                        }else{
-                            $falta_preencher = true;
-                        }
-                    }
-                    if($falta_preencher == false){
-                        foreach($solicitacao->servicos as $servico){
-                            if(is_numeric($servico->valor)){
-                                $total += $servico->valor;
-                            }else{
-                                $falta_preencher = true;
-                            }
-                        }
-                    }
-
-
-                } 
+                $this->somaValorSolicitacao($solicitacao);
+                
             }
 
             if($status_atual_solicitacao->tipo_status == 'Em processo de execução'){
@@ -171,8 +147,15 @@ class SolicitacaoController extends Controller
                 $status = 'Finalizada';
             }
 
-            if($status_atual_solicitacao->tipo_status == 'Aprovado pelo Administrador'){
+            if($status_atual_solicitacao->tipo_status == 'Aprovado pelo Administrador' && Auth::user()->tipo_conta == 'AD'){
                 $status = 'Aprovado pelo Administrador';
+            }else if($status_atual_solicitacao->tipo_status == 'Aprovado pelo Administrador' && Auth::user()->tipo_conta == 'C'){
+                $status = 'Iniciou Cotação';
+                $this->somaValorSolicitacao($solicitacao);
+            }
+
+            if($status_atual_solicitacao->tipo_status == 'Pendente'){
+                $status = 'Pendente';
             }
             
             
@@ -187,6 +170,34 @@ class SolicitacaoController extends Controller
             }
         }
         return back();
+    }
+
+    private function somaValorSolicitacao($solicitacao){
+        //soma valor da solicitação 
+        $total = null;
+        $falta_preencher = false;
+        if($solicitacao->produtos->first() == null && $solicitacao->servicos->first() == null){
+            $falta_preencher = true;
+        }else{
+            foreach($solicitacao->produtos as $produto){
+                if(is_numeric($produto->valor)){
+                    $total += $produto->valor;
+                }else{
+                    $falta_preencher = true;
+                }
+            }
+            if($falta_preencher == false){
+                foreach($solicitacao->servicos as $servico){
+                    if(is_numeric($servico->valor)){
+                        $total += $servico->valor;
+                    }else{
+                        $falta_preencher = true;
+                    }
+                }
+            }
+
+
+        } 
     }
 
     public function mostrar_verificacao_diretoria($id){
@@ -574,6 +585,20 @@ class SolicitacaoController extends Controller
             // 'id_solicitacao'=>'required',
             'descricao' => 'required',
         ]);
+        /*
+        {#248 ▼
+            +"produtos": array:2 [▼
+            0 => {#249 ▶}
+            1 => {#250 ▶}
+            ]
+            +"servicos": array:1 [▼
+            0 => {#251 ▶}
+            ]
+            +"descricao": "ertre eterte erter"
+            +"id_modificador": 6
+            +"data_modificacao": 1542781761
+        }
+        */
 
         if(session()->has('novaSolicitacao')){
             $solicitacao = session('novaSolicitacao');
@@ -583,37 +608,40 @@ class SolicitacaoController extends Controller
             $solicitacao->save();
             
             //salvando alterações no produto
-            foreach($solicitacao->produtos as $produto){
-                if(isset($produto->id) && is_numeric($produto->id)){
-                    //salvando alteração em objeto
-                    $produto->save();
-                }else{
-                    //salva produto
-                    $produtoController = new ProdutoController();
-                    $produto = $produtoController->cadastrar_produto($produto);
-                    
-                    //salva registro na tabela auxiliar
-                    $solicitacao_produto = new Detalhe_Solicitacao_Produto();
-                    $solicitacao_produto->id_solicitacao = $solicitacao->id;
-                    $solicitacao_produto->id_produto = $produto->id;
-                    $solicitacao_produto->save();
+            if(isset($solicitacao->produtos)){
+                foreach($solicitacao->produtos as $produto){
+                    if(isset($produto->id) && is_numeric($produto->id)){
+                        //salvando alteração em objeto
+                        $produto->save();
+                    }else{
+                        //salva produto
+                        $produtoController = new ProdutoController();
+                        $produto = $produtoController->cadastrar_produto($produto);
+                        
+                        //salva registro na tabela auxiliar
+                        $solicitacao_produto = new Detalhe_Solicitacao_Produto();
+                        $solicitacao_produto->id_solicitacao = $solicitacao->id;
+                        $solicitacao_produto->id_produto = $produto->id;
+                        $solicitacao_produto->save();
+                    }
                 }
-            }
+            }    
+            if(isset($solicitacao->servicos)){
+                //salvando alterações no servico
+                foreach($solicitacao->servicos as $servico){
+                    if(isset($servico->id) && is_numeric($servico->id)){
+                        //salvando alteração em objeto
+                        $servico->save();
+                    }else{
+                        $servicoController = new ServicoController();
+                        $servico = $servicoController->cadastrar_servico($servico);
 
-            //salvando alterações no servico
-            foreach($solicitacao->servicos as $servico){
-                if(isset($servico->id) && is_numeric($servico->id)){
-                    //salvando alteração em objeto
-                    $servico->save();
-                }else{
-                    $servicoController = new ServicoController();
-                    $servico = $servicoController->cadastrar_servico($servico);
-
-                    //salva registro na tabela auxiliar
-                    $solicitacao_servico  = new Detalhe_Solicitacao_Servico();
-                    $solicitacao_servico->id_solicitacao = $solicitacao->id;
-                    $solicitacao_servico->id_servico = $servico->id;
-                    $solicitacao_servico->save();
+                        //salva registro na tabela auxiliar
+                        $solicitacao_servico  = new Detalhe_Solicitacao_Servico();
+                        $solicitacao_servico->id_solicitacao = $solicitacao->id;
+                        $solicitacao_servico->id_servico = $servico->id;
+                        $solicitacao_servico->save();
+                    }
                 }
             }
 
