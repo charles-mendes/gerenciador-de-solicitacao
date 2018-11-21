@@ -46,6 +46,10 @@
                     @if($status == 'Finalizada')    
                         <h4 class="card-title text-center">Solicitação Finalizada</h4>
                         {{-- <h4 class="card-title text-center">Você deseja finalizar o processo da solicitação ?</h4> --}}
+                    @endif
+                    @if($status == 'Aprovado pelo Administrador')    
+                        <h4 class="card-title text-center">Solicitação Aprovada pelo Administrador</h4>
+                        {{-- <h4 class="card-title text-center">Você deseja finalizar o processo da solicitação ?</h4> --}}    
                     @else
                         <h4 class="card-title text-center">Avaliar Solicitação</h4>
                         <h4 class="card-title text-center">Você deseja aprovar está solicitação ?</h4>
@@ -134,7 +138,7 @@
                             </div>
                         </div>
                     @endif
-                    @if($status == 'Finalizada')
+                    @if($status == 'Finalizada' || $status == 'Aprovado pelo Administrador')
                         <div class="row">
                             <div class="col-4 offset-4 text-center pt-3">
                                 <div class="row">

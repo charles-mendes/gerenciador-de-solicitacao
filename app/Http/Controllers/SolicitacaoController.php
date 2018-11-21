@@ -133,7 +133,7 @@ class SolicitacaoController extends Controller
             
 
 
-            if($status_atual_solicitacao->tipo_conta == 'Iniciou Cotação'){
+            if($status_atual_solicitacao->tipo_status == 'Iniciou Cotação'){
                 $status = 'Iniciou Cotação';
 
                 //soma valor da solicitação 
@@ -163,12 +163,16 @@ class SolicitacaoController extends Controller
                 } 
             }
 
-            if($status_atual_solicitacao->tipo_conta == 'Em processo de execução'){
+            if($status_atual_solicitacao->tipo_status == 'Em processo de execução'){
                 $status = 'Em processo de execução';
             }
 
-            if($status_atual_solicitacao->tipo_conta == 'Finalizada'){
+            if($status_atual_solicitacao->tipo_status == 'Finalizada'){
                 $status = 'Finalizada';
+            }
+
+            if($status_atual_solicitacao->tipo_status == 'Aprovado pelo Administrador'){
+                $status = 'Aprovado pelo Administrador';
             }
             
             
