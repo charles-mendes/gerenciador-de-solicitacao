@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Solicitacao;
 use Illuminate\Http\Request;
 
 class RelatorioController extends Controller
@@ -12,8 +12,9 @@ class RelatorioController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        return view('relatorio.relatorio');
+    {   
+        $solicitacoes = Solicitacao::all();
+        return view('relatorio.relatorio',['solicitacoes' => $solicitacoes]);
     }
 
     /**
