@@ -30,7 +30,7 @@ class BuildMenu
                 $menu = [
                // 'Dashboard'   => ['link'=> '/dashboard','icone'=> "mdi mdi-gauge"],
                 'Solicitação' => ['link' => '/solicitacao','icone' =>  "mdi mdi-gauge"],
-                'Usuarios'    => ['link'=>'/usuarios','icone'=>"mdi mdi-table"],
+                //'Usuarios'    => ['link'=>'/usuarios','icone'=>"mdi mdi-table"],
                 'Fornecedor'  => ['link'=>'/fornecedor','icone'=>"mdi mdi-emoticon"],
                 'Relatorios'  => ['link'=>'/relatorios','icone'=>"mdi mdi-earth"],
                 ];
