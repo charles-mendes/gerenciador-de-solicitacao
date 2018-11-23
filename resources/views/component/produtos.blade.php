@@ -3,7 +3,7 @@
         @if(Auth::user()->tipo_conta == 'S')    
             <th>Nome</th>
             <th>Quantidade</th>
-            <th>Descricao</th>
+            <th>Descrição</th>
             @if(isset($acao) && $acao == true)
                 <th>Ações</th>
             @endif
@@ -11,7 +11,7 @@
             <th>Nome</th>
             <th>Quantidade</th>
             <th>Valor</th>
-            <th>Descricao</th>
+            <th>Descrição</th>
             @if(isset($acao) && $acao == true)
                 <th>Ações</th>
             @endif

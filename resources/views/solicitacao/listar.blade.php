@@ -53,9 +53,9 @@
             <div class="card">
                 <div class="card-block">
                     <h4 class="card-title">Listar Solicitações 
-                        <button type="button" class="btn btn-primary float-right" onclick="novaSolicitacao();">Nova Solicitacao</button>
+                        <button type="button" class="btn btn-primary float-right" onclick="novaSolicitacao();">Nova Solicitação</button>
                     </h4>
-                    <h6 class="card-subtitle">Lista os solicitações cadastrados no sistema.</h6>
+                    <h6 class="card-subtitle">Lista as solicitações cadastradas no sistema.</h6>
                     <div class="table-responsive">
                         <table id="example" class="display" style="width:100%">
                             <thead>
@@ -63,9 +63,9 @@
                                     {{-- <th>id</th> --}}
                                     <th>Descrição</th>
                                     <th>Criador</th>
-                                    <th>Data Criacao</th>
-                                    <th>Ultima Modificacao</th>
-                                    <th>Data Modificacao</th>
+                                    <th>Data Criação</th>
+                                    <th>Ultima Modificação</th>
+                                    <th>Data Modificação</th>
                                     <th>Status</th>
                                     <th>Ações</th>
                                 </tr>

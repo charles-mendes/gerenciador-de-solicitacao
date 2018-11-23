@@ -4,7 +4,7 @@
     @component(
         'layouts.component.breadcrumb',
         [
-            'title' => 'Listar Solicitações',
+            'title' => 'Relatório',
             'localizacoes' => [ ['Home', route('dashboard') ],['listar solicitacao', ''] ]
         ]
     )
@@ -55,7 +55,7 @@
 
             <div class="card">
                 <div class="card-block">
-                    <h4 class="card-title">Listar Solicitações 
+                    <h4 class="card-title">Relatório 
                         <button type="button" class="btn btn-primary float-right" onclick="novaSolicitacao();">Nova Solicitacao</button>
                     </h4>
                     <h6 class="card-subtitle">Lista os solicitações cadastrados no sistema.</h6>
@@ -74,9 +74,9 @@
                                 <tr>
                                     <th><strong>Descrição</strong></th>
                                     <th><strong>Criador</strong></th>
-                                    <th><strong>Data Criacao</strong></th>
-                                    <th><strong>Ultima Modificacao</strong></th>
-                                    <th><strong>Data Modificacao</strong></th>
+                                    <th><strong>Data Criação</strong></th>
+                                    <th><strong>Ultima Modificação</strong></th>
+                                    <th><strong>Data Modificação</strong></th>
                                     <th><strong>Status</strong></th>
                                 </tr>
 
@@ -103,7 +103,7 @@
                                           <th><strong>Nome</strong></th>
                                           <th><strong>Quantidade</strong></th>
                                           <th><strong>Valor</strong></th>
-                                          <th><strong>descricao</strong></th>
+                                          <th><strong>descrição</strong></th>
                                           {{-- <td><strong></strong></td> --}}
                                        </tr>   
                                        @foreach ($solicitacao->produtos as $item)
@@ -120,7 +120,7 @@
                                     
                                     @if(isset($solicitacao->servicos) && $solicitacao->servicos->first() !== null)
                                        <tr>
-                                          <td>Servico</td>
+                                          <td>Serviço</td>
                                           <td></td>
                                           <td></td>
                                           <td></td>
@@ -133,7 +133,7 @@
                                           <th></th>
                                           <th><strong>Nome</strong></th>
                                           <th><strong>Valor</strong></th>
-                                          <th><strong>descricao</strong></th>
+                                          <th><strong>descrição</strong></th>
                                        </tr>   
                                        @foreach ($solicitacao->servicos as $item)
                                           <tr>

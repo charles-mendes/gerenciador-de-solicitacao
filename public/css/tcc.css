@@ -17,3 +17,16 @@ margin-right: 50px;
     margin-right: 50px;
 
 }
+/* TELA DE LOGIN*/
+
+.titulo-tcc{
+    margin: auto;
+    margin-top: 5%;
+   
+}
+
+.titulo-tcc h1{
+    text-transform: uppercase;
+    text-align: center;
+    margin: auto;
+}

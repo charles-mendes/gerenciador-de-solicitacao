@@ -25,15 +25,18 @@
     <!-- Custom CSS -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 
+    <!-- nosso css -->
+    <link href="{{ asset('css/tcc.css') }}" rel="stylesheet">
     
 </head>
 <body>
      
-
-        <main class="py-4">
-            @yield('content')
-        </main>
-    </div>
+    <header class="titulo-tcc">
+        <h1 > Gerenciador de Solicitação</h1>
+    </header>
+    <main class="py-4">
+        @yield('content')
+    </main>
 </body>
 <script src="{{ asset('/plugins/jquery/jquery.min.js') }}"></script>
 <!-- <script src="{{ asset('/plugins/bootstrap/js/bootstrap.min.js') }}" defer></script> -->

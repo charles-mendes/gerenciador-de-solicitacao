@@ -9,7 +9,7 @@
     <meta name="author" content="Charles e Rafael">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/favicon.png') }}">
-    <title>TCC</title>
+    <title>Gerenciador de Solicitação</title>
     <!-- Bootstrap Core CSS -->
     <link href="{{ asset('plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- chartist CSS -->

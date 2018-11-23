@@ -54,7 +54,7 @@
 </head>    
 <body class="fix-header fix-sidebar card-no-border">
     <div>
-        <h3 style="text-align:center;">Detalhe da Solicitacao</h3>
+        <h3 style="text-align:center;">Detalhe da Solicitação</h3>
 
         <table style="width: 50%;" align="center" >
             <tr>
@@ -93,7 +93,7 @@
                     <tr>
                         <th>Nome</th>
                         <th>Quantidade</th>
-                        <th>Descricao</th>
+                        <th>Descrição</th>
                     </tr>
                 </thead>
                     
@@ -121,7 +121,7 @@
                 <thead>
                     <tr>
                         <th>Nome</th>
-                        <th>Descricao</th>
+                        <th>Descrição</th>
                     </tr>
                 </thead>
                 

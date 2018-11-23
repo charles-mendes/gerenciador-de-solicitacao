@@ -45,7 +45,7 @@
                                     <th>Status Contrato</th>
                                     <th>Telefone</th>
                                     <th>Email</th>
-                                    <th>Descricao</th>
+                                    <th>Descrição</th>
                                     <th>Produto/Servico</th>
                                     <th>Ações</th>
                                 </tr>
