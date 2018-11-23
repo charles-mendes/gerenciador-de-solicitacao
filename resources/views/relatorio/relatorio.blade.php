@@ -109,8 +109,11 @@
                                     </td>
                                     <td rowspan="3">ITEM 2</td>
                                     <td>Pruto</td>
-                                    <td>price1</td>
-                                    <td rowspan="3">ITEM 4</td>
+                                    @foreach ($collection as $item)
+                                        <td>price1</td>    
+                                        
+                                    @endforeach
+                                    
                                 </tr>  
 
                                  <tr>
