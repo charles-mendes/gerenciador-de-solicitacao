@@ -52,9 +52,14 @@ function avaliaSolicitacao(solicitacao){
 }
 
 $(document).ready(function () {
+    // $('#example').DataTable({
+    //     "language": {"url":"/plugins/datatables/language/Portuguese-Brasil.json"},
+    // });
 
-    $('#example').DataTable({
-        "language": {"url":"/plugins/datatables/language/Portuguese-Brasil.json"},
+     $('#example').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
     });
-
 });

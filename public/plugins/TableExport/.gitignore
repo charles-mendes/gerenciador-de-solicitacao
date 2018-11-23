@@ -1,0 +1,14 @@
+# ignore all files in the following directories
+.idea/
+*.iml
+/assets
+/index.html
+/search
+/test
+/module
+/docs/_book
+.jshintrc
+.DS_store
+*.ico
+bower_components
+node_modules

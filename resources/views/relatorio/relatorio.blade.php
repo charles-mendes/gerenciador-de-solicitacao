@@ -25,10 +25,13 @@
         }
     </style> --}}
     <link href="{{ asset('css/switch.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/TableExport/dist/css/tableexport.css') }}" rel="stylesheet">
 @endpush
 
 @push('scripts')
-    <script src="{{ asset('js/solicitacao/listar.js?t='.time()) }}"></script>
+    <script src="{{ asset('js/relatorio/listar.js?t='.time()) }}"></script>
+    <script src="{{ asset('plugins/TableExport/dist/js/tableexport.js?t='.time()) }}"></script>
+    <script src="{{ asset('plugins/FileSaver/dist/FileSaver.js?t='.time()) }}"></script>
 @endpush
 
 @php
@@ -60,8 +63,40 @@
                     </h4>
                     <h6 class="card-subtitle">Lista os solicitações cadastrados no sistema.</h6>
                     <div class="table-responsive">
+                        {{-- <table id="example" class="display" style="width:100%">
+                                <thead>
+                                        <tr>    
+                                            <th>Solicitacao</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>    
+                                        <td>Solicitacao</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                        </table> --}}
+
+                        
                         <table id="example" class="display" style="width:100%">
-                            {{-- <tr> --}}
+                                <thead>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                 </tr>
+                                </thead>
                                  @foreach($solicitacoes as $solicitacao)
                                  <tr>
                                     <td>Solicitacao {{$solicitacao->id}}</td>
@@ -104,7 +139,6 @@
                                           <th><strong>Quantidade</strong></th>
                                           <th><strong>Valor</strong></th>
                                           <th><strong>descricao</strong></th>
-                                          {{-- <td><strong></strong></td> --}}
                                        </tr>   
                                        @foreach ($solicitacao->produtos as $item)
                                           <tr>
@@ -143,12 +177,10 @@
                                              <td>{{$item->nome}}</td>
                                              <td>{{$item->valor}}</td>
                                              <td>{{$item->descricao}}</td>
-                                             {{-- <td><strong></strong></td> --}}
                                           </tr>  
                                        @endforeach
                                     @endif
                                 @endforeach
-                            {{-- </tbody> --}}
                         </table>
                     </div>
                 </div>

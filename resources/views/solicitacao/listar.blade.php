@@ -67,7 +67,7 @@
                                     <th>Ultima Modificacao</th>
                                     <th>Data Modificacao</th>
                                     <th>Status</th>
-                                    <th>Ações</th>
+                                    {{-- <th>Ações</th> --}}
                                 </tr>
                             </thead>
                         
@@ -80,8 +80,8 @@
                                         <td>{{ date('d/m/Y H:i:s' , strtotime($solicitacao->data_criacao))}}</td>
                                         <td>{{App\Usuario::find($solicitacao->id_modificador)->nome}}</td>
                                         <td>{{ date('d/m/Y H:i:s' , strtotime($solicitacao->data_modificacao))}}</td>
-                                        <td><span class="label label-success">{{App\Status::find($solicitacao->id_status)->tipo_status}}</span><td>
-                                            
+                                        <td><span class="label label-success">{{App\Status::find($solicitacao->id_status)->tipo_status}}</span></td>
+                                        {{-- <td>    
                                             <button type="button" class="btn btn-primary" data-id="{{$solicitacao->id}}" onclick="visualizarSoliciticoes(this);" data-toggle="tooltip" data-placement="right" title=""
                                                 data-original-title="Clique aqui para visualizar os detalhes deste usuário">
                                                     <i class="ti-eye"></i>
@@ -96,7 +96,7 @@
                                                     <a class="dropdown-item" data-id="{{$solicitacao->id}}" onclick="excluirSolicitacao(this);">Inativar</a>
                                                 </div>
                                             </div>
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>

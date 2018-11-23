@@ -24,7 +24,7 @@
     <link href="{{ asset('css/colors/blue.css') }}" id="theme" rel="stylesheet">
     <!-- Datatables-->
     {{-- <link href="{{ asset('plugins/datatables/media/css/dataTables.min.css') }}" rel="stylesheet"> --}}
-    <link href="{{ asset('plugins/datatables/media/css/jquery.dataTables_themeroller.css') }}" rel="stylesheet">
+    {{-- <link href="{{ asset('plugins/datatables/media/css/jquery.dataTables_themeroller.css') }}" rel="stylesheet"> --}}
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -203,7 +203,10 @@
     <!-- ============================================================== -->
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
     <!-- DataTables -->
-    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+
+    {{-- <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script> --}}
+
+
     <!-- Bootstrap tether Core JavaScript -->
     <script src="{{ asset('plugins/bootstrap/js/tether.min.js') }}"></script>
     
@@ -233,6 +236,31 @@
     <!-- ============================================================== -->
     <!-- Style switcher -->
     <!-- ============================================================== -->
+
+    <!-- ============================================================== -->
+
+    <script src="{{URL::to('plugins_pro/datatables/jquery.dataTables.min.js')}}"></script>
+
+    <!-- start - This is for export functionality only -->
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <!-- end - This is for export functionality only -->
+
+    <script>
+        // $(document).ready(function() {
+        //     $('#example23').DataTable({
+        //         dom: 'Bfrtip',
+        //         buttons: [
+        //             'copy', 'csv', 'excel', 'pdf', 'print'
+        //         ]
+        //     });
+        // });
+    </script>
     
 
     @stack('scripts')
