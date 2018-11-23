@@ -25,13 +25,13 @@
         }
     </style> --}}
     <link href="{{ asset('css/switch.css') }}" rel="stylesheet">
-    <link href="{{ asset('plugins/TableExport/dist/css/tableexport.css') }}" rel="stylesheet">
+    {{-- <link href="{{ asset('plugins/TableExport/dist/css/tableexport.css') }}" rel="stylesheet"> --}}
 @endpush
 
 @push('scripts')
     <script src="{{ asset('js/relatorio/listar.js?t='.time()) }}"></script>
-    <script src="{{ asset('plugins/TableExport/dist/js/tableexport.js?t='.time()) }}"></script>
-    <script src="{{ asset('plugins/FileSaver/dist/FileSaver.js?t='.time()) }}"></script>
+    {{-- <script src="{{ asset('plugins/TableExport/dist/js/tableexport.js?t='.time()) }}"></script> --}}
+    {{-- <script src="{{ asset('plugins/FileSaver/dist/FileSaver.js?t='.time()) }}"></script> --}}
 @endpush
 
 @php
@@ -63,65 +63,81 @@
                     </h4>
                     <h6 class="card-subtitle">Lista os solicitações cadastrados no sistema.</h6>
                     <div class="table-responsive">
-                        {{-- <table id="example" class="display" style="width:100%">
-                                <thead>
-                                        <tr>    
-                                            <th>Solicitacao</th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                        </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>    
-                                        <td>Solicitacao</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                        </table> --}}
-
                         
-                        <table id="example" class="display" style="width:100%">
+                        <table  id="example" width="100%">
                                 <thead>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                        <th>Solicitacao</th>
+                                        <th>Item</th>
+                                        <th>Solicitacao</th>
+                                        <th>Solicitacao</th>
+                                        <th>Solicitacao</th>
+                                     
+                                </thead>
+                                <tr>
+                                    <td rowspan="3">ITEM 1</td>
+                                    <td rowspan="3">ITEM 2</td>
+                                    <td>name1</td>
+                                    <td>price1</td>
+                                    <td rowspan="3">ITEM 4</td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>name2</td>
+                                    <td>price2</td>
+                                </tr>
+                                <tr>
+                                    <td>name3</td>
+                                    <td>price3</td>
+                                </tr>
+                        </table>
+
+
+                        <table id="example23" class="display" style="width:100%">
+                                <thead>
+                                    <td>Solicitacao</td>
+                                    <td>Item</td>
+                                    <td>Solicitacao</td>
+                                    <td>Solicitacao</td>
+                                    <td>Solicitacao</td>
+                                    <td>Solicitacao</td>
                                  </tr>
                                 </thead>
-                                 @foreach($solicitacoes as $solicitacao)
-                                 <tr>
-                                    <td>Solicitacao {{$solicitacao->id}}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                 </tr>
+                                @foreach($solicitacoes as $solicitacao)
                                 <tr>
-                                    <th><strong>Descrição</strong></th>
-                                    <th><strong>Criador</strong></th>
-                                    <th><strong>Data Criacao</strong></th>
-                                    <th><strong>Ultima Modificacao</strong></th>
-                                    <th><strong>Data Modificacao</strong></th>
-                                    <th><strong>Status</strong></th>
-                                </tr>
+                                    <td rowspan="3">
+                                        <p class="text-center">Solicitacao</p>  <br> <p class="text-center"> {{$solicitacao->descricao}}</p> 
+                                    </td>
+                                    <td rowspan="3">ITEM 2</td>
+                                    <td>Pruto</td>
+                                    <td>price1</td>
+                                    <td rowspan="3">ITEM 4</td>
+                                </tr>  
 
                                  <tr>
-                                    <td>{{$solicitacao->descricao}}</td>
+                                    <td rowspan="3">
+                                        <p class="text-center">Solicitacao</p>  <br> <p class="text-center"> {{$solicitacao->descricao}}</p> 
+                                    </td> 
+                                    {{-- @foreach($solicitacao as $item) --}}
+                                    <td rowspan="3">
+                                        Produto
+                                    </td>
+                                    <td rowspan="3">
+                                        Produto
+                                    </td>
+
+
                                     <td>{{App\Usuario::find($solicitacao->id_criador)->nome}}</td>
                                     <td>{{ date('d/m/Y H:i:s' , strtotime($solicitacao->data_criacao))}}</td>
                                     <td>{{App\Usuario::find($solicitacao->id_modificador)->nome}}</td>
                                     <td>{{ date('d/m/Y H:i:s' , strtotime($solicitacao->data_modificacao))}}</td>
                                     <td><span class="label label-success">{{App\Status::find($solicitacao->id_status)->tipo_status}}</span></td>
+
+
+
+
+
+
+
                                  </tr>
                                     @if(isset($solicitacao->produtos) && $solicitacao->produtos->first() !== null )
                                        <tr>
@@ -132,14 +148,6 @@
                                           <td></td>
                                           <td></td>
                                        </tr>
-                                       <tr>
-                                          <th></th>
-                                          <th></th>
-                                          <th><strong>Nome</strong></th>
-                                          <th><strong>Quantidade</strong></th>
-                                          <th><strong>Valor</strong></th>
-                                          <th><strong>descricao</strong></th>
-                                       </tr>   
                                        @foreach ($solicitacao->produtos as $item)
                                           <tr>
                                              <td></td>
@@ -161,14 +169,6 @@
                                           <td></td>
                                           <td></td>
                                        </tr>
-                                       <tr>
-                                          <th></th>
-                                          <th></th>
-                                          <th></th>
-                                          <th><strong>Nome</strong></th>
-                                          <th><strong>Valor</strong></th>
-                                          <th><strong>descricao</strong></th>
-                                       </tr>   
                                        @foreach ($solicitacao->servicos as $item)
                                           <tr>
                                              <td></td>
@@ -186,7 +186,7 @@
                 </div>
             </div>    
         </div>
-        <div class="modal fade" id="detalhe-solicitacao" tabindex="-1" role="dialog" aria-hidden="true">
+        {{-- <div class="modal fade" id="detalhe-solicitacao" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                         
@@ -200,6 +200,6 @@
                         
                 </div>
             </div>
-        </div>  
+        </div>   --}}
 @endsection
 
