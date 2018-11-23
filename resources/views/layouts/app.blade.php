@@ -37,6 +37,7 @@
     <main class="py-4">
         @yield('content')
     </main>
+    <footer class="footer-login"> 2018 - TCC Rafael e Charles </footer>
 </body>
 <script src="{{ asset('/plugins/jquery/jquery.min.js') }}"></script>
 <!-- <script src="{{ asset('/plugins/bootstrap/js/bootstrap.min.js') }}" defer></script> -->

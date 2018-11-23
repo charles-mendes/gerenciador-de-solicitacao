@@ -19,9 +19,11 @@ margin-right: 50px;
 }
 /* TELA DE LOGIN*/
 
+
+
 .titulo-tcc{
     margin: auto;
-    margin-top: 5%;
+    margin: 5%;
    
 }
 
@@ -29,4 +31,13 @@ margin-right: 50px;
     text-transform: uppercase;
     text-align: center;
     margin: auto;
+}
+
+.footer-login{
+    border-top: 1px solid rgba(120, 130, 140, 0.13);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 17px 15px;
 }
