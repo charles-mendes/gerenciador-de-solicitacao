@@ -3,17 +3,18 @@
 @php
     // dd($status);
 @endphp
-@section('breadcrumb')
+{{-- @section('breadcrumb')
     @component('layouts.component.breadcrumb',[
           'title' => ($status == 'criando') ? 'Nova Solicitacao' : 'Editando Solicitacao',
           'localizacoes' => [ ['Home', route('listar_solicitacao') ],[($status == 'criando') ? 'Nova Solicitacao' : 'Editando Solicitacao', ''] ] 
         ]
     )
     @endcomponent
-@endsection
+@endsection --}}
 
 @push('scripts')
-  <script src="{{ asset('js/solicitacao/nova.js') }}"></script>
+  {{-- <script src="{{ asset('js/solicitacao/nova.js?t={{time()}}') }}"></script> --}}
+  <script src="{{ asset('js/solicitacao/nova.js?t='.time()) }}"></script>
 @endpush
 
 @section('content')
