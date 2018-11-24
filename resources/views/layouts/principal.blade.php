@@ -250,17 +250,6 @@
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
     <!-- end - This is for export functionality only -->
-
-    <script>
-        // $(document).ready(function() {
-        //     $('#example23').DataTable({
-        //         dom: 'Bfrtip',
-        //         buttons: [
-        //             'copy', 'csv', 'excel', 'pdf', 'print'
-        //         ]
-        //     });
-        // });
-    </script>
     
 
     @stack('scripts')
