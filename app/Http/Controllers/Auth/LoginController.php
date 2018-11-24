@@ -25,7 +25,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    //protected $redirectTo = '/home';
+    protected $redirectTo = '/dashboard';
 
     protected function redirectTo(){
         return '/dashboard';
@@ -48,4 +48,5 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
 }
