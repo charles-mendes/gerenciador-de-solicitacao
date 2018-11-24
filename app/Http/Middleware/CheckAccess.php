@@ -26,6 +26,6 @@ class CheckAccess
             }
         }
         //se não tiver redirecionando usuario para o dashboard com mensagem de erro
-        return redirect()->route('dashboard')->with('error', 'Não tem permissão para acessar esta página.');
+        return redirect()->route('listar_solicitacao')->with('error', 'Não tem permissão para acessar esta página.');
     }
 }

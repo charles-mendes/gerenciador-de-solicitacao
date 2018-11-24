@@ -5,7 +5,7 @@
         'layouts.component.breadcrumb',
         [
             'title' => 'Avalia Solicitaçao',
-            'localizacoes' => [ ['Home', route('dashboard') ],['avalia solicitacao', ''] ]
+            'localizacoes' => [ ['Home', route('listar_solicitacao') ],['avalia solicitacao', ''] ]
         ]
     )
     @endcomponent

@@ -6,7 +6,7 @@
 @section('breadcrumb')
     @component('layouts.component.breadcrumb',[
           'title' => ($status == 'criando') ? 'Nova Solicitacao' : 'Editando Solicitacao',
-          'localizacoes' => [ ['Home', route('dashboard') ],[($status == 'criando') ? 'Nova Solicitacao' : 'Editando Solicitacao', ''] ] 
+          'localizacoes' => [ ['Home', route('listar_solicitacao') ],[($status == 'criando') ? 'Nova Solicitacao' : 'Editando Solicitacao', ''] ] 
         ]
     )
     @endcomponent

@@ -5,7 +5,7 @@
         'layouts.component.breadcrumb',
         [
           'title' => 'Novo Cadastro Produto/Servico',
-          'localizacoes' => [ ['Home', route('dashboard') ],['nova-cadastro', ''] ] 
+          'localizacoes' => [ ['Home', route('listar_solicitacao') ],['nova-cadastro', ''] ] 
         ]
     )
     @endcomponent

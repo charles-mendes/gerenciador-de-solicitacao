@@ -5,7 +5,7 @@
         'layouts.component.breadcrumb',
         [
             'title' => 'Listar Fornecedores',
-            'localizacoes' => [ ['Home', route('dashboard') ],['listar fornecedores', ''] ]
+            'localizacoes' => [ ['Home', route('listar_solicitacao') ],['listar fornecedores', ''] ]
         ]
     )
     @endcomponent

@@ -37,7 +37,7 @@ Route::group(['middleware' => 'menu'], function () {
 
 
     //tela de dashboard
-    Route::get('/dashboard', function () {return view('layouts.principal');})->name('dashboard');
+    // Route::get('/dashboard', function () {return view('layouts.principal');})->name('dashboard');
 
     // cadastrar novo usuario
     Route::get('cadastrar', 'Auth\RegisterController@showRegistrationForm')->name('cadastro_inicial');
