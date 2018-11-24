@@ -165,6 +165,9 @@ class SolicitacaoController extends Controller
             if($status_atual_solicitacao->tipo_status == 'Finalizada'){
                 $status = 'Finalizada';
             }
+            if($status_atual_solicitacao->tipo_status == 'Aprovado pelo Aprovador'){
+                $status = 'Aprovado pelo Aprovador';
+            }
 
             if($status_atual_solicitacao->tipo_status == 'Aprovado pelo Administrador' && Auth::user()->tipo_conta == 'AD'){
                 $status = 'Aprovado pelo Administrador';
