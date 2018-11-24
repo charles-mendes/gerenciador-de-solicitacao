@@ -32,6 +32,9 @@ function naoDeixaLetra(id){
         }else{
             $(this).val('');
         }
+    });  
+}      
+
 function autoCompleta(){
     $('#nome').blur(function(){
         $.ajax({
