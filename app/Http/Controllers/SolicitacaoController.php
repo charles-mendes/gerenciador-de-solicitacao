@@ -152,10 +152,9 @@ class SolicitacaoController extends Controller
             
 
 
-            if($status_atual_solicitacao->tipo_status == 'Iniciou Cotação'){
+            if($status_atual_solicitacao->tipo_status == 'Iniciou Cotação' && Auth::user()->tipo_conta == 'C'){
                 $status = 'Iniciou Cotação';
-                $this->somaValorSolicitacao($solicitacao);
-                
+                $falta_preencher = $this->somaValorSolicitacao($solicitacao);
             }
 
             if($status_atual_solicitacao->tipo_status == 'Em processo de execução'){
@@ -171,10 +170,12 @@ class SolicitacaoController extends Controller
 
             if($status_atual_solicitacao->tipo_status == 'Aprovado pelo Administrador' && Auth::user()->tipo_conta == 'AD'){
                 $status = 'Aprovado pelo Administrador';
-            }else if($status_atual_solicitacao->tipo_status == 'Aprovado pelo Administrador' && Auth::user()->tipo_conta == 'C'){
+            }else if( ($status_atual_solicitacao->tipo_status == 'Aprovado pelo Administrador' ||  $status_atual_solicitacao->tipo_status == 'Aprovado pelo Aprovador' ) &&
+             Auth::user()->tipo_conta == 'C'){
                 $status = 'Iniciou Cotação';
-                $this->somaValorSolicitacao($solicitacao);
+                $falta_preencher = $this->somaValorSolicitacao($solicitacao);
             }
+
 
             if($status_atual_solicitacao->tipo_status == 'Pendente'){
                 $status = 'Pendente';
@@ -200,11 +201,13 @@ class SolicitacaoController extends Controller
         if($solicitacao->produtos->first() == null && $solicitacao->servicos->first() == null){
             $falta_preencher = true;
         }else{
+            // dd(is_numeric($solicitacao->produtos[0]->valor));
             foreach($solicitacao->produtos as $produto){
                 if(is_numeric($produto->valor)){
                     $total += $produto->valor;
                 }else{
                     $falta_preencher = true;
+                    break;
                 }
             }
             if($falta_preencher == false){
@@ -213,12 +216,14 @@ class SolicitacaoController extends Controller
                         $total += $servico->valor;
                     }else{
                         $falta_preencher = true;
+                        break;
                     }
                 }
             }
 
 
         } 
+        return $falta_preencher;
     }
 
     public function mostrar_verificacao_diretoria($id){
@@ -304,6 +309,8 @@ class SolicitacaoController extends Controller
         ]);
 
         $solicitacao = Solicitacao::find($request->input('id_solicitacao'));
+
+        //contar valores da solicitação
         
         
         //pegando status
