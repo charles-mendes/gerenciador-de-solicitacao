@@ -85,12 +85,30 @@ class SolicitacaoController extends Controller
                 return back()->withErrors('Solicitação não encontrada.');
             }
             $usuario = Auth::user()->tipo_conta;
+
+            if($usuario == 'AD' || $usuario == 'A' || $usuario == 'C' || $usuario == 'D'){
+                
+            }else{
+                return back()->withErrors('Não possui altorização.');
+            }    
             
+            
+
             $status = '';
             $falta_preencher = false;
             $total = 0;
 
+            //Verificando se solicitação ja foi aprovada pelo mesmo tipo de usuario
             $status_atual_solicitacao =  Status::find($solicitacao->id_status);
+            $tipo_status = $status_atual_solicitacao->tipo_status;
+
+            if( ($usuario == 'A' && $tipo_status == 'Aprovado pelo Aprovador') ||
+                ($usuario == 'C' && $tipo_status == 'Aprovado pelo Comprador') ||
+                ($usuario == 'AD' && $tipo_status == 'Aprovado pelo Administrador') ||
+                ($usuario == 'D' && $tipo_status == 'Aprovado pela Diretoria')){
+                    return back()->withErrors('Esta solicitação já foi aprovada por um usúario do mesmo perfil do que o seu.');
+            }
+
 
 
             //caso haja justificativa pegar a ultima que seria a mais valida
@@ -108,6 +126,7 @@ class SolicitacaoController extends Controller
                 $status_reprovado_diretoria->id,
             ];
 
+            //pegar a ultima justificativa
             if(in_array($status_atual_solicitacao->id, $ids_reprovados )){
                 $justificativas = $solicitacao->justificativas;
                 if($justificativas->first() !== null){
@@ -159,7 +178,7 @@ class SolicitacaoController extends Controller
             }
             // dd($falta_preencher);
             
-            if($usuario == 'AD' || $usuario == 'A' || $usuario == 'C' || $usuario == 'D'){
+            
                 return view('solicitacao.aprova',[
                             'solicitacao'=> $solicitacao,
                             'id'=> $id, 'status' => $status, 
@@ -167,7 +186,6 @@ class SolicitacaoController extends Controller
                             'total' => $total,
                             'justificativa' => $justificativa,
                             ]);       
-            }
         }
         return back();
     }

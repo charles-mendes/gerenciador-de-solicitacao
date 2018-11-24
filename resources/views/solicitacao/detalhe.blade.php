@@ -53,18 +53,31 @@
                 </table>
             </div>                
             @endif
-        <div class="row">
-            <div class="col-12 text-center pt-3">
-                <div class="row">
-                    <div class="col-6">
-                        <button type="button" class="btn btn-success" data-id="{{$id}}" onclick="editarSolicitacao(this);">Editar solicitação</button>
-                    </div>
-                    <div class="col-6"> 
-                        <button type="button" class="btn btn-primary" data-id="{{$id}}" onclick="avaliaSolicitacao(this);">Avaliar solicitação</button>
+        
+        @if(Auth::user()->tipo_conta == 'S' ||  ( Auth::user()->tipo_conta == 'A' && App\Status::find($solicitacao->id_status)->tipo_status == 'Aprovado pelo Aprovador' ) )
+            <div class="row">
+                <div class="col-12 text-center pt-3">
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="button" class="btn btn-success" data-id="{{$id}}" onclick="editarSolicitacao(this);">Editar solicitação</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @else    
+            <div class="row">
+                <div class="col-12 text-center pt-3">
+                    <div class="row">
+                        <div class="col-6">
+                            <button type="button" class="btn btn-success" data-id="{{$id}}" onclick="editarSolicitacao(this);">Editar solicitação</button>
+                        </div>
+                        <div class="col-6"> 
+                            <button type="button" class="btn btn-primary" data-id="{{$id}}" onclick="avaliaSolicitacao(this);">Avaliar solicitação</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif    
             
           
         </form>
