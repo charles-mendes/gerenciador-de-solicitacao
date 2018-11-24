@@ -85,12 +85,30 @@ class SolicitacaoController extends Controller
                 return back()->withErrors('Solicitação não encontrada.');
             }
             $usuario = Auth::user()->tipo_conta;
+
+            if($usuario == 'AD' || $usuario == 'A' || $usuario == 'C' || $usuario == 'D'){
+                
+            }else{
+                return back()->withErrors('Não possui altorização.');
+            }    
             
+            
+
             $status = '';
             $falta_preencher = false;
             $total = 0;
 
+            //Verificando se solicitação ja foi aprovada pelo mesmo tipo de usuario
             $status_atual_solicitacao =  Status::find($solicitacao->id_status);
+            $tipo_status = $status_atual_solicitacao->tipo_status;
+
+            if( ($usuario == 'A' && $tipo_status == 'Aprovado pelo Aprovador') ||
+                ($usuario == 'C' && $tipo_status == 'Aprovado pelo Comprador') ||
+                ($usuario == 'AD' && $tipo_status == 'Aprovado pelo Administrador') ||
+                ($usuario == 'D' && $tipo_status == 'Aprovado pela Diretoria')){
+                    return back()->withErrors('Esta solicitação já foi aprovada por um usúario do mesmo perfil do que o seu.');
+            }
+
 
 
             //caso haja justificativa pegar a ultima que seria a mais valida
@@ -108,6 +126,7 @@ class SolicitacaoController extends Controller
                 $status_reprovado_diretoria->id,
             ];
 
+            //pegar a ultima justificativa
             if(in_array($status_atual_solicitacao->id, $ids_reprovados )){
                 $justificativas = $solicitacao->justificativas;
                 if($justificativas->first() !== null){
@@ -133,10 +152,9 @@ class SolicitacaoController extends Controller
             
 
 
-            if($status_atual_solicitacao->tipo_status == 'Iniciou Cotação'){
+            if($status_atual_solicitacao->tipo_status == 'Iniciou Cotação' && Auth::user()->tipo_conta == 'C'){
                 $status = 'Iniciou Cotação';
-                $this->somaValorSolicitacao($solicitacao);
-                
+                $falta_preencher = $this->somaValorSolicitacao($solicitacao);
             }
 
             if($status_atual_solicitacao->tipo_status == 'Em processo de execução'){
@@ -146,20 +164,25 @@ class SolicitacaoController extends Controller
             if($status_atual_solicitacao->tipo_status == 'Finalizada'){
                 $status = 'Finalizada';
             }
+            if($status_atual_solicitacao->tipo_status == 'Aprovado pelo Aprovador'){
+                $status = 'Aprovado pelo Aprovador';
+            }
 
             if($status_atual_solicitacao->tipo_status == 'Aprovado pelo Administrador' && Auth::user()->tipo_conta == 'AD'){
                 $status = 'Aprovado pelo Administrador';
-            }else if($status_atual_solicitacao->tipo_status == 'Aprovado pelo Administrador' && Auth::user()->tipo_conta == 'C'){
+            }else if( ($status_atual_solicitacao->tipo_status == 'Aprovado pelo Administrador' ||  $status_atual_solicitacao->tipo_status == 'Aprovado pelo Aprovador' ) &&
+             Auth::user()->tipo_conta == 'C'){
                 $status = 'Iniciou Cotação';
-                $this->somaValorSolicitacao($solicitacao);
+                $falta_preencher = $this->somaValorSolicitacao($solicitacao);
             }
+
 
             if($status_atual_solicitacao->tipo_status == 'Pendente'){
                 $status = 'Pendente';
             }
             // dd($falta_preencher);
             
-            if($usuario == 'AD' || $usuario == 'A' || $usuario == 'C' || $usuario == 'D'){
+            
                 return view('solicitacao.aprova',[
                             'solicitacao'=> $solicitacao,
                             'id'=> $id, 'status' => $status, 
@@ -167,7 +190,6 @@ class SolicitacaoController extends Controller
                             'total' => $total,
                             'justificativa' => $justificativa,
                             ]);       
-            }
         }
         return back();
     }
@@ -179,11 +201,13 @@ class SolicitacaoController extends Controller
         if($solicitacao->produtos->first() == null && $solicitacao->servicos->first() == null){
             $falta_preencher = true;
         }else{
+            // dd(is_numeric($solicitacao->produtos[0]->valor));
             foreach($solicitacao->produtos as $produto){
                 if(is_numeric($produto->valor)){
                     $total += $produto->valor;
                 }else{
                     $falta_preencher = true;
+                    break;
                 }
             }
             if($falta_preencher == false){
@@ -192,12 +216,14 @@ class SolicitacaoController extends Controller
                         $total += $servico->valor;
                     }else{
                         $falta_preencher = true;
+                        break;
                     }
                 }
             }
 
 
         } 
+        return $falta_preencher;
     }
 
     public function mostrar_verificacao_diretoria($id){
@@ -283,6 +309,8 @@ class SolicitacaoController extends Controller
         ]);
 
         $solicitacao = Solicitacao::find($request->input('id_solicitacao'));
+
+        //contar valores da solicitação
         
         
         //pegando status
@@ -548,11 +576,12 @@ class SolicitacaoController extends Controller
 
 
     public function editar_solicitacao($id){
-        
-        if($id){
+        $id = (int) $id;
+        if(is_numeric($id)){
             //verifica se o usuario tipo solicitante tem permissão para editar essa soliciitação
             if(Auth::user()->tipo_conta == "S"){
-                $solicitacoes = Solicitacao::all()->where('id_criador',Auth::user()->id)->get()->first();
+                // dd(Solicitacao::all(),$id,Auth::user()->id);
+                $solicitacoes = Solicitacao::where('id_criador',Auth::user()->id)->get();
                 $verify = false;
                 foreach($solicitacoes as $solicitacao){
                     if($solicitacao->id == $id){
@@ -745,7 +774,7 @@ class SolicitacaoController extends Controller
         if(Auth::user()->tipo_conta == 'S'){
             $this->validate($request,[
                 'nome' => 'required',
-                'quantidade' => 'required',
+                'quantidade' => 'required|min:1',
                 //  'valor'=> 'required',
                 'descricao'=>'required',
              ]);
@@ -753,8 +782,8 @@ class SolicitacaoController extends Controller
         }else{
             $this->validate($request,[
                 'nome' => 'required',
-                'quantidade' => 'required',
-                'valor'=> 'required',
+                'quantidade' => 'required|min:1',
+                'valor'=> 'required|min:1',
                 'descricao'=>'required',
              ]);
 

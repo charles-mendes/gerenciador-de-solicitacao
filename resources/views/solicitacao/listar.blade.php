@@ -5,7 +5,7 @@
         'layouts.component.breadcrumb',
         [
             'title' => 'Listar Solicitações',
-            'localizacoes' => [ ['Home', route('dashboard') ],['listar solicitacao', ''] ]
+            'localizacoes' => [ ['Home', route('listar_solicitacao') ],['listar solicitacao', ''] ]
         ]
     )
     @endcomponent
@@ -59,7 +59,7 @@
                                     <th>Ultima Modificação</th>
                                     <th>Data Modificação</th>
                                     <th>Status</th>
-                                    {{-- <th>Ações</th> --}}
+                                    <th>Ações</th>
                                 </tr>
                             </thead>
                         
@@ -72,9 +72,9 @@
                                         <td>{{ date('d/m/Y H:i:s' , strtotime($solicitacao->data_criacao))}}</td>
                                         <td>{{App\Usuario::find($solicitacao->id_modificador)->nome}}</td>
                                         <td>{{ date('d/m/Y H:i:s' , strtotime($solicitacao->data_modificacao))}}</td>
-                                        <td><span class="label label-success">{{App\Status::find($solicitacao->id_status)->tipo_status}}</span></td>
-                                        {{-- <td>    
-                                            <button type="button" class="btn btn-primary" data-id="{{$solicitacao->id}}" onclick="visualizarSoliciticoes(this);" data-toggle="tooltip" data-placement="right" title=""
+                                        <td><span class="label label-success">{{App\Status::find($solicitacao->id_status)->tipo_status}}</span><td>
+                                            
+                                            <button type="button" class="btn btn-primary" data-id="{{$solicitacao->id}}" onclick="visualizarSoliciticoes(this);" data-toggle="tooltip" data-placement="left" title=""
                                                 data-original-title="Clique aqui para visualizar os detalhes deste usuário">
                                                     <i class="ti-eye"></i>
                                             </button>
@@ -88,7 +88,7 @@
                                                     <a class="dropdown-item" data-id="{{$solicitacao->id}}" onclick="excluirSolicitacao(this);">Inativar</a>
                                                 </div>
                                             </div>
-                                        </td> --}}
+                                        </td> 
                                     </tr>
                                 @endforeach
                             </tbody>

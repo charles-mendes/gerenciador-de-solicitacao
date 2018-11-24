@@ -4,8 +4,8 @@
     @component(
         'layouts.component.breadcrumb',
         [
-            'title' => 'Relatório das Solicitações',
-            'localizacoes' => [ ['Home', route('dashboard') ],['Relatório das Solicitações', ''] ]
+            'title' => 'Relatório',
+            'localizacoes' => [ ['Home', route('listar_solicitacao') ],['Relatório de solicitações', ''] ]
         ]
     )
     @endcomponent

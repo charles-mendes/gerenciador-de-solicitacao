@@ -27,12 +27,12 @@
             </div>
 
             <div class="form-group mb-3">
-                <label class="col-form-label">Ultima Modificacao</label>
+                <label class="col-form-label">Ultima Modificação</label>
                 <p>{{date('d/m/Y H:i:s' , strtotime($fornecedor->data_modificacao))}}</p>
             </div>
 
             <div class="form-group mb-3">
-                <label class="col-form-label">Status</label>
+                <label class="col-form-label">Status do Fornecedor</label>
                 @if($fornecedor->status == 'A')
                     <span class="label label-success">Ativo</span>
                 @else
@@ -62,13 +62,12 @@
             </div>                
 
         @endif
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-12 text-center">
                 <button type="button" class="btn btn-primary" data-id="{{$id}}" onclick="editarFornecedor(this);">Editar fornecedor</button>
             </div>
-        </div>
+        </div> --}}
             
-          
         </form>
     </div>
 {{-- </div> --}}

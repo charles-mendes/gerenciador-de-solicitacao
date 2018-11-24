@@ -25,10 +25,10 @@ class LoginController extends Controller
      *
      * @var string
      */
-    //protected $redirectTo = '/home';
+    protected $redirectTo = '/solicitacao';
 
     protected function redirectTo(){
-        return '/dashboard';
+        return '/solicitacao';
     }
 
     protected function credentials(\Illuminate\Http\Request $request)
@@ -48,4 +48,5 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
 }

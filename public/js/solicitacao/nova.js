@@ -1,14 +1,5 @@
 $(document).ready(function () {
 
-    // $('table.display').DataTable({
-    //     "language": {"url":"/plugins/datatables-plugins/i18n/Portuguese-Brasil.lang"},
-    //     "columnDefs": [ {
-    //         "targets"  : 'no-sort',
-    //         "orderable": false,
-    //         "order": []
-    //     }]
-    // });
-
     $('table.display').DataTable({
         "language": {"url":"/plugins/datatables/language/Portuguese-Brasil.json"},
         "searching": false,
@@ -21,6 +12,28 @@ $(document).ready(function () {
 
 
 });
+
+function naoDeixaApenasNumero(id){
+    $('#'+ id).blur(function(){
+        let campo = $(this).val();
+        if(!isNaN(parseFloat(campo)) && isFinite(campo)){
+            $(this).val('');
+        }
+
+    });
+}
+
+
+function naoDeixaLetra(id){
+    $('#'+ id).blur(function(){
+        let campo = $(this).val();
+        if(!isNaN(parseFloat(campo)) && isFinite(campo)){
+            
+        }else{
+            $(this).val('');
+        }
+    });  
+}      
 
 function autoCompleta(){
     $('#nome').blur(function(){
@@ -50,6 +63,12 @@ function autoCompleta(){
 function cadastrarProduto(){
     
     $('#cadastrar-produto .modal-content').load('/solicitacao/novo-produto/', function () {
+        naoDeixaApenasNumero('nome');
+        naoDeixaApenasNumero('descricao');
+
+        naoDeixaLetra('quantidade');
+        naoDeixaLetra('valor');
+
         autoCompleta();
         $('#cadastrar-produto').modal('show');
         $('table.display').DataTable();
@@ -62,6 +81,12 @@ function editarProduto(produto){
     let id = $(produto).attr("data-id");
 
     $('#editar-produto .modal-content').load('/solicitacao/edita-produto/'+ id, function () {
+        naoDeixaApenasNumero('nome');
+        naoDeixaApenasNumero('descricao');
+
+        naoDeixaLetra('quantidade');
+        naoDeixaLetra('valor');
+
         $('#editar-produto').modal('show');
         $('table.display').DataTable();
     });
@@ -83,6 +108,11 @@ function excluirProduto(produto){
 function cadastrarServico(){
     
     $('#cadastrar-servico .modal-content').load('/solicitacao/novo-servico/', function () {
+        naoDeixaApenasNumero('nome');
+        naoDeixaApenasNumero('descricao');
+
+        naoDeixaLetra('valor');
+
         $('#cadastrar-servico').modal('show');
         $('table.display').DataTable();
     });
@@ -94,6 +124,11 @@ function editarServico(servico){
     let id = $(servico).attr("data-id");
 
     $('#editar-servico .modal-content').load('/solicitacao/edita-servico/'+ id, function () {
+        naoDeixaApenasNumero('nome');
+        naoDeixaApenasNumero('descricao');
+
+        naoDeixaLetra('valor');
+
         $('#editar-servico').modal('show');
         $('table.display').DataTable();
     });

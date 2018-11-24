@@ -3,17 +3,18 @@
 @php
     // dd($status);
 @endphp
-@section('breadcrumb')
+{{-- @section('breadcrumb')
     @component('layouts.component.breadcrumb',[
           'title' => ($status == 'criando') ? 'Nova Solicitacao' : 'Editando Solicitacao',
-          'localizacoes' => [ ['Home', route('dashboard') ],[($status == 'criando') ? 'Nova Solicitacao' : 'Editando Solicitacao', ''] ] 
+          'localizacoes' => [ ['Home', route('listar_solicitacao') ],[($status == 'criando') ? 'Nova Solicitacao' : 'Editando Solicitacao', ''] ] 
         ]
     )
     @endcomponent
-@endsection
+@endsection --}}
 
 @push('scripts')
-  <script src="{{ asset('js/solicitacao/nova.js') }}"></script>
+  {{-- <script src="{{ asset('js/solicitacao/nova.js?t={{time()}}') }}"></script> --}}
+  <script src="{{ asset('js/solicitacao/nova.js?t='.time()) }}"></script>
 @endpush
 
 @section('content')
@@ -32,7 +33,7 @@
             <div class="card-block">
                 <h4 class="card-title">
                     Cadastrar Produto
-                    <button type="button" onclick="cadastrarProduto()" class="btn btn-primary">Cadastrar produto</button>
+                    <button type="button" onclick="cadastrarProduto()" class="btn btn-primary">+</button>
                 </h4>
                 <div class="table-responsive">
                     <table id="" class="display" style="width:100%">
@@ -46,7 +47,7 @@
             <div class="card-block">
                 <h4 class="card-title">
                     Cadastrar Servicos
-                    <button type="button" onclick="cadastrarServico()" class="btn btn-primary">Cadastrar servico</button>
+                    <button type="button" onclick="cadastrarServico()" class="btn btn-primary">+</button>
                 </h4>
                 <div class="table-responsive">
                     <table id="" class="display" style="width:100%">

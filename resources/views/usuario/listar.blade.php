@@ -5,7 +5,7 @@
         'layouts.component.breadcrumb',
         [
             'title' => 'Listar Usuarios',
-            'localizacoes' => [ ['Home', route('dashboard') ],['listar usuarios', ''] ]
+            'localizacoes' => [ ['Home', route('listar_solicitacao') ],['listar usuarios', ''] ]
         ]
     )
     @endcomponent

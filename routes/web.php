@@ -21,12 +21,23 @@ Route::group(['middleware' => 'menu'], function () {
     /**
      * LOGIN
      **/
-    Route::get('/login', function () { return view('auth.login');});
-    Route::get('/', function () { return view('auth.login');});
+    // Route::get('/login', function () { return view('auth.login');});
+    // Route::get('/', function () { return view('auth.login');});
+
+
+    // route to show the login form
+    Route::get('/login', 'LoginControllerPortal@showLogin');
+    Route::get('/', 'LoginControllerPortal@showLogin');
+
+    // route to process the form
+    Route::post('login', array('uses' => 'LoginControllerPortal@doLogin'));
+
+
+
 
 
     //tela de dashboard
-    Route::get('/dashboard', function () {return view('layouts.principal');})->name('dashboard');
+    // Route::get('/dashboard', function () {return view('layouts.principal');})->name('dashboard');
 
     // cadastrar novo usuario
     Route::get('cadastrar', 'Auth\RegisterController@showRegistrationForm')->name('cadastro_inicial');

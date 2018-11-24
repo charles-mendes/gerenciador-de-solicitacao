@@ -1,7 +1,81 @@
+function mascaraIdentificacao(){
+    $("#identificacao").keydown(function(){
+        try {
+            $("#identificacao").unmask();
+        } catch (e) {}
+    
+        var tamanho = $("#identificacao").val().length;
+    
+        if(tamanho < 11){
+            $("#identificacao").mask("999.999.999-99");
+        } else if(tamanho >= 11){
+            $("#identificacao").mask("99.999.999/9999-99");
+        }
+    
+        // ajustando foco
+        var elem = this;
+        setTimeout(function(){
+            // mudo a posição do seletor
+            elem.selectionStart = elem.selectionEnd = 10000;
+        }, 0);
+        // reaplico o valor para mudar o foco
+        var currentValue = $(this).val();
+        $(this).val('');
+        $(this).val(currentValue);
+    });
+}
+
+function mascaraParaTelefone(){
+    var CelphoneMaskBehavior = function (val) {
+        return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+    },
+    spOptions = {
+        onKeyPress: function(val, e, field, options) {
+            field.mask(CelphoneMaskBehavior.apply({}, arguments), options);
+        }
+    };
+
+
+
+    // $(function () {
+        // $('#cpf, .mask-cpf').mask('999.999.999-99');
+        // $('.valor').mask('000.000.000.000.000,00', {reverse: true});
+        // $('.cep').mask('00000-000');
+        $('#telefone').mask('(00) 0000-0000');
+        $('#telefone').mask(CelphoneMaskBehavior, spOptions);
+    // });
+}
+
+function naoDeixaNumero(id){
+    $('#'+ id).blur(function(){
+        let campo = $(this).val();
+        if(!isNaN(parseFloat(campo)) && isFinite(campo)){
+            $(this).val('');
+        }
+
+    });
+}
+
 
 function novoFornecedor(){
     $('#fornecedor .modal-content').load('/fornecedor/novo/', function () {
         $('#fornecedor').modal('show');
+        
+        //colocando mascara no cnpj/cpf
+        mascaraIdentificacao();
+
+        mascaraParaTelefone();
+
+        $('#cep').mask('00000-000'); // mascara do cep
+
+        naoDeixaNumero('nome');
+        naoDeixaNumero('endereco');
+        naoDeixaNumero('bairro');
+        naoDeixaNumero('cidade');
+        naoDeixaNumero('estado');
+        naoDeixaNumero('pais');
+
+
         $('table.display').DataTable();
 
         // ocultar/mostrar campo do endereco
@@ -36,6 +110,9 @@ function editarFornecedor(fornecedor){
     $('#fornecedor .modal-content').load('/fornecedor/editar/'+ id, function () {
         $('#fornecedor').modal('show');
 
+        //colocando mascara no cnpj/cpf
+        mascaraIdentificacao();
+
         // ocultar/mostrar campo do endereco
         $("#check_endereco").click(function(){
             required(this,'#fields_endereco','.verify-required');
@@ -55,6 +132,8 @@ function editarFornecedor(fornecedor){
     });
 
 }
+
+
 
 function required(botao,campo,identificador){
       //verificar se botão ta check 

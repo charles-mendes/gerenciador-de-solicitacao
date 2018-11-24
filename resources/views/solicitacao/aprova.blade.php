@@ -5,7 +5,7 @@
         'layouts.component.breadcrumb',
         [
             'title' => 'Avalia Solicitaçao',
-            'localizacoes' => [ ['Home', route('dashboard') ],['avalia solicitacao', ''] ]
+            'localizacoes' => [ ['Home', route('listar_solicitacao') ],['avalia solicitacao', ''] ]
         ]
     )
     @endcomponent
@@ -35,7 +35,7 @@
             @endif
             <div class="card">
                 <div class="card-block">
-                    @if($status == 'Pendente')    
+                    @if( ($status == 'Pendente') || ($status == 'Aprovado pelo Aprovador' && Auth::user()->tipo_conta == 'C') )    
                         <h4 class="card-title text-center">Avaliar Solicitação</h4>
                         <h4 class="card-title text-center">Você deseja aprovar está solicitação ?</h4>
                     @endif
@@ -149,7 +149,7 @@
                             </div>
                         </div>
                     @endif
-                    @if($status == 'Pendente')
+                    @if($status == 'Pendente' || ($status == 'Aprovado pelo Aprovador' && Auth::user()->tipo_conta == 'C'))
                         <div class="row">
                             <div class="col-12 text-center pt-3">
                                 <div class="row">
