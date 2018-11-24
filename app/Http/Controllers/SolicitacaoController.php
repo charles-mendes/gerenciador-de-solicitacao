@@ -548,11 +548,12 @@ class SolicitacaoController extends Controller
 
 
     public function editar_solicitacao($id){
-        
-        if($id){
+        $id = (int) $id;
+        if(is_numeric($id)){
             //verifica se o usuario tipo solicitante tem permissão para editar essa soliciitação
             if(Auth::user()->tipo_conta == "S"){
-                $solicitacoes = Solicitacao::all()->where('id_criador',Auth::user()->id)->get()->first();
+                // dd(Solicitacao::all(),$id,Auth::user()->id);
+                $solicitacoes = Solicitacao::where('id_criador',Auth::user()->id)->get();
                 $verify = false;
                 foreach($solicitacoes as $solicitacao){
                     if($solicitacao->id == $id){

@@ -82,7 +82,7 @@
                                         <td>{{ date('d/m/Y H:i:s' , strtotime($solicitacao->data_modificacao))}}</td>
                                         <td><span class="label label-success">{{App\Status::find($solicitacao->id_status)->tipo_status}}</span><td>
                                             
-                                            <button type="button" class="btn btn-primary" data-id="{{$solicitacao->id}}" onclick="visualizarSoliciticoes(this);" data-toggle="tooltip" data-placement="right" title=""
+                                            <button type="button" class="btn btn-primary" data-id="{{$solicitacao->id}}" onclick="visualizarSoliciticoes(this);" data-toggle="tooltip" data-placement="left" title=""
                                                 data-original-title="Clique aqui para visualizar os detalhes deste usuário">
                                                     <i class="ti-eye"></i>
                                             </button>
