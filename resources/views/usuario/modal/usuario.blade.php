@@ -12,7 +12,7 @@
         <input type="hidden" name="id_usuario" value="{{isset($usuario) ? $usuario->id :''}}">
         <div class="form-group mb-0">
             <label for="name" class="col-form-label">Nome do Usuario*</label>
-            <input type="text" class="form-control" id="nome" name="nome" value="{{isset($usuario) ? $usuario->nome : ''}}">
+            <input type="text" maxlength="50" class="form-control" id="nome" name="nome" value="{{isset($usuario) ? $usuario->nome : ''}}">
         </div>
         <div class="form-group mb-0">
             <label for="quantidade" min="1" class="col-form-label">Email *</label>

@@ -34,7 +34,7 @@ class UsuarioController extends Controller
 
   public function cadastrar_usuario(Request $request){
     $this->validate($request,[
-      'nome' => 'required|string|max:255',
+      'nome' => 'required|string|max:50',
       'email' => 'required|string|email|max:255|unique:usuario',
       'senha' => 'required|string|min:6',
       'tipo_conta' => 'required|regex:/^[A,C,S]$/u',
@@ -81,7 +81,7 @@ class UsuarioController extends Controller
     if($usuario->email == $request->input('email') ){
       
       $this->validate($request,[
-        'nome' => 'required|string|max:255',
+        'nome' => 'required|string|max:50',
         'email' => 'required|string|email|max:255',
         'senha' => 'required|string|min:6',
         'tipo_conta' => 'required|regex:/^[A,C,S]$/u',
@@ -90,7 +90,7 @@ class UsuarioController extends Controller
     }else{
       //quando usuario envia o email diferente, alterando outras informações
       $this->validate($request,[
-        'nome' => 'required|string|max:255',
+        'nome' => 'required|string|max:50',
         'email' => 'required|string|email|max:255|unique:usuario',
         'senha' => 'required|string|min:6',
         'tipo_conta' => 'required|regex:/^[A,C,S]$/u',
