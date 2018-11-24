@@ -10,4 +10,10 @@ class DetalheFornecedorProduto extends Model
     
     //desabilitando update_at e create_at
     public $timestamps = false;
+
+
+    public function detalhe_produto()
+    {
+        return $this->hasMany('App\Produto','id','id_produto');
+    }
 }

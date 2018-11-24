@@ -8,7 +8,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <!--<title>{{ config('app.name', 'Laravel') }}</title> -->
+    <title>Gerenciador de Solicitação</title>
 
     <!-- Scripts -->
     <!-- <script src="{{-- asset('js/app.js') --}}" defer></script> -->
@@ -24,15 +25,19 @@
     <!-- Custom CSS -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 
+    <!-- nosso css -->
+    <link href="{{ asset('css/tcc.css') }}" rel="stylesheet">
     
 </head>
 <body>
      
-
-        <main class="py-4">
-            @yield('content')
-        </main>
-    </div>
+    <header class="titulo-tcc">
+        <h1 > Gerenciador de Solicitação</h1>
+    </header>
+    <main class="py-4">
+        @yield('content')
+    </main>
+    <footer class="footer-login"> 2018 - TCC Rafael e Charles </footer>
 </body>
 <script src="{{ asset('/plugins/jquery/jquery.min.js') }}"></script>
 <!-- <script src="{{ asset('/plugins/bootstrap/js/bootstrap.min.js') }}" defer></script> -->

@@ -67,6 +67,8 @@ Route::group(['middleware' => 'menu'], function () {
     Route::get('/solicitacao/justificativa/{id}', 'SolicitacaoController@justificativa')->name('justificativa_solicitacao');
     Route::post('/solicitacao/cadastrar_justificativa', 'SolicitacaoController@cadastrar_justificativa')->name('cadastrar_justificativa');
 
+    Route::post('/solicitacao/pegaProduto', 'SolicitacaoController@pegaProduto');
+
     //visualizar solicitação
     Route::get('/solicitacao/visualizar/{id}', 'SolicitacaoController@visualizar')->name('visualizar_solicitacao');
     
@@ -145,6 +147,9 @@ Route::group(['middleware' => 'menu'], function () {
     //Solicitacao Produtos
 
     //Solicitacao Servicos
+      //relatorio 
+    Route::get('/relatorios', 'RelatorioController@index')->name('relatorio');
+
 
 });
 
@@ -152,6 +157,5 @@ Auth::routes();
 
 // Route::get('/home', 'HomeController@index')->name('home');
 
-  //relatorio 
 
-  Route::get('/relatorios', 'RelatorioController@index')->name('relatorio');
+

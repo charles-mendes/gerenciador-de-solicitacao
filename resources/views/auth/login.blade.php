@@ -65,11 +65,11 @@
                     <div class="form-group row">
                         <div class="col-md-6 offset-md-5">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                                {{-- <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                                 <label class="form-check-label" for="remember">
                                     {{ __('Remember Me') }}
-                                </label>
+                                </label> --}}
                             </div>
                         </div>
                     </div>
@@ -81,8 +81,8 @@
                                 </button> -->
                                 
                             <a class="btn btn-link" href="{{ route('cadastro_inicial') }}">
-                                        {{ __('Cadastrar nova conta ?') }}
-                                </a>
+                                    {{ __('Cadastrar nova conta ?') }}
+                            </a>
 
                                 <a id="recuperar-password" class="btn btn-link" href="javascript:void(0);">
                                     {{ __('Esqueceu sua senha ?') }}

@@ -16,5 +16,29 @@ class UsuarioSeeder extends Seeder
             'situacao' => 'A',
             'tipo_conta' => 'AD'
         ]);
+
+        DB::table('usuario')->insert([
+            'nome' => 'professor',
+            'email' => 'professor@testa.com',
+            'senha' => '$2y$10$mg/bmBbHrkfmCPNgvgyQsunY/lrzYUsFEYuebtPrCO/YLdZHY5oQS',
+            'situacao' => 'A',
+            'tipo_conta' => 'AD'
+        ]);
+
+        DB::table('usuario')->insert([
+            'nome' => 'aluno',
+            'email' => 'aluno@testa.com',
+            'senha' => '$2y$10$mg/bmBbHrkfmCPNgvgyQsunY/lrzYUsFEYuebtPrCO/YLdZHY5oQS',
+            'situacao' => 'A',
+            'tipo_conta' => 'AD'
+        ]);
+
+        DB::table('usuario')->insert([
+            'nome' => 'estudante',
+            'email' => 'estudante@testa.com',
+            'senha' => '$2y$10$mg/bmBbHrkfmCPNgvgyQsunY/lrzYUsFEYuebtPrCO/YLdZHY5oQS',
+            'situacao' => 'A',
+            'tipo_conta' => 'AD'
+        ]);
     }
 }

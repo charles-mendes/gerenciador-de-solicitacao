@@ -39,7 +39,7 @@
                             <th>Quantidade</th>
                             <th>Valor</th>
                             <th>Valor Imposto</th>
-                            <th>Descricao</th>
+                            <th>Descrição</th>
                             <th>Link Oferta</th>
                             <th>Ações</th>
                           </tr>
@@ -90,7 +90,7 @@
                             <th>Nome</th>
                             <th>Valor</th>
                             <th>Valor Imposto</th>
-                            <th>Descricao</th>
+                            <th>Descrição</th>
                             <th>Ações</th>
                           </tr>
                       </thead>

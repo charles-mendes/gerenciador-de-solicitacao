@@ -32,6 +32,26 @@ function naoDeixaLetra(id){
         }else{
             $(this).val('');
         }
+function autoCompleta(){
+    $('#nome').blur(function(){
+        $.ajax({
+            method: "POST",
+            url: "/solicitacao/pegaProduto",
+            data: {
+                produto: $('#nome').val(),
+                _token: $('input[name=_token]').val()
+            }
+        }).done(function(result){
+            if(result !== 0) {
+                $('#valor').val(result.valor);
+                $('textarea#descricao').text(result.descricao);
+                
+            }
+           
+    
+        }).fail (function(msg){
+            // errorMessage.innerText = 'Falha na tentativa de pagamento.';
+        });
 
     });
 }
@@ -46,6 +66,7 @@ function cadastrarProduto(){
         naoDeixaLetra('quantidade');
         naoDeixaLetra('valor');
 
+        autoCompleta();
         $('#cadastrar-produto').modal('show');
         $('table.display').DataTable();
     });
@@ -102,7 +123,7 @@ function editarServico(servico){
     $('#editar-servico .modal-content').load('/solicitacao/edita-servico/'+ id, function () {
         naoDeixaApenasNumero('nome');
         naoDeixaApenasNumero('descricao');
-        
+
         naoDeixaLetra('valor');
 
         $('#editar-servico').modal('show');

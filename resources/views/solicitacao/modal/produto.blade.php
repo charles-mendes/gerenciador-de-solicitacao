@@ -15,7 +15,14 @@
         <input type="hidden" name="id_produto" value="{{isset($id) ? $id :''}}">
         <div class="form-group mb-0">
             <label for="nome" class="col-form-label">Nome do Produto*</label>
-            <input type="text" maxlength="100" class="form-control" id="nome" name="nome" value="{{$produto->nome}}">
+            <input list="list_produtos" maxlength="100" type="text" class="form-control" id="nome" name="nome" value="{{$produto->nome}}">
+            @if(!isset($id))
+            <datalist id="list_produtos">
+                @foreach ($produtos_fornecedor as $prod)
+                    <option value="{{$prod['nome']}}">
+                @endforeach
+            </datalist>
+            @endif
         </div>
         <div class="form-group mb-0">
             <label for="quantidade" min="1" class="col-form-label">Quantidade *</label>
