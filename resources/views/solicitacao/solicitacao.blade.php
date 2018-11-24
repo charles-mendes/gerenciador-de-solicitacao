@@ -32,7 +32,7 @@
             <div class="card-block">
                 <h4 class="card-title">
                     Cadastrar Produto
-                    <button type="button" onclick="cadastrarProduto()" class="btn btn-primary">Cadastrar produto</button>
+                    <button type="button" onclick="cadastrarProduto()" class="btn btn-primary">+</button>
                 </h4>
                 <div class="table-responsive">
                     <table id="" class="display" style="width:100%">
@@ -46,7 +46,7 @@
             <div class="card-block">
                 <h4 class="card-title">
                     Cadastrar Servicos
-                    <button type="button" onclick="cadastrarServico()" class="btn btn-primary">Cadastrar servico</button>
+                    <button type="button" onclick="cadastrarServico()" class="btn btn-primary">+</button>
                 </h4>
                 <div class="table-responsive">
                     <table id="" class="display" style="width:100%">

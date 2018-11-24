@@ -14,7 +14,7 @@
         <input type="hidden" name="id_fornecedor" value="{{isset($id) ? $id :''}}">
         <div class="form-group mb-0">
             <label for="name" class="col-form-label">Nome do Fornecedor *</label>
-            <input type="text" class="form-control" id="nome" name="nome" value="{{$fornecedor->nome}}">
+            <input type="text" maxlength="50"  class="form-control" id="nome" name="nome" value="{{$fornecedor->nome}}">
         </div>
         <div class="form-group mb-2 mt-3">
         <input type="checkbox" id="check_identificacao" name="check_identificacao" {{ $check->check_identificacao == true ? 'checked' : ''}}/>
@@ -26,7 +26,7 @@
         </div>
         <div class="form-group mb-0">
             <label for="telefone" class="col-form-label">Telefone *</label>
-            <input type="number" class="form-control" id="telefone" name="telefone" value="{{$fornecedor->telefone}}">
+            <input type="text" class="form-control" id="telefone" name="telefone" value="{{$fornecedor->telefone}}">
         </div>
         <div class="form-group mb-0">
             <label for="email" class="col-form-label">Email *</label>
@@ -34,7 +34,7 @@
         </div>
         <div class="form-group mb-0">
                 <label for="descricao" class="col-form-label">Descricao do fornecedor :</label>
-                <input type="mail" class="form-control" id="descricao" name="descricao" value="{{$fornecedor->descricao}}">
+                <input type="mail" maxlength="200" class="form-control" id="descricao" name="descricao" value="{{$fornecedor->descricao}}">
             </div>
         <div class="form-group mb-2 mt-3">
             <input type="checkbox" id="check_endereco" name="check_endereco"  {{ $check->check_endereco == true  ? 'checked' : ''}}/>
@@ -54,7 +54,7 @@
             <input type="text" class="form-control verify-required" id="estado" name="estado" value="{{$fornecedor->endereco->estado}}">
 
             <label for="numero" class="col-form-label">numero</label>
-            <input type="text" class="form-control verify-required" id="numero" name="numero" value="{{$fornecedor->endereco->numero}}">
+            <input type="text" maxlength="8" class="form-control verify-required" id="numero" name="numero" value="{{$fornecedor->endereco->numero}}">
 
             <label for="cep" class="col-form-label">CEP</label>
             <input type="text" class="form-control verify-required" id="cep" name="cep" value="{{$fornecedor->endereco->cep}}">
@@ -73,7 +73,7 @@
                 <input type="text" class="form-control verify-required-contrato" id="numero_contrato" name="numero_contrato" value="{{$fornecedor->contrato->numero_contrato}}">
 
                 <label for="descricao_contrato" class="col-form-label">Descricao Contrato</label>
-                <input type="text" class="form-control verify-required-contrato" id="descricao_contrato" name="descricao_contrato" value="{{$fornecedor->contrato->descricao}}">
+                <input type="text" maxlength="200" class="form-control verify-required-contrato" id="descricao_contrato" name="descricao_contrato" value="{{$fornecedor->contrato->descricao}}">
 
                 <label for="data_vencimento" class="col-form-label">Data Vencimento</label>
                 <input type="date" class="form-control verify-required-contrato" id="data_vencimento" name="data_vencimento" value="{{$fornecedor->contrato->data_vencimento}}">

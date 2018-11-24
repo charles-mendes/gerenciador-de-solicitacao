@@ -25,6 +25,38 @@ function mascaraIdentificacao(){
     });
 }
 
+function mascaraParaTelefone(){
+    var CelphoneMaskBehavior = function (val) {
+        return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+    },
+    spOptions = {
+        onKeyPress: function(val, e, field, options) {
+            field.mask(CelphoneMaskBehavior.apply({}, arguments), options);
+        }
+    };
+
+
+
+    // $(function () {
+        // $('#cpf, .mask-cpf').mask('999.999.999-99');
+        // $('.valor').mask('000.000.000.000.000,00', {reverse: true});
+        // $('.cep').mask('00000-000');
+        $('#telefone').mask('(00) 0000-0000');
+        $('#telefone').mask(CelphoneMaskBehavior, spOptions);
+    // });
+}
+
+function naoDeixaNumero(id){
+    $('#'+ id).blur(function(){
+        let campo = $(this).val();
+        if(!isNaN(parseFloat(campo)) && isFinite(campo)){
+            $(this).val('');
+        }
+
+    });
+}
+
+
 function novoFornecedor(){
     $('#fornecedor .modal-content').load('/fornecedor/novo/', function () {
         $('#fornecedor').modal('show');
@@ -32,6 +64,16 @@ function novoFornecedor(){
         //colocando mascara no cnpj/cpf
         mascaraIdentificacao();
 
+        mascaraParaTelefone();
+
+        $('#cep').mask('00000-000'); // mascara do cep
+
+        naoDeixaNumero('nome');
+        naoDeixaNumero('endereco');
+        naoDeixaNumero('bairro');
+        naoDeixaNumero('cidade');
+        naoDeixaNumero('estado');
+        naoDeixaNumero('pais');
 
 
         $('table.display').DataTable();

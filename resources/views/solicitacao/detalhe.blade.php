@@ -27,18 +27,10 @@
             </div>
 
             <div class="form-group mb-3">
-                <label class="col-form-label">Ultima Modificacao</label>
+                <label class="col-form-label">Última Modificação</label>
                 <p>{{date('d/m/Y H:i:s' , strtotime($solicitacao->data_modificacao))}}</p>
             </div>
 
-            <div class="form-group mb-3">
-                <label class="col-form-label">Status</label>
-                @if($solicitacao->status == 'A')
-                    <span class="label label-success">Ativo</span>
-                @else
-                    <span class="label label-success">Inativo</span>
-                @endif
-            </div>
             <h3>Produtos</h3>
             @if($solicitacao->produtos->first() == [])
                 <p>Não há produtos.</p>

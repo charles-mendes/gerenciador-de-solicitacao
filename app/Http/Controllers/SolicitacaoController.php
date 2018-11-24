@@ -653,7 +653,7 @@ class SolicitacaoController extends Controller
         if(Auth::user()->tipo_conta == 'S'){
             $this->validate($request,[
                 'nome' => 'required',
-                'quantidade' => 'required',
+                'quantidade' => 'required|min:1',
                 //  'valor'=> 'required',
                 'descricao'=>'required',
              ]);
@@ -661,8 +661,8 @@ class SolicitacaoController extends Controller
         }else{
             $this->validate($request,[
                 'nome' => 'required',
-                'quantidade' => 'required',
-                'valor'=> 'required',
+                'quantidade' => 'required|min:1',
+                'valor'=> 'required|min:1',
                 'descricao'=>'required',
              ]);
 
