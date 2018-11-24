@@ -52,9 +52,7 @@ function avaliaSolicitacao(solicitacao){
 }
 
 $(document).ready(function () {
-
     $('#example').DataTable({
         "language": {"url":"/plugins/datatables/language/Portuguese-Brasil.json"},
     });
-
 });
