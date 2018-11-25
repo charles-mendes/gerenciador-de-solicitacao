@@ -41,6 +41,7 @@
 </head>
 @php
     // dd(session()->all());
+    // dd(Auth::user());
 @endphp
 <body class="fix-header fix-sidebar card-no-border">
     <!-- ============================================================== -->

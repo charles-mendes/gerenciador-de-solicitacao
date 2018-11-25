@@ -47,33 +47,75 @@ class SolicitacaoController extends Controller
         return view('solicitacao.solicitacao',['solicitacao' => $solicitacao ,'status' => 'criando']);
     }
     
+    //listar Solicitações
     public function listar(){
-        //caso usuario for do tipo 'S' == solicitante faz filtro mostrando apenas solicitações dele
+        //usuario tipo 'S', sistema faz filtro mostrando apenas solicitações que ele criar
         if(Auth::user()->tipo_conta == 'S'){
-            $solicitacoes = Solicitacao::all()->where('id_criador',Auth::user()->id);
+            $solicitacoes = Solicitacao::where('id_criador',Auth::user()->id)->get();
         }else if(Auth::user()->tipo_conta == 'A'){
             //so pode mostrar solicitações que estão pendentes e que foram aprovadas e reprovados pelo Aprovador
-            $status_pendente = Status::where('tipo_status','Pendente')->get()->first();
-            $status_aprovador_aprovado = Status::where('tipo_status','Aprovado pelo Aprovador')->get()->first();
-            $status_aprovador_reprovado = Status::where('tipo_status','Reprovado pelo Aprovador')->get()->first();
+            $status_pendente = $this->pegaStatus('Pendente');
+            $status_aprovador_aprovado = $this->pegaStatus('Aprovado pelo Aprovador');
+            $status_aprovador_reprovado = $this->pegaStatus('Reprovado pelo Aprovador');
             
             $solicitacoes = Solicitacao::where('id_status',$status_pendente->id)
             ->orwhere('id_status',$status_aprovador_aprovado->id)
             ->orwhere('id_status',$status_aprovador_reprovado->id)->get();
-        }else{
+        }else if(Auth::user()->tipo_conta == 'AD' ||  Auth::user()->tipo_conta == 'C'){
             $solicitacoes = Solicitacao::all();
+        }else if(Auth::user()->tipo_conta == 'D'){
+            dd('Não foi feito configurações para esse tipo de conta');
+        }else{
+            dd('Não foi feito configurações para esse tipo de conta');
+            //Criar erros
         }
         
-        //mandar para tela listar com os produtos e com os servicos
+        //mandar para tela listar solicitações
         return view('solicitacao.listar', ['solicitacoes'=> $solicitacoes]);
 
     }
 
+    // private function verificaVisualizacao($id){
+    //     // id é o id da solicitação
+    //     $tipo_conta = Auth::user()->tipo_conta;
+
+    //     if($tipo_conta == 'S'){
+    //         //tem que verificar se a solicitação é a que o usuario criou
+    //         $solicitacao = Solicitacao::find($id);
+    //         if($solicitacao->id_criador == Auth::user()->id){
+    //             return true;
+    //         }
+    //     }else if($tipo_conta == 'C' || $tipo_conta == 'AD'){
+    //         return true;
+    //     }else if($tipo_conta == 'D'){
+    //         return true;
+    //     }else{
+    //         return back()->withErrors('Tipo de conta não configurado.');
+    //     }
+    //     return false;
+    // }
+
     
     public function detalhe($id){
-        //pegando solicitacao
-        $solicitacao = Solicitacao::find($id);
-        return view('solicitacao.detalhe',['solicitacao'=> $solicitacao,'id'=> $id]);        
+        $id = (int) $id;
+        if(is_numeric($id)){
+            // dd($this->verificaVisualizacao($id));
+
+            //pegando solicitacao
+            $solicitacao = Solicitacao::find($id);
+            if($solicitacao == null){
+                return back()->withErrors('Solicitação não encontrada.');
+            }
+            return view('solicitacao.detalhe',['solicitacao'=> $solicitacao,'id'=> $id]);  
+        }          
+    }
+
+    private function pegaStatus($status){
+        if(isset($status)){
+            $status = Status::where('tipo_status',$status)->get()->first();
+
+            return $status;
+        }
     }
 
 
@@ -83,24 +125,29 @@ class SolicitacaoController extends Controller
             $solicitacao = Solicitacao::find($id);
             if($solicitacao == null){
                 return back()->withErrors('Solicitação não encontrada.');
+                //error perfeito ta voltando na tela
             }
             $usuario = Auth::user()->tipo_conta;
 
-            if($usuario == 'AD' || $usuario == 'A' || $usuario == 'C' || $usuario == 'D'){
-                
-            }else{
-                return back()->withErrors('Não possui altorização.');
-            }    
-            
-            
-
-            $status = '';
-            $falta_preencher = false;
-            $total = 0;
+            if( !($usuario == 'A' || $usuario == 'C' || $usuario == 'D') ){
+                return back()->withErrors('Não possui autorização.');
+            }
 
             //Verificando se solicitação ja foi aprovada pelo mesmo tipo de usuario
             $status_atual_solicitacao =  Status::find($solicitacao->id_status);
             $tipo_status = $status_atual_solicitacao->tipo_status;
+
+            $status = '';
+            $falta_preencher = false;
+            $total = 0;
+    
+            //1° situação -  a solicitação esta pendente
+            if($status_atual_solicitacao->tipo_status == 'Pendente'){
+                $status = 'Pendente';
+                return view('solicitacao.avalia.avalia_solicitacao',['solicitacao'=> $solicitacao,'id'=> $id,'status' => $status]);    
+            }
+
+
 
             if( ($usuario == 'A' && $tipo_status == 'Aprovado pelo Aprovador') ||
                 ($usuario == 'C' && $tipo_status == 'Aprovado pelo Comprador') ||
@@ -114,10 +161,10 @@ class SolicitacaoController extends Controller
             //caso haja justificativa pegar a ultima que seria a mais valida
 
             //verifica quais são os reprovados para demostrar justificativa
-            $status_reprovado_aprovador = Status::where('tipo_status','Reprovado pelo Aprovador')->get()->first();
-            $status_reprovado_adm = Status::where('tipo_status','Reprovado pelo Administrador')->get()->first();
-            $status_reprovado_comprador = Status::where('tipo_status','Reprovado pelo Comprador')->get()->first();
-            $status_reprovado_diretoria = Status::where('tipo_status','Reprovado pela Diretoria')->get()->first();
+            $status_reprovado_aprovador = $this->pegaStatus('Reprovado pelo Aprovador');
+            $status_reprovado_adm = $this->pegaStatus('Reprovado pelo Administrador');
+            $status_reprovado_comprador = $this->pegaStatus('Reprovado pelo Comprador');
+            $status_reprovado_diretoria = $this->pegaStatus('Reprovado pela Diretoria');
 
             $ids_reprovados = [
                 $status_reprovado_aprovador->id,
@@ -177,9 +224,7 @@ class SolicitacaoController extends Controller
             }
 
 
-            if($status_atual_solicitacao->tipo_status == 'Pendente'){
-                $status = 'Pendente';
-            }
+            
             // dd($falta_preencher);
             
             
@@ -191,7 +236,7 @@ class SolicitacaoController extends Controller
                             'justificativa' => $justificativa,
                             ]);       
         }
-        return back();
+        return back()->withErrors('Solicitação não encontrada.');
     }
 
     private function somaValorSolicitacao($solicitacao){
@@ -233,6 +278,9 @@ class SolicitacaoController extends Controller
     
         if($id !== null){
             $solicitacao = Solicitacao::find($id);
+            if($solicitacao == null){
+                return back()->withErrors('Solicitação não encontrada.');
+            }
             return view('solicitacao.modal.verifica_email_diretoria',['solicitacao'=> $solicitacao, 'id' => $id]);    
         }
         return back();
@@ -267,16 +315,19 @@ class SolicitacaoController extends Controller
 
         
         $solicitacao = Solicitacao::find($request->input('id_solicitacao'));
+        if($solicitacao == null){
+            return back()->withErrors('Solicitação não encontrada.');
+        }
         
         //muda status para aprovado
-        $status = Status::where('tipo_status','Aprovado pelo Comprador')->get()->first();
+        $status = $this->pegaStatus('Aprovado pelo Comprador');
         $solicitacao->id_status = $status->id;
         $solicitacao->save();
 
         $this->setHistorico($solicitacao);
 
         //muda status para esperando diretoria
-        $status = Status::where('tipo_status','Esperando Aprovação da diretoria')->get()->first();
+        $status = $this->pegaStatus('Esperando Aprovação da diretoria');
         $solicitacao->id_status = $status->id;
         $solicitacao->save();
 
@@ -309,6 +360,9 @@ class SolicitacaoController extends Controller
         ]);
 
         $solicitacao = Solicitacao::find($request->input('id_solicitacao'));
+        if($solicitacao == null){
+            return back()->withErrors('Solicitação não encontrada.');
+        }
 
         //contar valores da solicitação
         
@@ -317,12 +371,12 @@ class SolicitacaoController extends Controller
         $tipo_conta = Auth::user()->tipo_conta;
 
         if($tipo_conta == 'D'){
-            $status = Status::where('tipo_status','Aprovado pela Diretoria')->get()->first();
+            $status = $this->pegaStatus('Aprovado pela Diretoria');
         }else if($tipo_conta == 'A'){
-            $status = Status::where('tipo_status','Aprovado pelo Aprovador')->get()->first();
+            $status = $this->pegaStatus('Aprovado pelo Aprovador');
         }else if($tipo_conta == 'C'){
             //tenho que gravar no historico que foi aprovado pelo comprador e que inicio cotação
-            $status = Status::where('tipo_status','Aprovado pelo Comprador')->get()->first();
+            $status = $this->pegaStatus('Aprovado pelo Comprador');
             if($status == null){
                 return back()->withErrors('Status não encontrado.');
             }
@@ -332,10 +386,10 @@ class SolicitacaoController extends Controller
             //enviando que foi aprovado
             $this->setHistorico($solicitacao);
 
-            $status = Status::where('tipo_status','Iniciou Cotação')->get()->first();
+            $status = $this->pegaStatus('Iniciou Cotação');
 
         }else if($tipo_conta == 'AD'){
-            $status = Status::where('tipo_status','Aprovado pelo Administrador')->get()->first();
+            $status = $this->pegaStatus('Aprovado pelo Administrador');
         }
     
         if($status == null){
@@ -382,13 +436,13 @@ class SolicitacaoController extends Controller
         //pegando status
         $tipo_conta = Auth::user()->tipo_conta;
         if($tipo_conta == 'D'){
-            $status = Status::where('tipo_status','Reprovado pela Diretoria')->get()->first();
+            $status = $this->pegaStatus('Reprovado pela Diretoria');
         }else if($tipo_conta == 'A'){
-            $status = Status::where('tipo_status','Reprovado pelo Aprovador')->get()->first();
+            $status = $this->pegaStatus('Reprovado pelo Aprovador');
         }else if($tipo_conta == 'C'){
-            $status = Status::where('tipo_status','Reprovado pelo Comprador')->get()->first();
+            $status = $this->pegaStatus('Reprovado pelo Comprador');
         }else if($tipo_conta == 'AD'){
-            $status = Status::where('tipo_status','Reprovado pelo Administrador')->get()->first();
+            $status = $this->pegaStatus('Reprovado pelo Administrador');
         }
 
         if($status == null){
@@ -397,6 +451,9 @@ class SolicitacaoController extends Controller
 
         //adicionando status na solicitação
         $solicitacao = Solicitacao::find($request->input('id_solicitacao'));
+        if($solicitacao == null){
+            return back()->withErrors('Solicitação não encontrada.');
+        }
         $solicitacao->id_status = $status->id;
         $solicitacao->save();
 
@@ -420,6 +477,9 @@ class SolicitacaoController extends Controller
     
         if($id !== null){
             $solicitacao = Solicitacao::find($id);
+            if($solicitacao == null){
+                return back()->withErrors('Solicitação não encontrada.');
+            }
             return view('solicitacao.modal.verifica_cotacao',['solicitacao'=> $solicitacao]);    
         }
         return back();
@@ -431,10 +491,13 @@ class SolicitacaoController extends Controller
             // 'justificativa'=>'required',
         ]);
         //altera status da solicitacao
-        $status = Status::where('tipo_status','Finalizou Cotação')->get()->first();
+        $status = $this->pegaStatus('Finalizou Cotação');
 
         //adicionando status na solicitação
         $solicitacao = Solicitacao::find($request->input('id_solicitacao'));
+        if($solicitacao == null){
+            return back()->withErrors('Solicitação não encontrada.');
+        }
         $solicitacao->id_status = $status->id;
         $solicitacao->save();
 
@@ -442,10 +505,9 @@ class SolicitacaoController extends Controller
         $this->setHistorico($solicitacao);
 
         //altera status da solicitacao
-        $status = Status::where('tipo_status','Em processo de execução')->get()->first();
+        $status = $this->pegaStatus('Em processo de execução');
 
-        //adicionando status na solicitação
-        $solicitacao = Solicitacao::find($request->input('id_solicitacao'));
+        //adicionando outro status na solicitação
         $solicitacao->id_status = $status->id;
         $solicitacao->save();
 
@@ -464,10 +526,13 @@ class SolicitacaoController extends Controller
         }
         
         //altera status da solicitacao
-        $status = Status::where('tipo_status','Finalizada')->get()->first();
+        $status = $this->pegaStatus('Finalizada');
 
         //adicionando status na solicitação
         $solicitacao = Solicitacao::find($id);
+        if($solicitacao == null){
+            return back()->withErrors('Solicitação não encontrada.');
+        }
         $solicitacao->id_status = $status->id;
         $solicitacao->save();
 
@@ -499,7 +564,7 @@ class SolicitacaoController extends Controller
         //cria uma solicitacao
         $solicitacao = new Solicitacao();
         //pegar status de pendente
-        $status = Status::where('tipo_status','Pendente')->get()->first();
+        $status = $this->pegaStatus('Pendente');
         $solicitacao->id_status = $status->id;
         $solicitacao->descricao = $request->input('descricao');
         $solicitacao->id_criador = Auth::user()->id;
@@ -580,7 +645,6 @@ class SolicitacaoController extends Controller
         if(is_numeric($id)){
             //verifica se o usuario tipo solicitante tem permissão para editar essa soliciitação
             if(Auth::user()->tipo_conta == "S"){
-                // dd(Solicitacao::all(),$id,Auth::user()->id);
                 $solicitacoes = Solicitacao::where('id_criador',Auth::user()->id)->get();
                 $verify = false;
                 foreach($solicitacoes as $solicitacao){
@@ -599,6 +663,9 @@ class SolicitacaoController extends Controller
             //verifica se usuario venho ta url solicitação, caso venho faz o find da solicitação requerida e coloca na session novaSolicitação
             if(!is_numeric($previous)){
                 $solicitacao = Solicitacao::find($id);
+                if($solicitacao == null){
+                    return back()->withErrors('Solicitação não encontrada.');
+                }
                 session(['novaSolicitacao' => $solicitacao ]);
             }
             return view('solicitacao.solicitacao',['status' => 'editando' ,'id_solicitacao' => $id]);
@@ -687,6 +754,9 @@ class SolicitacaoController extends Controller
         
         if($id != null){
             $solicitacao = Solicitacao::find($id);
+            if($solicitacao == null){
+                return back()->withErrors('Solicitação não encontrada.');
+            }
             return view('solicitacao.modal.verifica_solicitacao',['solicitacao'=> $solicitacao]);    
         }
         return back();
@@ -700,8 +770,11 @@ class SolicitacaoController extends Controller
         $id_solicitacao = (int) request()->input('id_solicitacao');
 
         $solicitacao = Solicitacao::find($id_solicitacao);
+        if($solicitacao == null){
+            return back()->withErrors('Solicitação não encontrada.');
+        }
 
-        $status = Status::where('tipo_status','Inativada')->get()->first();
+        $status = $this->pegaStatus('Inativada');
         $solicitacao->id_status = $status->id;
         $solicitacao->save();
 
