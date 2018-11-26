@@ -1,5 +1,6 @@
 @php
-    dd($solicitacao->id,Auth::user()->id);
+    // dd($solicitacao->id,Auth::user()->id);
+    // dd( );
 @endphp
 {{-- <div class="modal-content"> --}}
     <div class="modal-header">
@@ -67,26 +68,42 @@
                     </div>
                 </div>
             </div>
-        {{-- @endif --}}
-        {{-- verifica se foi ele quem aprovou se for da para reprovar --}}
-        {{-- @if(( Auth::user()->tipo_conta == 'A' && App\Status::find($solicitacao->id_status)->tipo_status == 'Aprovado pelo Aprovador'  && ) )
-        
-        @endif --}}
         @else
-            <div class="row">
-                <div class="col-12 text-center pt-5">
-                    <div class="row">
-                        <div class="col-6">
-                            <button type="button" class="btn btn-success" data-id="{{$id}}" onclick="editarSolicitacao(this);">Editar solicitação</button>
-                        </div>
-                        <div class="col-6"> 
-                            <button type="button" class="btn btn-primary" data-id="{{$id}}" onclick="avaliaSolicitacao(this);">Avaliar solicitação</button>
+            
+            @if( Auth::user()->tipo_conta == 'A' && App\Status::find($solicitacao->id_status)->tipo_status == 'Aprovado pelo Aprovador'  &&  $aprovou == true)
+                <div class="row">
+                    <div class="col-12 text-center pt-5">
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-success" data-id="{{$id}}" onclick="editarSolicitacao(this);">Editar solicitação</button>
+                            </div>
+                            <div class="col-6"> 
+                                <button type="button" class="btn btn-primary" data-id="{{$id}}" onclick="avaliaSolicitacao(this);">Reprovar solicitação</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        @endif    
+            @else
+                <div class="row">
+                    <div class="col-12 text-center pt-5">
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-success" data-id="{{$id}}" onclick="editarSolicitacao(this);">Editar solicitação</button>
+                            </div>
+                            <div class="col-6"> 
+                                <button type="button" class="btn btn-primary" data-id="{{$id}}" onclick="avaliaSolicitacao(this);">Avaliar solicitação</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif    
             
+
+        @endif
+        {{-- verifica se foi ele quem aprovou se for da para reprovar --}}
+        {{-- se for outro aprovador tem que aparecer que ja foi aprovada por outro  --}}
+        
+        
           
         </form>
     </div>

@@ -106,7 +106,18 @@ class SolicitacaoController extends Controller
             if($solicitacao == null){
                 return back()->withErrors('Solicitação não encontrada.');
             }
-            return view('solicitacao.detalhe',['solicitacao'=> $solicitacao,'id'=> $id]);  
+
+            //verificando se a aprovação da solicitação foi feita pelo usuario atual
+            $ultimo_registro = HistoricoSolicitacao::where('id_solicitacao',$solicitacao->id)->where('id_usuario',Auth::user()->id)->get()->last();
+            
+            $aprovou = false;
+            if(!($ultimo_registro == null) ){
+                if($ultimo_registro->id_status == $this->pegaStatus('Aprovado pelo Aprovador')->id){
+                    $aprovou = true;
+                }
+            }
+
+            return view('solicitacao.detalhe',['solicitacao'=> $solicitacao,'id'=> $id, 'aprovou' => $aprovou]);  
         }          
     }
 
@@ -123,6 +134,7 @@ class SolicitacaoController extends Controller
         $id = (int) $id;
         if(is_numeric($id)){
             $solicitacao = Solicitacao::find($id);
+            
             if($solicitacao == null){
                 return back()->withErrors('Solicitação não encontrada.');
                 //error perfeito ta voltando na tela
@@ -133,22 +145,41 @@ class SolicitacaoController extends Controller
                 return back()->withErrors('Não possui autorização.');
             }
 
-            //Verificando se solicitação ja foi aprovada pelo mesmo tipo de usuario
+            
             $status_atual_solicitacao =  Status::find($solicitacao->id_status);
             $tipo_status = $status_atual_solicitacao->tipo_status;
 
             $status = '';
-            $falta_preencher = false;
-            $total = 0;
+            $justificativa = $this->pegaJustificativa($solicitacao); //pegando justificativas
+            
     
             //1° situação -  a solicitação esta pendente
+            //se ela esta pendente é para o usuario aprovar
+            //quem pode aprovar : Aprovador e Comprador
             if($status_atual_solicitacao->tipo_status == 'Pendente'){
                 $status = 'Pendente';
-                return view('solicitacao.avalia.avalia_solicitacao',['solicitacao'=> $solicitacao,'id'=> $id,'status' => $status]);    
+                return view('solicitacao.avalia.avalia_solicitacao',['solicitacao'=> $solicitacao,'id'=> $id,'status' => $status,'justificativa' => $justificativa]);    
             }
 
 
+            //2 ° aprovador que aprovou solicitação pode reprovar solicitação
+            if($status_atual_solicitacao->tipo_status == 'Aprovado pelo Aprovador'){
 
+                 //verificando se a aprovação da solicitação foi feita pelo usuario atual
+                $ultimo_registro = HistoricoSolicitacao::where('id_solicitacao',$solicitacao->id)->where('id_usuario',Auth::user()->id)->get()->last();
+                if(!($ultimo_registro == null) ){
+                    if($ultimo_registro->id_status == $this->pegaStatus('Aprovado pelo Aprovador')->id){
+                        return view('solicitacao.avalia.reprova_solicitacao',['solicitacao'=> $solicitacao,'id'=> $id,'justificativa' => $justificativa]);
+                    }
+                    
+                }else{
+                    //verifica algo
+                }
+                  
+            }
+
+            
+            //Verificando se solicitação ja foi aprovada pelo mesmo tipo de usuario
             if( ($usuario == 'A' && $tipo_status == 'Aprovado pelo Aprovador') ||
                 ($usuario == 'C' && $tipo_status == 'Aprovado pelo Comprador') ||
                 ($usuario == 'AD' && $tipo_status == 'Aprovado pelo Administrador') ||
@@ -156,12 +187,65 @@ class SolicitacaoController extends Controller
                     return back()->withErrors('Esta solicitação já foi aprovada por um usúario do mesmo perfil do que o seu.');
             }
 
+            //3° Comprador quer finalizar solicitação
+            if($status_atual_solicitacao->tipo_status == 'Iniciou Cotação' && Auth::user()->tipo_conta == 'C'){
+                $status = 'Iniciou Cotação';
+
+                $falta_preencher = false;
+                $total = 0;
+                $array_soma = $this->somaValorSolicitacao($solicitacao);
+                $falta_preencher = $array_soma['falta_preencher'];
+                $total = $array_soma['total'];
+
+                return view('solicitacao.avalia.finaliza_cotacao',[
+                    'solicitacao'=> $solicitacao,
+                    'id'=> $id, 'status' => $status, 
+                    'justificativa' => $justificativa,
+                    'total' => $total,
+                    'falta_preencher' => $falta_preencher
+                ]);   
+            }
 
 
-            //caso haja justificativa pegar a ultima que seria a mais valida
+            //4°Quando comprador finalizaou sua cotacao
+            if($status_atual_solicitacao->tipo_status == 'Em processo de execução'){
+                $status = 'Em processo de execução';
 
-            //verifica quais são os reprovados para demostrar justificativa
-            $status_reprovado_aprovador = $this->pegaStatus('Reprovado pelo Aprovador');
+                return view('solicitacao.avalia.finaliza_solicitacao',[
+                    'solicitacao'=> $solicitacao,
+                    'id'=> $id, 'status' => $status, 
+                    'justificativa' => $justificativa,
+                    // 'total' => $total,
+                    // 'falta_preencher' => $falta_preencher
+                ]);  
+            }
+
+            //5° Quando solicitação foi finalizada 
+            if($status_atual_solicitacao->tipo_status == 'Finalizada'){
+                $status = 'Finalizada';
+
+
+                return view('solicitacao.avalia.finalizada',[
+                    'solicitacao'=> $solicitacao,
+                    'id'=> $id, 'status' => $status, 
+                    'justificativa' => $justificativa,
+                    // 'total' => $total,
+                    // 'falta_preencher' => $falta_preencher
+                ]);  
+            }
+
+
+            //6° quando solicitação foi regeitada por aprovar mas ele quer aprovar ela
+      
+        }
+        return back()->withErrors('Não foi encontrado configurações adequadas.');
+    }
+
+    private function pegaJustificativa($solicitacao){
+        $status_atual_solicitacao =  Status::find($solicitacao->id_status);
+
+        //caso haja justificativa pegar a ultima que seria a mais valida
+        $status_reprovado_aprovador = $this->pegaStatus('Reprovado pelo Aprovador');
             $status_reprovado_adm = $this->pegaStatus('Reprovado pelo Administrador');
             $status_reprovado_comprador = $this->pegaStatus('Reprovado pelo Comprador');
             $status_reprovado_diretoria = $this->pegaStatus('Reprovado pela Diretoria');
@@ -193,72 +277,23 @@ class SolicitacaoController extends Controller
             }else{
                 $justificativa = null;
             }
-            
-            
-
-            
-
-
-            if($status_atual_solicitacao->tipo_status == 'Iniciou Cotação' && Auth::user()->tipo_conta == 'C'){
-                $status = 'Iniciou Cotação';
-                $falta_preencher = $this->somaValorSolicitacao($solicitacao);
-            }
-
-            if($status_atual_solicitacao->tipo_status == 'Em processo de execução'){
-                $status = 'Em processo de execução';
-            }
-
-            if($status_atual_solicitacao->tipo_status == 'Finalizada'){
-                $status = 'Finalizada';
-            }
-            if($status_atual_solicitacao->tipo_status == 'Aprovado pelo Aprovador'){
-                $status = 'Aprovado pelo Aprovador';
-            }
-
-            if($status_atual_solicitacao->tipo_status == 'Aprovado pelo Administrador' && Auth::user()->tipo_conta == 'AD'){
-                $status = 'Aprovado pelo Administrador';
-            }else if( ($status_atual_solicitacao->tipo_status == 'Aprovado pelo Administrador' ||  $status_atual_solicitacao->tipo_status == 'Aprovado pelo Aprovador' ) &&
-             Auth::user()->tipo_conta == 'C'){
-                $status = 'Iniciou Cotação';
-                $falta_preencher = $this->somaValorSolicitacao($solicitacao);
-            }
-
-
-            
-            // dd($falta_preencher);
-            
-            
-                return view('solicitacao.aprova',[
-                            'solicitacao'=> $solicitacao,
-                            'id'=> $id, 'status' => $status, 
-                            'falta_preencher' => $falta_preencher,
-                            'total' => $total,
-                            'justificativa' => $justificativa,
-                            ]);       
-        }
-        return back()->withErrors('Solicitação não encontrada.');
+        return $justificativa;
     }
 
     private function somaValorSolicitacao($solicitacao){
         //soma valor da solicitação 
         $total = null;
         $falta_preencher = false;
+        
         if($solicitacao->produtos->first() == null && $solicitacao->servicos->first() == null){
             $falta_preencher = true;
         }else{
-            // dd(is_numeric($solicitacao->produtos[0]->valor));
-            foreach($solicitacao->produtos as $produto){
-                if(is_numeric($produto->valor)){
-                    $total += $produto->valor;
-                }else{
-                    $falta_preencher = true;
-                    break;
-                }
-            }
-            if($falta_preencher == false){
-                foreach($solicitacao->servicos as $servico){
-                    if(is_numeric($servico->valor)){
-                        $total += $servico->valor;
+            
+            if($solicitacao->produtos->first() !== null){
+                
+                foreach($solicitacao->produtos as $produto){
+                    if(is_numeric($produto->valor)){
+                        $total += $produto->valor;
                     }else{
                         $falta_preencher = true;
                         break;
@@ -266,9 +301,22 @@ class SolicitacaoController extends Controller
                 }
             }
 
-
+            if($solicitacao->servicos->first() !== null){
+                // dd('entrei');
+                if($falta_preencher == false){
+                    foreach($solicitacao->servicos as $servico){
+                        if(is_numeric($servico->valor)){
+                            $total += $servico->valor;
+                        }else{
+                            $falta_preencher = true;
+                            break;
+                        }
+                    }
+                }
+            }     
+            
         } 
-        return $falta_preencher;
+        return array('falta_preencher' => $falta_preencher,'total' => $total);
     }
 
     public function mostrar_verificacao_diretoria($id){
@@ -640,28 +688,38 @@ class SolicitacaoController extends Controller
     }
 
 
-    public function editar_solicitacao($id){
+    public function editar_solicitacao($id,Request $request){
         $id = (int) $id;
         if(is_numeric($id)){
+            $solicitacao = Solicitacao::find($id);
+            if($solicitacao == null){
+                return redirect()->route('listar_solicitacao')->withErrors('Solicitação não encontrada.');
+            }
+
             //verifica se o usuario tipo solicitante tem permissão para editar essa soliciitação
             if(Auth::user()->tipo_conta == "S"){
                 $solicitacoes = Solicitacao::where('id_criador',Auth::user()->id)->get();
                 $verify = false;
-                foreach($solicitacoes as $solicitacao){
-                    if($solicitacao->id == $id){
+                foreach($solicitacoes as $soli){
+                    if($soli->id == $id){
                         $verify = true;
                     }
                 }
                 if(!($verify)){
-                    return back()->withErrors('Você não tem permissão para editar esta solicitação.');
+                    return redirect()->route('listar_solicitacao')->withErrors('Você não tem permissão para editar esta solicitação.');
                 }
             }
-
             //pegando a url da onde o usuario venho 
-            $url_previous = explode('/',url()->previous());
-            $previous = end($url_previous);
+
+            //se usuario vem de solicitaçao
+            $url = explode('/',$request->path());
+
+            // $url_previous = explode('/',url()->previous());
+            // dd('aqui');
+            // $previous = end($url_previous);
             //verifica se usuario venho ta url solicitação, caso venho faz o find da solicitação requerida e coloca na session novaSolicitação
-            if(!is_numeric($previous)){
+            // dd(!is_numeric($previous),$previous );
+            if($url[0] == 'solicitacao'){
                 $solicitacao = Solicitacao::find($id);
                 if($solicitacao == null){
                     return back()->withErrors('Solicitação não encontrada.');
@@ -1170,3 +1228,4 @@ class SolicitacaoController extends Controller
 
 
 }
+

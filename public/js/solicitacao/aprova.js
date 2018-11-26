@@ -53,8 +53,6 @@ function justificarMotivo(solicitacao){
     $('#justificativa .modal-content').load('/solicitacao/justificativa/'+ id, function () {
         $('#justificativa').modal('show');
     });
-
-
 }
 
 $(document).ready(function () {

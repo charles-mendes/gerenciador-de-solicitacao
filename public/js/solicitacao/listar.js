@@ -56,3 +56,18 @@ $(document).ready(function () {
         "language": {"url":"/plugins/datatables/language/Portuguese-Brasil.json"},
     });
 });
+
+// function reprovarSolicitacao(solicitacao){
+//     let id = $(solicitacao).attr("data-id");
+
+//     window.location.href = '/solicitacao/avalia/'+ id;
+// }
+
+
+function justificarMotivo(solicitacao){
+    let id = $(solicitacao).attr("data-id");
+
+    $('#justificativa .modal-content').load('/solicitacao/justificativa/'+ id, function () {
+        $('#justificativa').modal('show');
+    });
+}

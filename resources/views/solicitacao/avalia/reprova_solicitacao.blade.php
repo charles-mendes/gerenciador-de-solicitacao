@@ -4,8 +4,8 @@
     @component(
         'layouts.component.breadcrumb',
         [
-            'title' => 'Avalia Solicitaçao',
-            'localizacoes' => [ ['Home', route('listar_solicitacao') ],['avalia solicitacao', ''] ]
+            'title' => 'Reprovar Solicitaçao',
+            'localizacoes' => [ ['Home', route('listar_solicitacao') ],['Reprovar solicitacao', ''] ]
         ]
     )
     @endcomponent
@@ -33,8 +33,9 @@
                     </div>
                 @endif
                 <div class="card-block">
-                        <h4 class="card-title text-center">Avaliar Solicitação</h4>
-                        <h4 class="card-title text-center">Você deseja aprovar está solicitação ?</h4>
+                        <h4 class="card-title text-center">Reprovar Solicitação</h4>
+                        <h4 class="card-title text-center">esta solicitação já está aprovada</h4>
+                        <h4 class="card-title text-center">Você deseja reprovar está solicitação ?</h4>
 
                     <h3 class="pt-4 text-center">Produtos</h3>
                     @if($solicitacao->produtos->first() == [])
@@ -61,18 +62,16 @@
                     <div class="row">
                         <div class="col-12 text-center pt-3">
                             <div class="row">
-                                <div class="col-6">
-                                    <button type="button" class="btn btn-danger" data-id="{{$id}}" onclick="justificarMotivo(this);">Não Aprovar</button>
-                                </div>
                                 <div class="col-6"> 
-                                    <button type="button" class="btn btn-primary" data-id="{{$id}}" onclick="aprovarSolicitacao();">Aprovar</button>
+                                    <a type="button" href="{{route('listar_solicitacao')}}" class="btn btn-primary">Voltar</a>
+                                    {{-- <button type="button" class="btn btn-primary" data-id="{{$id}}" onclick="aprovarSolicitacao();">Voltar</button> --}}
+                                </div> 
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-danger" data-id="{{$id}}" onclick="justificarMotivo(this);">Reprovar</button>
                                 </div>
+                                
                             </div>
                         </div>
-                        <form id="cadastrar_aprovacao" action="{{route('cadastrar_aprovacao')}}" method="POST">
-                            @csrf
-                            <input type="hidden" name="id_solicitacao" value="{{isset($id) ? $id :''}}">
-                        </form>
                     </div>
                 </div>
             </div>
