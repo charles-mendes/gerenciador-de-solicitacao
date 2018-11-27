@@ -71,3 +71,11 @@ function justificarMotivo(solicitacao){
         $('#justificativa').modal('show');
     });
 }
+
+// function ativarSolicitacao(solicitacao){
+//     let id = $(solicitacao).attr("data-id");
+
+//     $('#justificativa .modal-content').load('/solicitacao/ativa/'+ id, function () {
+//         $('#justificativa').modal('show');
+//     });
+// }

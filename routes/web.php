@@ -66,6 +66,8 @@ Route::group(['middleware' => 'menu'], function () {
     Route::post('/solicitacao/aprovar', 'SolicitacaoController@cadastrar_aprovacao')->name('cadastrar_aprovacao');
     Route::get('/solicitacao/finaliza_cotacao/{id}', 'SolicitacaoController@mostrar_verificacao_cotacao');
     Route::post('/solicitacao/finaliza_cotacao', 'SolicitacaoController@finaliza_cotacao')->name('finaliza_cotacao');
+
+    Route::post('/solicitacao/ativar', 'SolicitacaoController@cadastrar_ativacao')->name('cadastrar_ativacao');
     
     Route::get('/solicitacao/finaliza_solicitacao/{id}', 'SolicitacaoController@finaliza_solicitacao');
     

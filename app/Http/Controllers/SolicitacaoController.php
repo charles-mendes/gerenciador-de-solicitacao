@@ -161,23 +161,53 @@ class SolicitacaoController extends Controller
                 return view('solicitacao.avalia.avalia_solicitacao',['solicitacao'=> $solicitacao,'id'=> $id,'status' => $status,'justificativa' => $justificativa]);    
             }
 
-
+            //aqui é quando o aprovador já aprovou a solicitação
             //2 ° aprovador que aprovou solicitação pode reprovar solicitação
             if($status_atual_solicitacao->tipo_status == 'Aprovado pelo Aprovador'){
-
                  //verificando se a aprovação da solicitação foi feita pelo usuario atual
-                $ultimo_registro = HistoricoSolicitacao::where('id_solicitacao',$solicitacao->id)->where('id_usuario',Auth::user()->id)->get()->last();
+                $ultimo_registro = HistoricoSolicitacao::where('id_solicitacao',$solicitacao->id)->get()->last();
+                
                 if(!($ultimo_registro == null) ){
-                    if($ultimo_registro->id_status == $this->pegaStatus('Aprovado pelo Aprovador')->id){
+                    //ele foi o cara que aprovou
+                    if($ultimo_registro->id_status == $this->pegaStatus('Aprovado pelo Aprovador')->id && $ultimo_registro->id_usuario == Auth::user()->id ){
                         return view('solicitacao.avalia.reprova_solicitacao',['solicitacao'=> $solicitacao,'id'=> $id,'justificativa' => $justificativa]);
+                    }else{
+                        if($usuario == 'C'){
+                            return view('solicitacao.avalia.reprova_solicitacao',['solicitacao'=> $solicitacao,'id'=> $id,'justificativa' => $justificativa]);
+                        }else if($usuario == 'A'){
+                            return redirect()->route('listar_solicitacao')->withErrors('Você não tem permissão para reprovar esta solicitação, pois não foi você quem a criou.');
+                        }
                     }
                     
                 }else{
-                    //verifica algo
+                    //cai aqui quando não foi o usuario que não fez a ultima justificativa
+                
+                    //se caso for o comprador libera para realizar reprovação
+                    if($usuario == 'C'){
+                        return view('solicitacao.avalia.reprova_solicitacao',['solicitacao'=> $solicitacao,'id'=> $id,'justificativa' => $justificativa]);
+                    }else if($usuario == 'A'){
+                        return redirect()->route('listar_solicitacao')->withErrors('Você não tem permissão para reprovar esta solicitação, pois não foi você quem a criou.');
+                    }
                 }
                   
             }
 
+            //Pegando quando é reprovado
+            if( ( $usuario == 'A' && $tipo_status == 'Reprovado pelo Aprovador') ||
+            ($usuario == 'C' && $tipo_status == 'Reprovado pelo Comprador') ||
+            ($usuario == 'AD' && $tipo_status == 'Reprovado pelo Administrador')||
+            ($usuario == 'D' && $tipo_status == 'Reprovado pela Diretoria')){
+                //manda para uma pagina onde usuario possa trocar status atual da solicitação
+                return view('solicitacao.avalia.ativa_solicitacao',[
+                    'solicitacao'=> $solicitacao,
+                    'id'=> $id, 'status' => $status, 
+                    'justificativa' => $justificativa,
+                    // 'total' => $total,
+                    // 'falta_preencher' => $falta_preencher
+                ]);   
+
+                //return back()->withErrors('Esta solicitação já foi aprovada por um usúario do mesmo perfil do que o seu.');
+            }
             
             //Verificando se solicitação ja foi aprovada pelo mesmo tipo de usuario
             if( ($usuario == 'A' && $tipo_status == 'Aprovado pelo Aprovador') ||
@@ -236,6 +266,8 @@ class SolicitacaoController extends Controller
 
 
             //6° quando solicitação foi regeitada por aprovar mas ele quer aprovar ela
+
+            
       
         }
         return back()->withErrors('Não foi encontrado configurações adequadas.');
@@ -317,6 +349,35 @@ class SolicitacaoController extends Controller
             
         } 
         return array('falta_preencher' => $falta_preencher,'total' => $total);
+    }
+
+    public function cadastrar_ativacao(Request $request){
+        $this->validate($request,[
+            'id_solicitacao'=>'required',
+            // 'justificativa'=>'required',
+        ]);
+
+        $solicitacao = Solicitacao::find($request->input('id_solicitacao'));
+        if($solicitacao == null){
+            return back()->withErrors('Solicitação não encontrada.');
+        }
+
+        //novo status
+        //ela vai retornar para o estado inicial de pendente
+        $status = $this->pegaStatus('Pendente');
+
+        $solicitacao->id_status = $status->id;
+        $message = '';
+        if($solicitacao->save()){
+            $message = "Status da Solicitação (".$solicitacao->descricao.") alterado com sucesso!, status alterado para : ".$status->tipo_status;
+        }else{
+            return back()->withErrors('Status da solicitacação não alterado.');
+        }
+
+        //enviando que foi aprovado
+        $this->setHistorico($solicitacao);
+
+        return redirect()->route('listar_solicitacao')->with('success', $message);
     }
 
     public function mostrar_verificacao_diretoria($id){
