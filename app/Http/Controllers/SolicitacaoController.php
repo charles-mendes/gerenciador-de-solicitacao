@@ -752,6 +752,7 @@ class SolicitacaoController extends Controller
     public function editar_solicitacao($id,Request $request){
         $id = (int) $id;
         if(is_numeric($id)){
+
             $solicitacao = Solicitacao::find($id);
             if($solicitacao == null){
                 return redirect()->route('listar_solicitacao')->withErrors('Solicitação não encontrada.');
@@ -770,23 +771,28 @@ class SolicitacaoController extends Controller
                     return redirect()->route('listar_solicitacao')->withErrors('Você não tem permissão para editar esta solicitação.');
                 }
             }
+
             //pegando a url da onde o usuario venho 
 
             //se usuario vem de solicitaçao
             $url = explode('/',$request->path());
 
-            // $url_previous = explode('/',url()->previous());
-            // dd('aqui');
-            // $previous = end($url_previous);
+            $url_previous = explode('/',url()->previous());
+            $previous = end($url_previous);
+            // dd($previous);
             //verifica se usuario venho ta url solicitação, caso venho faz o find da solicitação requerida e coloca na session novaSolicitação
             // dd(!is_numeric($previous),$previous );
-            if($url[0] == 'solicitacao'){
+            if($url[0] == 'solicitacao' && $previous == 'solicitacao' ){
                 $solicitacao = Solicitacao::find($id);
                 if($solicitacao == null){
                     return back()->withErrors('Solicitação não encontrada.');
                 }
+                
                 session(['novaSolicitacao' => $solicitacao ]);
             }
+
+            //caso não for if de cima não faz nada
+
             return view('solicitacao.solicitacao',['status' => 'editando' ,'id_solicitacao' => $id]);
         }
         return back();
@@ -1020,6 +1026,7 @@ class SolicitacaoController extends Controller
 
             return view('solicitacao.modal.produto',['produto' => $produto ,'id'=> $id ,'habilitaCampo' => $habilitaCampo]);    
         }
+        
         return back();
     }
 
@@ -1057,6 +1064,7 @@ class SolicitacaoController extends Controller
         $solicitacao->produtos[$id]->id_criador = Auth::user()->id;
         $solicitacao->produtos[$id]->id_modificador = Auth::user()->id;
         
+        // dd($solicitacao);
         //adicionando alterações na solicitação 
         session()->put('novaSolicitacao', $solicitacao);
 
