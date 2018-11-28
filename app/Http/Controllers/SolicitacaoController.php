@@ -796,7 +796,8 @@ class SolicitacaoController extends Controller
             // dd($previous);
             //verifica se na url do usuario tem solicitação e se ele venho da tela solicitacao
             //verifica se na url do usuario tem solicitação e se ele venho da tela avalia
-            if( ($url[0] == 'solicitacao' && $previous == 'solicitacao') || ($url[0] == 'solicitacao' && $url[1] == 'avalia') ){
+            // dd($url[0] == 'solicitacao');
+            if( ($url[0] == 'solicitacao' && $previous == 'solicitacao') || ($url[0] == 'solicitacao' && $url_previous[count($url_previous)-2] == 'avalia') ){
                 $solicitacao = Solicitacao::find($id);
                 if($solicitacao == null){
                     return back()->withErrors('Solicitação não encontrada.');
