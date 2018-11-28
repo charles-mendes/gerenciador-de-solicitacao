@@ -805,29 +805,21 @@ class SolicitacaoController extends Controller
             // 'id_solicitacao'=>'required',
             'descricao' => 'required',
         ]);
-        /*
-        {#248 ▼
-            +"produtos": array:2 [▼
-            0 => {#249 ▶}
-            1 => {#250 ▶}
-            ]
-            +"servicos": array:1 [▼
-            0 => {#251 ▶}
-            ]
-            +"descricao": "ertre eterte erter"
-            +"id_modificador": 6
-            +"data_modificacao": 1542781761
-        }
-        */
 
         if(session()->has('novaSolicitacao')){
             $solicitacao = session('novaSolicitacao');
-            $solicitacao->descricao = $request->input('descricao');
-            $solicitacao->id_modificador = Auth::user()->id;
-            $solicitacao->data_modificacao = time();
-            $solicitacao->save();
+            // dd($solicitacao);
+            //pega solicitação do banco
+            $bdSolicitacao = Solicitacao::find($solicitacao->id);
+            $bdSolicitacao->descricao = $request->input('descricao');
+            $bdSolicitacao->id_modificador = Auth::user()->id;
+            $bdSolicitacao->data_modificacao = time();
+            $bdSolicitacao->save();
             
             //salvando alterações no produto
+
+            // dd($solicitacao->produtos);
+            // dd('');
             if(isset($solicitacao->produtos)){
                 foreach($solicitacao->produtos as $produto){
                     if(isset($produto->id) && is_numeric($produto->id)){

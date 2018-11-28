@@ -1,7 +1,7 @@
 @extends('layouts.principal')
 
 @php
-    // dd($status);
+    // dd(session('novaSolicitacao'));
 @endphp
 {{-- @section('breadcrumb')
     @component('layouts.component.breadcrumb',[
