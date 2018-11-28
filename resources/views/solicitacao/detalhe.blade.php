@@ -58,7 +58,7 @@
             </div>                
             @endif
         
-        @if(Auth::user()->tipo_conta == 'S' || Auth::user()->tipo_conta == 'AD')
+        @if(Auth::user()->tipo_conta == 'S' || Auth::user()->tipo_conta == 'AD' || Auth::user()->tipo_conta == 'C' &&  App\Status::find($solicitacao->id_status)->tipo_status == 'Esperando Aprovação da diretoria')
             <div class="row">
                 <div class="col-12 text-center pt-5">
                     <div class="row">

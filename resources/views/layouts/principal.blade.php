@@ -118,6 +118,9 @@
                                 @if(Auth::user()->tipo_conta == 'A')
                                     <h3> Aprovador </h3>
                                 @endif
+                                @if(Auth::user()->tipo_conta == 'D')
+                                    <h3> Diretor </h3>
+                                @endif
                             </div>
                         </li>
                         

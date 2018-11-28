@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Solicitacao;
 use App\Produto;
 use App\Status;
+use App\Diretoria;
 use App\HistoricoSolicitacao;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\ServicoController;
@@ -64,36 +65,22 @@ class SolicitacaoController extends Controller
         }else if(Auth::user()->tipo_conta == 'AD' ||  Auth::user()->tipo_conta == 'C'){
             $solicitacoes = Solicitacao::all();
         }else if(Auth::user()->tipo_conta == 'D'){
-            dd('Não foi feito configurações para esse tipo de conta');
+            //pegando solicitações da diretoria
+            $diretoria = Diretoria::where('id_usuario',Auth::user()->id)->get();
+            $solicitacoes = [];
+            foreach($diretoria as $d){
+                $solicitacoes[] = $d->solicitacao->first();
+            }
         }else{
             dd('Não foi feito configurações para esse tipo de conta');
-            //Criar erros
         }
+
         
         //mandar para tela listar solicitações
         return view('solicitacao.listar', ['solicitacoes'=> $solicitacoes]);
 
     }
 
-    // private function verificaVisualizacao($id){
-    //     // id é o id da solicitação
-    //     $tipo_conta = Auth::user()->tipo_conta;
-
-    //     if($tipo_conta == 'S'){
-    //         //tem que verificar se a solicitação é a que o usuario criou
-    //         $solicitacao = Solicitacao::find($id);
-    //         if($solicitacao->id_criador == Auth::user()->id){
-    //             return true;
-    //         }
-    //     }else if($tipo_conta == 'C' || $tipo_conta == 'AD'){
-    //         return true;
-    //     }else if($tipo_conta == 'D'){
-    //         return true;
-    //     }else{
-    //         return back()->withErrors('Tipo de conta não configurado.');
-    //     }
-    //     return false;
-    // }
 
     
     public function detalhe($id){
@@ -264,6 +251,14 @@ class SolicitacaoController extends Controller
                 ]);  
             }
 
+            //Valor maior que 5000 mil reais diretoria tem que aprovar
+            if($status_atual_solicitacao->tipo_status == 'Esperando Aprovação da diretoria'){
+                $status = 'Esperando Aprovação da diretoria';
+
+                return view('solicitacao.avalia.avalia_solicitacao',['solicitacao'=> $solicitacao,'id'=> $id,'status' => $status,'justificativa' => $justificativa]);    
+            }
+
+
             //5° Quando solicitação foi finalizada 
             if($status_atual_solicitacao->tipo_status == 'Finalizada'){
                 $status = 'Finalizada';
@@ -430,11 +425,20 @@ class SolicitacaoController extends Controller
             $usuario->data_modificacao = time();
             $usuario->tipo_conta = 'D';
             $usuario->save();
+        }else{
+            $usuario->tipo_conta = 'D';
+            $usuario->save();
         }
 
         //envia email para diretoria, para esperar por alteração no status da solicitação 
         $mailController = new MailController();
         $mailController->enviarEmailDiretoria($request->input('id_solicitacao'),$usuario);
+
+        //guardar quem é o usuario da diretoria
+        $diretoria = new Diretoria();
+        $diretoria->id_solicitacao = $request->input('id_solicitacao');
+        $diretoria->id_usuario = $usuario->id;
+        $diretoria->save();
 
         
         $solicitacao = Solicitacao::find($request->input('id_solicitacao'));
