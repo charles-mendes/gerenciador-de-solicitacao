@@ -162,6 +162,7 @@ class SolicitacaoController extends Controller
             }
 
             //aqui é quando o aprovador já aprovou a solicitação
+            //quando solicitação foi regeitada por aprovar mas ele quer re-ativar ela
             //2 ° aprovador que aprovou solicitação pode reprovar solicitação
             if($status_atual_solicitacao->tipo_status == 'Aprovado pelo Aprovador'){
                  //verificando se a aprovação da solicitação foi feita pelo usuario atual
@@ -190,6 +191,19 @@ class SolicitacaoController extends Controller
                     }
                 }
                   
+            }
+
+            //Quando comprador quer ativar solicitação que esta reprovada
+            if( $usuario == 'C' && $tipo_status == 'Reprovado pelo Aprovador'){
+                $status = 'Reprovado pelo Aprovador';
+                //manda para uma pagina onde usuario possa trocar status atual da solicitação
+                return view('solicitacao.avalia.ativa_solicitacao',[
+                    'solicitacao'=> $solicitacao,
+                    'id'=> $id, 'status' => $status, 
+                    'justificativa' => $justificativa,
+                    // 'total' => $total,
+                    // 'falta_preencher' => $falta_preencher
+                ]);   
             }
 
             //Pegando quando é reprovado
@@ -265,7 +279,7 @@ class SolicitacaoController extends Controller
             }
 
 
-            //6° quando solicitação foi regeitada por aprovar mas ele quer aprovar ela
+            
 
             
       
@@ -780,9 +794,9 @@ class SolicitacaoController extends Controller
             $url_previous = explode('/',url()->previous());
             $previous = end($url_previous);
             // dd($previous);
-            //verifica se usuario venho ta url solicitação, caso venho faz o find da solicitação requerida e coloca na session novaSolicitação
-            // dd(!is_numeric($previous),$previous );
-            if($url[0] == 'solicitacao' && $previous == 'solicitacao' ){
+            //verifica se na url do usuario tem solicitação e se ele venho da tela solicitacao
+            //verifica se na url do usuario tem solicitação e se ele venho da tela avalia
+            if( ($url[0] == 'solicitacao' && $previous == 'solicitacao') || ($url[0] == 'solicitacao' && $url[1] == 'avalia') ){
                 $solicitacao = Solicitacao::find($id);
                 if($solicitacao == null){
                     return back()->withErrors('Solicitação não encontrada.');
@@ -791,7 +805,7 @@ class SolicitacaoController extends Controller
                 session(['novaSolicitacao' => $solicitacao ]);
             }
 
-            //caso não for if de cima não faz nada
+            //caso ele não entre no if de cima, ele fica com a sessão anterior 
 
             return view('solicitacao.solicitacao',['status' => 'editando' ,'id_solicitacao' => $id]);
         }
