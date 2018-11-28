@@ -68,10 +68,10 @@
                                         </td>     
                                         <td>
                                             @if($usuario->tipo_conta == 'A')
-                                                <span class="label label-success">Aprovador</span>
+                                                <span class="label label-custom">Aprovador</span>
                                             @endif
                                             @if($usuario->tipo_conta == 'C')
-                                                <span class="label label-success">Comprador</span>
+                                                <span class="label label-warning">Comprador</span>
                                             @endif
                                             @if($usuario->tipo_conta == 'AD')
                                                 <span class="label label-danger">Administrador</span>

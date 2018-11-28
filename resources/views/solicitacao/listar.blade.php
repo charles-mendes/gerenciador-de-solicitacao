@@ -72,8 +72,20 @@
                                         <td>{{ date('d/m/Y H:i:s' , strtotime($solicitacao->data_criacao))}}</td>
                                         <td>{{App\Usuario::find($solicitacao->id_modificador)->nome}}</td>
                                         <td>{{ date('d/m/Y H:i:s' , strtotime($solicitacao->data_modificacao))}}</td>
-                                        <td><span class="label label-success">{{App\Status::find($solicitacao->id_status)->tipo_status}}</span><td>
-                                            
+                                        @if(App\Status::find($solicitacao->id_status)->tipo_status == "Inativada")
+                                            <td><span class="label label-warning">{{App\Status::find($solicitacao->id_status)->tipo_status}}</span><td>
+
+                                        @elseif(strstr(App\Status::find($solicitacao->id_status)->tipo_status, "Reprovado"))
+                                            <td><span class="label label-danger">{{App\Status::find($solicitacao->id_status)->tipo_status}}</span><td>
+                                        @elseif(strstr(App\Status::find($solicitacao->id_status)->tipo_status, "Aprovado")) 
+                                            <td><span class="label label-megna">{{App\Status::find($solicitacao->id_status)->tipo_status}}</span><td>              
+                                        @elseif(strstr(App\Status::find($solicitacao->id_status)->tipo_status, "Finalizada")) 
+                                            <td><span class="label label-inverse">{{App\Status::find($solicitacao->id_status)->tipo_status}}</span><td> 
+                                        @elseif(strstr(App\Status::find($solicitacao->id_status)->tipo_status, "Cotação")) 
+                                            <td><span class="label label-purple">{{App\Status::find($solicitacao->id_status)->tipo_status}}</span><td>
+                                        @else
+                                            <td><span class="label label-success">{{App\Status::find($solicitacao->id_status)->tipo_status}}</span><td>
+                                        @endif    
                                             <button type="button" class="btn btn-primary" data-id="{{$solicitacao->id}}" onclick="visualizarSoliciticoes(this);" data-toggle="tooltip" data-placement="left" title=""
                                                 data-original-title="Clique aqui para visualizar os detalhes deste usuário">
                                                     <i class="ti-eye"></i>

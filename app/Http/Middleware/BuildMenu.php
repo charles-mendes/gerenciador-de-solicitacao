@@ -26,7 +26,7 @@ class BuildMenu
                     'Solicitacao' => ['link' => '/solicitacao','icone' =>  "mdi mdi-gauge",],
                 ];
 
-            }else if( $tipo_conta == 'AD' || $tipo_conta == 'C'){
+            }else if( $tipo_conta == 'AD'){
                 $menu = [
                // 'Dashboard'   => ['link'=> '/dashboard','icone'=> "mdi mdi-gauge"],
                 'Solicitação' => ['link' => '/solicitacao','icone' =>  "mdi mdi-gauge"],
@@ -34,6 +34,14 @@ class BuildMenu
                 'Fornecedor'  => ['link'=>'/fornecedor','icone'=>"mdi mdi-emoticon"],
                 'Relatorios'  => ['link'=>'/relatorios','icone'=>"mdi mdi-earth"],
                 ];
+            }else if($tipo_conta == 'C'){
+                $menu = [
+                // 'Dashboard'   => ['link'=> '/dashboard','icone'=> "mdi mdi-gauge"],
+                'Solicitação' => ['link' => '/solicitacao','icone' =>  "mdi mdi-gauge"],
+               // 'Usuarios'    => ['link'=>'/usuarios','icone'=>"mdi mdi-table"],
+                'Fornecedor'  => ['link'=>'/fornecedor','icone'=>"mdi mdi-emoticon"],
+                'Relatorios'  => ['link'=>'/relatorios','icone'=>"mdi mdi-earth"],
+                ];    
             }else{
                 //Solicitante ou outros que não tem cadastro do tipo_conta
                 $menu = [
