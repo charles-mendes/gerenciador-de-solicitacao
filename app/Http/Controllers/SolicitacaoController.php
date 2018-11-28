@@ -1094,7 +1094,8 @@ class SolicitacaoController extends Controller
         if(session()->has('novaSolicitacao')){
             $solicitacao = session('novaSolicitacao');
             if( isset($solicitacao->produtos) && isset($solicitacao->produtos[$id_produto])){
-                
+                // dd( isset($solicitacao->produtos[$id_produto]->id)? $solicitacao->produtos[$id_produto]->id : 0, $solicitacao->produtos);
+
                 if(isset($solicitacao->produtos[$id_produto]->id)){
                     //deleta produto do  banco na hora que usuario esta editando solicitação
                     $produto = Produto::find($solicitacao->produtos[$id_produto]->id);
@@ -1108,12 +1109,12 @@ class SolicitacaoController extends Controller
                 
                 $produtos = $solicitacao->produtos;
                 
-                if(count($produtos) !== 0){
+                if(count($produtos) > 0){
                     //excluindo produto
                     unset($produtos[$id_produto]);
                     
                     //ordenando vetor depois da exclusão de um produto
-                    $produtos = array_values($produtos);
+                    // $produtos = array_values($produtos);
                 }
                 session('novaSolicitacao')->produtos = $produtos;
                 
@@ -1240,7 +1241,7 @@ class SolicitacaoController extends Controller
     //o que é verificacao
     public function mostrar_verificacao_servico($id){
         //verifica se a session existe, se não existir ele redireciona a nova solicitacao
-        if($id != null && session()->has('novaSolicitacao')){
+        if($id !== null && session()->has('novaSolicitacao')){
             $id = (int) $id;
             $solicitacao = session('novaSolicitacao');
             //verifica se existe o vetor produtos e se o produto que foi escolhido existe no array de produtos cadastrados
@@ -1275,12 +1276,12 @@ class SolicitacaoController extends Controller
 
                 //para ajustar visualização de edição de solicitação
                 $servicos = $solicitacao->servicos;
-                
-                if(count($servicos) !== 0){
+                // dd($servicos,$id_servico,count($servicos));
+                if(count($servicos) > 0){
                     //excluindo servico
                     unset($servicos[$id_servico]);
                     //ordenando vetor depois da exclusão de um servico
-                    $servicos = array_values($servicos);
+                    // $servicos = array_values($servicos);
                 }
                 session('novaSolicitacao')->servicos = $servicos;
                 
