@@ -125,11 +125,11 @@
                         </li>
                         
                         <li>    
-                             <button type="button" class="btn btn-default header-profile-logout" href="{{ route('logout') }}"
+                            <button type="button" class="btn btn-default header-profile-logout fa fa-power-off" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
                                     document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
-                                <i class="fa fa-power-off"></i>
+                                
                             </button>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf

@@ -4,18 +4,24 @@
 }
 
 .header-profile-nome{
-margin-right: 50px;
+    margin-right: 50px;
+}
+
+.header-profile-nome h3{
+    font-size: 17px;
+}
+.header-profile-tipoconta{ 
+    margin-right: 50px;
+    color: white;
 
 }
 
-.header-profile-tipoconta{
-    margin-right: 50px;
-    color: white;
+.header-profile-tipoconta h3{ 
+    font-size: 17px;
 }
 
 .header-profile-logout{
     margin-right: 50px;
-
 }
 /* TELA DE LOGIN*/
 
