@@ -124,8 +124,8 @@ para configurar tabela usuario
 https://pt.stackoverflow.com/questions/187488/personalizando-uma-model-de-usuarios-laravel-5-4-problema-no-login  
 
 
-para gerar os usuario fakes  
->php artisan db:seed --class=UsuarioTableSeeder -v  
+rodar seed, isso é obrigatorio para realizar as configurações padrões do banco 
+>php artisan db:seed
 
 
 
@@ -138,4 +138,4 @@ para gerar os usuario fakes
 
 
 para configurar o email tem configurar as variaveis no arquivo .env e depois rodar esse comando no terminal :  
-php artisan config:cache  
+>php artisan config:cache  
