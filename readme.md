@@ -6,10 +6,15 @@ Integrantes:
 
 -----------------Iniciar projeto--------------
 Requisitos minimos:
+
 Apache 2
+
 PHP 7.2 
+
 MYSQL 5.7
+
 Composer 1.7
+
 Laravel 5.6
 ------------------No Windows------------------
 
