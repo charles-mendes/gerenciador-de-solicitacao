@@ -1,8 +1,8 @@
-Curso : Ciéncia da Computação  
+Curso : Ciência da computação  
 8° Périodo  
 Integrantes:  
-    *Charles Juan da Silva Mendes  
-    *Rafael Borsatto  
+    *Charles Juan da Silva Mendes / email: charlesmendes9@gmail.com  
+    *Rafael Borsatto  / email: rafaelborsatto58@gmail.com
 
 -----------------Iniciar projeto--------------  
 
@@ -89,7 +89,7 @@ adicionar no arquivo conf
     AllowOverride All  
     allow from all  
     Options +Indexes  
-> </Directory>  
+><\/Directory>  
 	
 após realizar esta configuração:  
 
