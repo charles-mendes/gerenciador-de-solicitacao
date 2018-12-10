@@ -1,4 +1,9 @@
-Curso : Ciência da computação  
+Trabalho de Conclusão de Curso (TCC)  
+Nome do projeto: Gerenciador de Solicitação de Compra  
+Faculdade: Centro Universitário Campos de Andrade  
+Endereço: R. João Scuissiato, 13 - Santa Quiteria, Curitiba - PR  
+Ano: 2018  
+Curso: Ciência da computação  
 8° Périodo  
 Integrantes:  
     *Charles Juan da Silva Mendes / email: charlesmendes9@gmail.com  
