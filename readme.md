@@ -1,10 +1,23 @@
+Curso : Ciéncia da Computação
+8° Périodo
+Integrantes:
+    Charles Juan da Silva Mendes
+    Rafael Borsatto
+
+-----------------Iniciar projeto--------------
+Requisitos minimos:
+Apache 2
+PHP 7.2 
+MYSQL 5.7
+Composer 1.7
+Laravel 5.6
 ------------------No Windows------------------
 
-primeiro instala o wamp 
+primeiro instalar o wamp 
 
 
-depois instala o composer
-obs : na hora da instalação tu tem que escolher o php7.2 na caixa de opções 
+depois instalar o composer
+obs : na hora da instalação, tem que escolher o php7.2 na caixa de opções 
 para que o composer seja instalado dentro do php7.2
 
 
@@ -14,32 +27,33 @@ instalar o laravel :
 
 dentro do projeto do laravel , rodar 
 >composer update -- pra baixar algumas atualizacaos q faltaram 
-obs:demora para caramba esse comando
+obs:demora bastante esse comando
 
->composer dump-autoload -- pra limpar uns erros laaa
+>composer dump-autoload -- se caso de alguns erros no passo anterior, use esse comando
 
-
-inicio o laravel dentro do projeto 
->php artisan serve
+gerar a chave key do laravel
+>php artisan key:generate --force.
 
 
 adicionar o arquivo .env no projeto, pq o env não vem, tem que copiar um arquivo de exemplo que tem no laravel
 >copiar arquivo .env.example e dar o nome de .env
 
-gerar a chave key do laravel
->php artisan key:generate --force.
+configurar banco no .env para criar tabela
+>crie um banco no mysql e adicionar conexões do banco dentro do arquivo .env
 
-da pra usar o console CMD dentro do VScode 
->Ctrl + Shift + P - abre caixa de pesquisa no vsCode
->digitar : Create new integrated Terminal
+rodar migration para criar tabelas no banco
+>php artisan migrate
 
+rodar seed para popular dados que são obrigatorios ter
+>php artisan db:seed 
 
-
+inicio o laravel dentro do projeto 
+>php artisan serve
 
 --------------------No linux--------------------
 
 instalar Apache 2
-instalar mysql
+instalar MYSQL >=5.7
 Instalar PHP >=7.2
 
 dar um git clone no repositório
@@ -63,16 +77,16 @@ copiar e colar arquivo conf que configura um novo virtual host
 >sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/gerenciador.conf
 
 adicionar no arquivo conf
-        ServerAlias gerenciador.c
-        ServerName gerenciador
-        DocumentRoot /var/www/html/gerenciador-de-solicitacao/public
-        <Directory /var/www/html/gerenciador-de-solicitacao/public>
-          AllowOverride All
-          allow from all
-          Options +Indexes
-        </Directory>
+        >ServerAlias gerenciador.c
+        >ServerName gerenciador
+        >DocumentRoot /var/www/html/gerenciador-de-solicitacao/public
+            ><Directory /var/www/html/gerenciador-de-solicitacao/public>
+                AllowOverride All
+                allow from all
+                Options +Indexes
+            ></Directory>
 	
-após realizar esta configuração :
+após realizar esta configuração:
 
 Ativar os arquivo de configuração
 
