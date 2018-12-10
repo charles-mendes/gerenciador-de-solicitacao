@@ -85,11 +85,11 @@ adicionar no arquivo conf
 >ServerAlias gerenciador.c  
 >ServerName gerenciador  
 >DocumentRoot /var/www/html/gerenciador-de-solicitacao/public  
-><Directory /var/www/html/gerenciador-de-solicitacao/public>  
-    >AllowOverride All  
-    >allow from all  
-    >Options +Indexes  
-></Directory>  
+> <Directory /var/www/html/gerenciador-de-solicitacao/public>  
+    AllowOverride All  
+    allow from all  
+    Options +Indexes  
+> </Directory>  
 	
 após realizar esta configuração:  
 
